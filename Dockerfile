@@ -12,10 +12,12 @@ ENV \
     LETS_ENCRYPT_EMAIL=
 
 RUN apk -U upgrade \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites/* /var/www/localhost/* /tmp/*
+    && apk add \
+        bash \
+    && rm -rf /var/cache/apk/* /etc/nginx/sites /www /var/www/localhost /tmp/*
 
 COPY ./overlay /
 
-RUN ln -s /etc/ssl/certs /certs
-RUN ln -s /etc/nginx/sites /sites
+RUN ln -s /certs /etc/ssl/certs
+RUN ln -s /sites /etc/nginx/sites
 VOLUME [ "/certs", "/sites" ]
