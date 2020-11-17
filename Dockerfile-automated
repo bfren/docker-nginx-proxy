@@ -12,7 +12,7 @@ ENV \
     LETS_ENCRYPT_EMAIL=
 
 RUN apk -U upgrade \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites/* /var/www/* /tmp/*
+    && rm -rf /var/cache/apk/* /etc/nginx/sites/* /var/www/localhost/* /tmp/*
 
 COPY ./overlay /
 
