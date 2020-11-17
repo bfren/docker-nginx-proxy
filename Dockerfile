@@ -6,11 +6,13 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
     org.label-schema.vendor="Ben Green" \
     org.label-schema.schema-version="1.0"
 
+EXPOSE 443
+
 ENV \
     LETS_ENCRYPT_EMAIL=
 
 RUN apk -U upgrade \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites/* /tmp/*
+    && rm -rf /var/cache/apk/* /etc/nginx/sites/* /var/www/* /tmp/*
 
 COPY ./overlay /
 
