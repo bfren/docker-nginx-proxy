@@ -14,7 +14,7 @@ ENV \
 RUN apk -U upgrade \
     && apk add \
         bash \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites /www /var/www/localhost /tmp/*
+    && rm -rf /var/cache/apk/* /etc/nginx/sites /www/* /tmp/*
 
 COPY ./overlay /
 
