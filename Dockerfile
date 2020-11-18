@@ -20,4 +20,4 @@ COPY ./overlay /
 
 RUN ln -s /certs /etc/ssl/certs
 RUN ln -s /sites /etc/nginx/sites
-VOLUME [ "/certs", "/sites" ]
+VOLUME [ "/certs", "/sites", "/etc/acme.sh/conf" ]
