@@ -1,8 +1,11 @@
-#!/usr/bin/with-contenv bash
+#!/bin/bash
 
 #======================================================================================================================
-# Run request executable
+# Reload nginx - but only if it is running
 #======================================================================================================================
 
-s6-setuidgid www getssl-request
-nginx-reload
+if [ ! -z "$(pidof nginx)" ] ; then
+    echo " - reloading nginx..."
+    nginx -s reload
+    echo " - done."
+fi
