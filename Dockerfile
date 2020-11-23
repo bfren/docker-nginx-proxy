@@ -15,6 +15,7 @@ RUN apk -U upgrade \
     && apk add \
         bash \
         gomplate \
+        openssl \
     && rm -rf /var/cache/apk/* /etc/nginx/sites /www/* /tmp/*
 
 COPY ./overlay /
