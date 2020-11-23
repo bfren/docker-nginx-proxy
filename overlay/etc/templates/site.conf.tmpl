@@ -27,7 +27,7 @@ server {
         include                         helpers/secure-headers.conf;
     }
 
-    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
-    ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_dhparam                         {{ getenv "SSL_CERTS" }}/dhparam.pem;
+    ssl_certificate                     {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
+    ssl_certificate_key                 {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
+    ssl_dhparam                         {{ getenv "CERTS" }}/dhparam.pem;
 }

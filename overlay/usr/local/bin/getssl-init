@@ -18,6 +18,8 @@ setup_nginx () {
     export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
+
+    export CERTS=${SSL_CERTS}
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
@@ -43,15 +45,21 @@ setup_ssl () {
 
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
+    local CERT=${SSL_CERTS}/${DOMAIN_NAME}.crt
+    local KEY=${SSL_CERTS}/${DOMAIN_NAME}.key
     local ACL_DIR="'${ACME_CHALLENGE}'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
     local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
 
     # replace config values with defaults
     replace "SANS" "${SANS:1}" ${FILE}
-    replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${DOMAIN_NAME}.crt" ${FILE}
-    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN_NAME}.key" ${FILE}    
+    replace "DOMAIN_CERT_LOCATION" "${CERT}" ${FILE}
+    replace "DOMAIN_KEY_LOCATION" "${KEY}" ${FILE}    
     replace_d "ACL" "(${ACL})" ${FILE}
+
+    # create empty files so nginx config will work
+    touch ${CERT}
+    touch ${KEY}
 
 }
 
