@@ -74,3 +74,12 @@ replace "CA" ${CA} ${CONFIG}
 replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
 replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
 echo " - done."
+
+
+#======================================================================================================================
+# Request certificates
+#======================================================================================================================
+
+if [ "${SSL_REQUEST_ON_STARTUP}" = "1" ] ; then
+    request
+fi
