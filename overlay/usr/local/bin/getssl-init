@@ -55,11 +55,10 @@ fi
 
 
 #======================================================================================================================
-# Setup Nginx and SSL for each primary domain
+# Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
 source /etc/functions/replace.sh
-source /etc/functions/join.sh
 
 setup_nginx () {
 
@@ -89,32 +88,35 @@ setup_ssl () {
 
     # set default values
     [[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && CA="https://acme-v02.api.letsencrypt.org" || CA="https://acme-staging-v02.api.letsencrypt.org"
-    SANS=$(join , ${ALIASES})
+    SANS=$(printf ",%s" "${ALIASES[@]}")
     ACL_DIR="'/var/www/.well-known/acme-challenge'"
     ACL=$(seq -s "${ACL_DIR} " ${#ALIASES[@]} | sed 's/[0-9]//g')
 
     # replace config values with defaults
     replace "CA" ${CA} ${FILE}
-    replace "SANS" ${SANS} ${FILE}
+    replace "SANS" ${SANS:1} ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${DOMAIN}.crt" ${FILE}
-    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN}.key" ${FILE}
-    
+    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN}.key" ${FILE}    
     replace_d "ACL" "(${ACL})" ${FILE}
 
 }
 
-echo " - creating configuration..."
-
-CONFIG=${SSL_CERTS}/getssl.cfg
-replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
-replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
-replace "SERVER_TYPE" "https" ${CONFIG}
-
+echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
-    echo " - domain ${D}..."
+    echo " - ${D}..."
     A=${ALIASES[${D}]}
     setup_nginx ${D} ${A}
     setup_ssl ${D} ${A}
 done
+echo " - done."
 
+
+#======================================================================================================================
+# Set global configuration
+#======================================================================================================================
+
+echo " - setting global configuration options..."
+CONFIG=${SSL_CERTS}/getssl.cfg
+replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
+replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
 echo " - done."
