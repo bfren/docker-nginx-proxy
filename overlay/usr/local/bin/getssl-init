@@ -16,11 +16,9 @@ fi
 
 SSL=/ssl
 SSL_CERTS=${SSL}/certs
-SSL_CONF=${SSL}/conf
 NGINX_SITES=/sites
 
 [[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
-[[ ! -d ${SSL_CONF} ]] && mkdir ${SSL_CONF}
 
 if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then 
     rm -rf ${SSL_CERTS}/*
@@ -32,16 +30,16 @@ fi
 # Create arrays and include configuration
 #======================================================================================================================
 
-SSL_CONF_SITES=${SSL_CONF}/sites.sh
-if [ ! -f ${SSL_CONF_SITES} ] ; then
-    echo " - you must create ${SSL_CONF_SITES} - see ssl-conf-sites-sample.sh."
+SSL_CONF=${SSL}/conf.sh
+if [ ! -f ${SSL_CONF} ] ; then
+    echo " - you must create ${SSL_CONF} - see ssl-conf-sample.sh."
     exit 1
 fi
 
 declare -A DOMAINS
 declare -A ALIASES
 
-source ${SSL_CONF_SITES}
+source ${SSL_CONF}
 
 
 #======================================================================================================================
@@ -87,15 +85,11 @@ setup_ssl () {
     getssl -w ${SSL_CERTS} -d -c ${D}
 
     # set default values
-    [[ "${LETS_ENCRYPT_LIVE}" = "1" ]] \
-        && local CA="https://acme-v02.api.letsencrypt.org" \
-        || local CA="https://acme-staging-v02.api.letsencrypt.org"
     local SANS=$(printf ",%s" "${A[@]}")
     local ACL_DIR="'/var/www/.well-known/acme-challenge'"
     local ACL=$(seq -s "${ACL_DIR} " ${#A[@]} | sed 's/[0-9]//g')
 
     # replace config values with defaults
-    replace "CA" ${CA} ${FILE}
     replace "SANS" ${SANS:1} ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${D}.crt" ${FILE}
     replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${D}.key" ${FILE}    
@@ -119,6 +113,8 @@ echo " - done."
 
 echo " - setting global configuration options..."
 CONFIG=${SSL_CERTS}/getssl.cfg
+[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] %& local CA="https://acme-v02.api.letsencrypt.org" | local CA="https://acme-staging-v02.api.letsencrypt.org"
+replace "CA" ${CA} ${CONFIG}
 replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
 replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
 echo " - done."

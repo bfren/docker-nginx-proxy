@@ -9,6 +9,7 @@ replace_d () {
     FILE=${3}
 
     if [ ! -z "${V}" ] ; then
+        echo " - setting '${K}' = '${V}' in ${FILE}..."
         sed -i "s|^#\?${K}.*$|${K}=${V}|i" ${FILE}
     fi
 
