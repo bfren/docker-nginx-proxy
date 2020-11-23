@@ -60,8 +60,10 @@ setup_nginx () {
 
     DOMAIN=${1}
     ALIASES=${2}
+    FILE=${NGINX_SITES}/${DOMAIN}/getssl.cfg
 
-    touch ${NGINX_SITES}/${DOMAIN}
+    # setup domain
+    touch ${FILE}
 
 }
 
@@ -69,12 +71,12 @@ setup_ssl () {
 
     DOMAIN=${1}
     ALIASES=${2}
+    FILE=${SSL_CERTS}/${DOMAIN}/getssl.cfg
 
     # setup domain
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
 
     # set default values
-    FILE=${SSL_CERTS}/${DOMAIN}/getssl.cfg
     CA=[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org"
     SANS=join_by , ${ALIASES}
     ACL="'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}) ${FILE}
@@ -94,7 +96,7 @@ echo " - creating configuration..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - domain ${D}..."
     A=${ALIASES[${D}]}
-    [ ! -f ${NGINX_SITES}/${DOMAIN}] && setup_nginx ${D} ${A}
+    [ ! -f ${NGINX_SITES}/${DOMAIN} ] && setup_nginx ${D} ${A}
     [ ! -d ${SSL_CERTS}/${DOMAIN} ] && setup_ssl ${D} ${A}
 done
 echo " - done."
