@@ -22,6 +22,11 @@ NGINX_SITES=/sites
 [[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
 [[ ! -d ${SSL_CONF} ]] && mkdir ${SSL_CONF}
 
+if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then 
+    rm -rf ${SSL_CERTS}/*
+    rm -rf ${NGINX_SITES}/*
+fi
+
 
 #======================================================================================================================
 # Create arrays and include configuration
@@ -63,7 +68,7 @@ setup_nginx () {
     FILE=${NGINX_SITES}/${DOMAIN}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && exit 0 || echo " - setting up nginx..."
+    [[ -f ${FILE} ]] && return 0 || echo " - setting up nginx..."
 
     # setup domain
     touch ${FILE}
@@ -77,7 +82,7 @@ setup_ssl () {
     FILE=${SSL_CERTS}/${DOMAIN}/getssl.cfg
 
     # check for existing configuration
-    [[ -d ${SSL_CERTS}/${DOMAIN} ]] && exit 0 || echo " - setting up SSL..."
+    [[ -d ${SSL_CERTS}/${DOMAIN} ]] && return 0 || echo " - setting up SSL..."
 
     # setup domain
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}

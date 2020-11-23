@@ -10,7 +10,8 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
 EXPOSE 443
 
 ENV LETS_ENCRYPT_EMAIL= \
-    LETS_ENCRYPT_LIVE=0
+    LETS_ENCRYPT_LIVE=0 \
+    SSL_CLEAN_INSTALL=0
 
 RUN apk -U upgrade \
     && apk add \
