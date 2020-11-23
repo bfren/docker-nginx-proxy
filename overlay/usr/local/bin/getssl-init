@@ -41,7 +41,7 @@ setup_ssl () {
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
     local ACL_DIR="'/var/www/.well-known/acme-challenge'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
-    local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT})
+    local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
 
     # replace config values with defaults
     replace "SANS" "${SANS:1}" ${FILE}
