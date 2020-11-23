@@ -1,6 +1,6 @@
 #!/bin/bash
 
-replace () { replace_d "${1}" "\"${2}\"" ${3} }
+replace () { replace_d "${1}" "\"${2}\"" ${3}; }
 
 replace_d () {
 
