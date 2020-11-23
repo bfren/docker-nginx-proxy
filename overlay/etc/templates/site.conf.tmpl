@@ -5,9 +5,11 @@ server {
     include                             helpers/acme-challenge.conf;
 
     {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
-    if ($host = {{ . }}) {
-        return 301 https://$host$request_uri;
-    }
+        {{ if . }}
+        if ($host = {{ . }}) {
+            return 301 https://$host$request_uri;
+        }
+        {{ end }}
     {{ end }}
 
     return 404;
