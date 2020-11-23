@@ -17,7 +17,7 @@
 #======================================================================================================================
 
 DOMAINS["example.com"]="http://example"
-ALIASES["example.com"]=("www.example.com" "ex.com" "www.ex.com")
+ALIASES["example.com"]="www.example.com" "ex.com" "www.ex.com"
 
 DOMAINS["test.com"]="http://test"
-ALIASES["test.com"]=("www.test.com")
+ALIASES["test.com"]=(www.test.com"
