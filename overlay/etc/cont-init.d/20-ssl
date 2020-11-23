@@ -6,11 +6,22 @@
 
 source /etc/functions/directories.sh
 
-if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
-    echo " - clean install detected, cleaning ${SSL_CERTS} and ${NGINX_SITES}..."
-    rm -rf ${SSL_CERTS}/*
-    rm -rf ${NGINX_SITES}/*
+CONFIG=${SSL_CERTS}/getssl.cfg
+if [ ! -f ${CONFIG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
+
+    if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
+        echo " - clean install detected, cleaning ${SSL_CERTS} and ${NGINX_SITES}..."
+        rm -rf ${SSL_CERTS}/*
+        rm -rf ${NGINX_SITES}/*
+        echo " - done."
+    fi
+
+    echo " - creating global configuration..."
+    gomplate \
+        -o ${CONFIG}\
+        -f /etc/templates/global.conf.tmpl
     echo " - done."
+    
 fi
 
 
