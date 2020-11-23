@@ -9,7 +9,8 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
 # port 80 is already exposed by the base image
 EXPOSE 443
 
-ENV LETS_ENCRYPT_EMAIL=
+ENV LETS_ENCRYPT_EMAIL= \
+    LETS_ENCRYPT_LIVE=0
 
 RUN apk -U upgrade \
     && apk add \

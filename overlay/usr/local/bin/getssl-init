@@ -53,20 +53,48 @@ fi
 # Setup Nginx and SSL for each primary domain
 #======================================================================================================================
 
-function setup_nginx() {
+source /etc/functions/replace.sh
+source /etc/functions/join.sh
+
+setup_nginx () {
+
     DOMAIN=${1}
+    ALIASES=${2}
+
     touch ${NGINX_SITES}/${DOMAIN}
+
 }
 
-function setup_ssl() {
+setup_ssl () {
+
     DOMAIN=${1}
+    ALIASES=${2}
+
+    # setup domain
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
+
+    # set default values
+    FILE=${SSL_CERTS}/${DOMAIN}/getssl.cfg
+    CA=[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org"
+    SANS=join_by , ${ALIASES}
+    ACL="'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}) ${FILE}
+
+    # replace config values with defaults
+    replace "CA" ${CA} ${FILE}
+    replace "SANS" ${SANS} ${FILE}
+    replace "ACL" "(${ACL})" ${FILE}
+    replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${DOMAIN}.crt" ${FILE}
+    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN}.key" ${FILE}
+    replace "RELOAD_CMD" "service nginx reload" ${FILE}
+    replace "SERVER_TYPE" "https" ${FILE}
+
 }
 
 echo " - creating configuration..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - domain ${D}..."
-    setup_nginx ${D}
-    setup_ssl ${D}
+    A=${ALIASES[${D}]}
+    [ ! -f ${NGINX_SITES}/${DOMAIN}] && setup_nginx ${D} ${A}
+    [ ! -d ${SSL_CERTS}/${DOMAIN} ] && setup_ssl ${D} ${A}
 done
 echo " - done."
