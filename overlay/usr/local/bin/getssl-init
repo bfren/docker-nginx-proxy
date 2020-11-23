@@ -74,25 +74,25 @@ setup_nginx () {
 
 setup_ssl () {
 
-    local D=${1}
-    local -n A=${2}
-    local FILE=${SSL_CERTS}/${D}/getssl.cfg
+    local DOMAIN_NAME=${1}
+    local -n DOMAIN_ALIASES=${2}
+    local FILE=${SSL_CERTS}/${DOMAIN_NAMED}/getssl.cfg
 
     # check for existing configuration
-    [[ -d ${SSL_CERTS}/${D} ]] && return 0 || echo " - setting up SSL..."
+    [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - setting up SSL..."
 
     # setup domain
-    getssl -w ${SSL_CERTS} -d -c ${D}
+    getssl -w ${SSL_CERTS} -d -c ${DOMAIN_NAME}
 
     # set default values
-    local SANS=$(printf ",%s" "${A[@]}")
+    local SANS=$(printf ",%s" "${DOMAIN_ALIASES[@]}")
     local ACL_DIR="'/var/www/.well-known/acme-challenge'"
-    local ACL=$(seq -s "${ACL_DIR} " ${#A[@]} | sed 's/[0-9]//g')
+    local ACL=$(seq -s "${ACL_DIR} " ${#DOMAIN_ALIASES[@] + 1} | sed 's/[0-9]//g')
 
     # replace config values with defaults
     replace "SANS" "${SANS:1}" ${FILE}
-    replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${D}.crt" ${FILE}
-    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${D}.key" ${FILE}    
+    replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${DOMAIN_NAME}.crt" ${FILE}
+    replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN_NAME}.key" ${FILE}    
     replace_d "ACL" "(${ACL})" ${FILE}
 
 }
