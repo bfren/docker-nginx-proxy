@@ -58,8 +58,13 @@ setup_ssl () {
     replace_d "ACL" "(${ACL})" ${FILE}
 
     # create empty files so nginx config will work
-    touch ${CERT}
-    touch ${KEY}
+    openssl req -newkey rsa:4096 \
+        -x509 \
+        -sha256 \
+        -days 3650 \
+        -nodes \
+        -out ${CERT} \
+        -keyout ${KEY}
 
 }
 
