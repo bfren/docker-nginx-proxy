@@ -14,6 +14,7 @@ ENV LETS_ENCRYPT_EMAIL=
 RUN apk -U upgrade \
     && apk add \
         bash \
+        curl \
         gomplate \
         openssl \
     && rm -rf /var/cache/apk/* /etc/nginx/sites /www/* /tmp/*
