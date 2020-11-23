@@ -16,7 +16,7 @@ source /etc/functions/replace.sh
 setup_nginx () {
 
     local DOMAIN_NAME=${1}
-    local DOMAIN_ALIASES=(${2})
+    local DOMAIN_ALIASES=${2}
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
@@ -30,7 +30,7 @@ setup_nginx () {
 setup_ssl () {
 
     local DOMAIN_NAME=${1}
-    local DOMAIN_ALIASES=(${2})
+    local DOMAIN_ALIASES=${2}
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/getssl.cfg
 
     # check for existing configuration
@@ -38,7 +38,7 @@ setup_ssl () {
     getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
-    local SANS=$(printf ",%s" "${DOMAIN_ALIASES[@]}")
+    local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
     local ACL_DIR="'/var/www/.well-known/acme-challenge'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
     local ACL=$(seq -s "${ACL_DIR} " ${ACL_RPT} | sed 's/[0-9]//g')
@@ -54,7 +54,7 @@ setup_ssl () {
 echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - ${D}..."
-    A=${ALIASES[${D}]}
+    A=(${ALIASES[${D}]})
     setup_nginx ${D} ${A}
     setup_ssl ${D} ${A}
 done
