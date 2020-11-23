@@ -15,9 +15,9 @@ source /etc/functions/replace.sh
 
 setup_nginx () {
 
-    local DOMAIN_NAME=${1}
+    export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
-    local -n DOMAIN_ALIASES=${3}
+    export -n DOMAIN_ALIASES=${3}
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
