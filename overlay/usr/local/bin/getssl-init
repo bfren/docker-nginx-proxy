@@ -90,7 +90,7 @@ setup_ssl () {
     local ACL=$(seq -s "${ACL_DIR} " ${#A[@]} | sed 's/[0-9]//g')
 
     # replace config values with defaults
-    replace "SANS" ${SANS:1} ${FILE}
+    replace "SANS" "${SANS:1}" ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${D}.crt" ${FILE}
     replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${D}.key" ${FILE}    
     replace_d "ACL" "(${ACL})" ${FILE}
@@ -113,7 +113,7 @@ echo " - done."
 
 echo " - setting global configuration options..."
 CONFIG=${SSL_CERTS}/getssl.cfg
-[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && local CA="https://acme-v02.api.letsencrypt.org" | local CA="https://acme-staging-v02.api.letsencrypt.org"
+[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && CA="https://acme-v02.api.letsencrypt.org" || CA="https://acme-staging-v02.api.letsencrypt.org"
 replace "CA" ${CA} ${CONFIG}
 replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
 replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
