@@ -72,9 +72,9 @@ echo " - done."
 
 echo " - setting global configuration options..."
 CONFIG=${SSL_CERTS}/getssl.cfg
-[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && CA="https://acme-v02.api.letsencrypt.org" || CA="https://acme-staging-v02.api.letsencrypt.org"
-replace "CA" ${CA} ${CONFIG}
-replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
+gomplate \
+    -o ${CONFIG} \
+    -f /etc/templates/global.conf.tmpl
 echo " - done."
 
 
