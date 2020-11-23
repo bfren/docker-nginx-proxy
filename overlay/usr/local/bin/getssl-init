@@ -31,7 +31,7 @@ setup_ssl () {
 
     local DOMAIN_NAME=${1}
     local -n DOMAIN_ALIASES=${2}
-    local FILE=${SSL_CERTS}/${DOMAIN_NAMED}/getssl.cfg
+    local FILE=${SSL_CERTS}/${DOMAIN_NAME}/getssl.cfg
 
     # check for existing configuration
     [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - setting up SSL..."
