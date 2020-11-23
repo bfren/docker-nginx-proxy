@@ -23,7 +23,7 @@ if [ ! -f ${CONFIG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
     echo " - done."
 
     echo " - generating dhparam..."
-    openssl dhparam -out ${SSL_CERTS}/dhparam.pem 4096
+    openssl dhparam -out ${SSL_CERTS}/dhparam.pem 2048
     echo " - done."
     
 fi
