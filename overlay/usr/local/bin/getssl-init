@@ -60,7 +60,10 @@ setup_nginx () {
 
     DOMAIN=${1}
     ALIASES=${2}
-    FILE=${NGINX_SITES}/${DOMAIN}/getssl.cfg
+    FILE=${NGINX_SITES}/${DOMAIN}
+
+    # check for existing configuration
+    [[ -f ${FILE} ]] && exit 0 || echo " - setting up nginx..."
 
     # setup domain
     touch ${FILE}
@@ -72,6 +75,9 @@ setup_ssl () {
     DOMAIN=${1}
     ALIASES=${2}
     FILE=${SSL_CERTS}/${DOMAIN}/getssl.cfg
+
+    # check for existing configuration
+    [[ -d ${SSL_CERTS}/${DOMAIN} ]] && exit 0 || echo " - setting up SSL..."
 
     # setup domain
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
@@ -96,7 +102,7 @@ echo " - creating configuration..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - domain ${D}..."
     A=${ALIASES[${D}]}
-    [ ! -f ${NGINX_SITES}/${DOMAIN} ] && setup_nginx ${D} ${A}
-    [ ! -d ${SSL_CERTS}/${DOMAIN} ] && setup_ssl ${D} ${A}
+    setup_nginx ${D} ${A}
+    setup_ssl ${D} ${A}
 done
 echo " - done."
