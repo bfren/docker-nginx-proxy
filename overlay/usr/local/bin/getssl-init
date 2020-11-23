@@ -37,7 +37,7 @@ setup_ssl () {
     [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - setting up SSL..."
 
     # setup domain
-    getssl -w ${SSL_CERTS} -d -q -c ${DOMAIN_NAME}
+    getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
     local SANS=$(printf ",%s" "${DOMAIN_ALIASES[@]}")

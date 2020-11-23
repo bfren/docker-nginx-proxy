@@ -21,8 +21,10 @@ NGINX_SITES=/sites
 [[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
 
 if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then 
+    echo " - clean install detected, cleaning ${SSL_CERTS} and ${NGINX_SITES}..."
     rm -rf ${SSL_CERTS}/*
     rm -rf ${NGINX_SITES}/*
+    echo " - done."
 fi
 
 
