@@ -88,9 +88,9 @@ setup_ssl () {
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
 
     # set default values
-    CA=$([[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org")
-    SANS=$(join_by , ${ALIASES})
-    ACL=$("'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}) ${FILE})
+    CA=`[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org"`
+    SANS=`join , ${ALIASES}`
+    ACL=`"'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]})`
 
     # replace config values with defaults
     replace "CA" ${CA} ${FILE}
