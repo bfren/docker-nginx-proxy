@@ -1,5 +1,5 @@
 server {
-    server_name                         {{ getenv "DOMAIN_NAME" }}{{ range getenv "DOMAIN_ALIASES" }} {{ . }}{{ end }};
+    server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
     listen                              80;
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
