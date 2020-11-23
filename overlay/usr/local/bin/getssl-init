@@ -12,62 +12,8 @@ source /etc/functions/check.sh
 #======================================================================================================================
 
 source /etc/functions/replace.sh
-
-setup_nginx () {
-
-    export DOMAIN_NAME=${1}
-    export UPSTREAM=${2}
-    local -n DOMAIN_ALIASES=${3}
-
-    export CERTS=${SSL_CERTS}
-    local FILE=${NGINX_SITES}/${DOMAIN_NAME}
-
-    # check for existing configuration
-    [[ -f ${FILE} ]] && return 0 || echo " - nginx..."
-
-    # setup domain
-    export DOMAIN_ALIASES_LIST=$(printf " %s" ${DOMAIN_ALIASES[@]})
-    gomplate \
-        -o ${FILE} \
-        -f /etc/templates/site.conf.tmpl
-
-}
-
-setup_ssl () {
-
-    local DOMAIN_NAME=${1}
-    local -n DOMAIN_ALIASES=${2}
-    local FILE=${SSL_CERTS}/${DOMAIN_NAME}/getssl.cfg
-
-    # check for existing configuration
-    [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - SSL..."
-    getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
-
-    # set default values
-    local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
-    local CERT=${SSL_CERTS}/${DOMAIN_NAME}.crt
-    local KEY=${SSL_CERTS}/${DOMAIN_NAME}.key
-    local ACL_DIR="'${ACME_CHALLENGE}'"
-    local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
-    local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
-
-    # replace config values with defaults
-    replace "SANS" "${SANS:1}" ${FILE}
-    replace "DOMAIN_CERT_LOCATION" "${CERT}" ${FILE}
-    replace "DOMAIN_KEY_LOCATION" "${KEY}" ${FILE}    
-    replace_d "ACL" "(${ACL})" ${FILE}
-
-    # create self-signed certificate so nginx config will work
-    openssl req -newkey rsa:4096 \
-        -x509 \
-        -sha256 \
-        -days 3650 \
-        -nodes \
-        -out ${CERT} \
-        -keyout ${KEY} \
-        -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${DOMAIN_NAME}"
-
-}
+source /etc/functions/setup-nginx.sh
+source /etc/functions/setup-ssl.sh
 
 echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
