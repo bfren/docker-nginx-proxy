@@ -20,7 +20,14 @@ if [ ! -f ${SITES_CONF} ] ; then
     exit 1
 fi
 
-declare -A DOMAINS
-declare -A ALIASES
+declare -Ax DOMAINS
+declare -Ax ALIASES
 
 source /ssl/conf/sites.sh
+
+
+#======================================================================================================================
+# Run initialisation script
+#======================================================================================================================
+
+s6-setuidgid www getssl-init
