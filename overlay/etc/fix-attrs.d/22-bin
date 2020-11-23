@@ -2,5 +2,5 @@
 /usr/local/bin/getssl-init false www:www 0500 0500
 /usr/local/bin/getssl-request false www:www 0500 0500
 /usr/local/bin/init false root:root 0500 0500
-/usr/local/bin/reload-nginx false root:root 0500 0500
+/usr/local/bin/nginx-reload false root:root 0500 0500
 /usr/local/bin/request false root:root 0500 0500

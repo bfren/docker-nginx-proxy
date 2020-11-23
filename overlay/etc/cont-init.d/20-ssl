@@ -21,6 +21,10 @@ if [ ! -f ${CONFIG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
         -o ${CONFIG}\
         -f /etc/templates/global.conf.tmpl
     echo " - done."
+
+    echo " - generating dhparam..."
+    openssl dhparam -out ${SSL_CERTS}/dhparam.pem
+    echo " - done."
     
 fi
 

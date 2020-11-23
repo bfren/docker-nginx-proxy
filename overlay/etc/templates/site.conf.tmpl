@@ -1,13 +1,31 @@
 server {
     server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
     listen                              80;
-    add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
     include                             helpers/acme-challenge.conf;
+
+    {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
+    if ($host = {{ . }}) {
+        return 301 https://$host$request_uri;
+    }
+    {{ end }}
+
+    return 404;
+}
+
+server {
+    server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
+    listen                              443 ssl;
+
+    add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
         include                         helpers/secure-headers.conf;
     }
+
+    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
+    ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
+    ssl_dhparam                         {{ getenv "SSL_CERTS" }}/dhparam.pem;
 }
