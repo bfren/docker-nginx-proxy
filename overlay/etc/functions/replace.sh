@@ -1,6 +1,8 @@
 #!/bin/bash
 
-replace () {
+replace () { replace_d "${1}" "\"${2}\"" ${3} }
+
+replace_d () {
 
     K=${1}
     V=${2}

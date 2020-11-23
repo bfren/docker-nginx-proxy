@@ -88,26 +88,32 @@ setup_ssl () {
     getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
 
     # set default values
-    CA=[[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org"
-    SANS=join_by , ${ALIASES}
-    ACL="'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}) ${FILE}
+    CA=$([[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && "https://acme-v02.api.letsencrypt.org" || "https://acme-staging-v02.api.letsencrypt.org")
+    SANS=$(join_by , ${ALIASES})
+    ACL=$("'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}) ${FILE})
 
     # replace config values with defaults
     replace "CA" ${CA} ${FILE}
     replace "SANS" ${SANS} ${FILE}
-    replace "ACL" "(${ACL})" ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${SSL_CERTS}/${DOMAIN}.crt" ${FILE}
     replace "DOMAIN_KEY_LOCATION" "${SSL_CERTS}/${DOMAIN}.key" ${FILE}
-    replace "RELOAD_CMD" "service nginx reload" ${FILE}
-    replace "SERVER_TYPE" "https" ${FILE}
+    
+    replace_d "ACL" "(${ACL})" ${FILE}
 
 }
 
 echo " - creating configuration..."
+
+CONFIG=${SSL_CERTS}/getssl.cfg
+replace "ACCOUNT_EMAIL" ${LETS_ENCRYPT_EMAIL} ${CONFIG}
+replace "RELOAD_CMD" "service nginx reload" ${CONFIG}
+replace "SERVER_TYPE" "https" ${CONFIG}
+
 for D in "${!DOMAINS[@]}" ; do
     echo " - domain ${D}..."
     A=${ALIASES[${D}]}
     setup_nginx ${D} ${A}
     setup_ssl ${D} ${A}
 done
+
 echo " - done."
