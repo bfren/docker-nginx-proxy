@@ -89,8 +89,9 @@ setup_ssl () {
 
     # set default values
     [[ "${LETS_ENCRYPT_LIVE}" = "1" ]] && CA="https://acme-v02.api.letsencrypt.org" || CA="https://acme-staging-v02.api.letsencrypt.org"
-    SANS=`join , ${ALIASES}`
-    ACL=$("'/var/www/.well-known/acme-challenge' "%.0s $(seq 0 ${#ALIASES[@]}))
+    SANS=$(join , ${ALIASES})
+    ACL_DIR="'/var/www/.well-known/acme-challenge'"
+    ACL=$(seq -s "${ACL_DIR} " ${#ALIASES[@]} | sed 's/[0-9]//g')
 
     # replace config values with defaults
     replace "CA" ${CA} ${FILE}
