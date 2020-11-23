@@ -16,14 +16,17 @@ source /etc/functions/replace.sh
 setup_nginx () {
 
     local DOMAIN_NAME=${1}
-    local -n DOMAIN_ALIASES=${2}
+    local UPSTREAM=${2}
+    local -n DOMAIN_ALIASES=${3}
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
     [[ -f ${FILE} ]] && return 0 || echo " - nginx..."
 
     # setup domain
-    touch ${FILE}
+    gomplate \
+        -o ${FILE} \
+        -f /etc/nginx/templates/site.conf.tmpl
 
 }
 
@@ -54,8 +57,9 @@ setup_ssl () {
 echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - ${D}..."
-    A=(${ALIASES[${D}]})
-    setup_nginx ${D} A
+    U=${DOMAINS[$D]}        # upstream server
+    A=(${ALIASES[${D}]})    # domain aliases
+    setup_nginx ${D} ${U} A
     setup_ssl ${D} A
 done
 echo " - done."

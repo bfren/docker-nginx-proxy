@@ -1,0 +1,17 @@
+server {
+    include                         helpers/base.conf;
+    index                           index.html index.htm;
+    include                         helpers/nginx-error-pages.conf;
+
+    include                         helpers/acme-challenge.conf;
+
+    location / {
+        proxy_bind                  $server_addr;
+        proxy_pass                  {{ getenv UPSTREAM }};
+        proxy_buffering             off;
+        proxy_redirect              off;
+
+        include                     helpers/proxy-params.conf;
+        include                     helpers/secure-headers.conf;
+    }
+}
