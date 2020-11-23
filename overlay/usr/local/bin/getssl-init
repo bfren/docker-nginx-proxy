@@ -16,7 +16,7 @@ source /etc/functions/replace.sh
 setup_nginx () {
 
     local DOMAIN_NAME=${1}
-    local -n DOMAIN_ALIASES=${2}
+    local DOMAIN_ALIASES=(${2})
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
@@ -30,7 +30,7 @@ setup_nginx () {
 setup_ssl () {
 
     local DOMAIN_NAME=${1}
-    local -n DOMAIN_ALIASES=${2}
+    local -n DOMAIN_ALIASES=(${2})
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/getssl.cfg
 
     # check for existing configuration
@@ -55,8 +55,8 @@ echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - ${D}..."
     A=${ALIASES[${D}]}
-    setup_nginx ${D} A
-    setup_ssl ${D} A
+    setup_nginx ${D} ${A}
+    setup_ssl ${D} ${A}
 done
 echo " - done."
 
