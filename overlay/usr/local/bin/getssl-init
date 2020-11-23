@@ -16,7 +16,7 @@ source /etc/functions/replace.sh
 setup_nginx () {
 
     local DOMAIN_NAME=${1}
-    local UPSTREAM=${2}
+    export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
     local FILE=${NGINX_SITES}/${DOMAIN_NAME}
 
@@ -26,7 +26,7 @@ setup_nginx () {
     # setup domain
     gomplate \
         -o ${FILE} \
-        -f /etc/nginx/templates/site.conf.tmpl
+        -f /etc/templates/site.conf.tmpl
 
 }
 
