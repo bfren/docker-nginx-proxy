@@ -1,5 +1,5 @@
 server {
-    server_name                         {{ getenv "DOMAIN_NAME" }}
+    server_name                         {{ getenv "DOMAIN_NAME" }};
     listen                              80;
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
