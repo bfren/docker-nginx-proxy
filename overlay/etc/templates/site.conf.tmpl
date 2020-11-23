@@ -6,11 +6,7 @@ server {
     include                             helpers/acme-challenge.conf;
 
     location / {
-        proxy_bind                      $server_addr;
         proxy_pass                      {{ getenv "UPSTREAM" }};
-        proxy_buffering                 off;
-        proxy_redirect                  off;
-
         include                         helpers/proxy-params.conf;
         include                         helpers/secure-headers.conf;
     }
