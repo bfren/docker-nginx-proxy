@@ -27,7 +27,7 @@ NGINX_SITES=/sites
 # Create arrays and include configuration
 #======================================================================================================================
 
-SSL_CONF_SITES=${CONF}/sites.sh
+SSL_CONF_SITES=${SSL_CONF}/sites.sh
 if [ ! -f ${SSL_CONF_SITES} ] ; then
     echo " - you must create ${SSL_CONF_SITES} - see ssl-conf-sites-sample.sh."
     exit 1
@@ -50,13 +50,23 @@ fi
 
 
 #======================================================================================================================
-# Setup each primary domain
+# Setup Nginx and SSL for each primary domain
 #======================================================================================================================
+
+function setup_nginx() {
+    DOMAIN=${1}
+    touch ${NGINX_SITES}/${DOMAIN}
+}
+
+function setup_ssl() {
+    DOMAIN=${1}
+    getssl -w ${SSL_CERTS} -d -c ${DOMAIN}
+}
 
 echo " - creating configuration..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - domain ${D}..."
-    touch ${NGINX_SITES}/${D}
-    getssl -w ${SSL_CERTS} -d -c ${D}
+    setup_nginx ${D}
+    setup_ssl ${D}
 done
 echo " - done."
