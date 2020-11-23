@@ -11,26 +11,10 @@ fi
 
 
 #======================================================================================================================
-# Define directories
-#======================================================================================================================
-
-SSL=/ssl
-SSL_CERTS=${SSL}/certs
-NGINX_SITES=/sites
-
-[[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
-
-if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then 
-    echo " - clean install detected, cleaning ${SSL_CERTS} and ${NGINX_SITES}..."
-    rm -rf ${SSL_CERTS}/*
-    rm -rf ${NGINX_SITES}/*
-    echo " - done."
-fi
-
-
-#======================================================================================================================
 # Create arrays and include configuration
 #======================================================================================================================
+
+source /etc/functions/directories.sh
 
 SSL_CONF=${SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then
