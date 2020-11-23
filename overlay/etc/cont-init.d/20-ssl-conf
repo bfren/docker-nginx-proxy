@@ -1,0 +1,26 @@
+#!/usr/bin/with-contenv bash
+
+#======================================================================================================================
+# Ensure email is set
+#======================================================================================================================
+
+if [ -z "${LETS_ENCRYPT_EMAIL}" ] ; then
+    echo " - LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
+    exit 1
+fi
+
+
+#======================================================================================================================
+# Create arrays and include configuration
+#======================================================================================================================
+
+SITES_CONF=/ssl/conf/sites.sh
+if [ ! -f ${SITES_CONF} ] ; then
+    echo " - you must create ${SITES_CONF} - see ssl-conf-sites-sample.sh."
+    exit 1
+fi
+
+declare -A DOMAINS
+declare -A ALIASES
+
+source /ssl/conf/sites.sh

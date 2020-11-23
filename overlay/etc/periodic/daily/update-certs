@@ -1,0 +1,3 @@
+#!/bin/bash
+
+getssl -u -a -q
