@@ -1,4 +1,4 @@
-/usr/local/bin/getssl false www:www 0500 0500
-/usr/local/bin/getssl-init false www:www 0500 0500
-/usr/local/bin/getssl-request false www:www 0500 0500
-/usr/local/bin/getssl-update false www:www 0500 0500
+/etc/getssl/getssl false www:www 0500 0500
+/etc/getssl/getssl-init false www:www 0500 0500
+/etc/getssl/getssl-request false www:www 0500 0500
+/etc/getssl/getssl-update false www:www 0500 0500
