@@ -8,17 +8,14 @@ server {
         root                            {{ getenv "WWW" }};
     }
 
-    {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}
-    {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
-    {{ if . }}
-    if ($host = {{ . }}) {
-        return 301 https://{{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}{{ getenv "DOMAIN_NAME" }}{{ else }}$host{{ end }}$request_uri;
+    location / {
+        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}{{ if . }}
+        if ($host = {{ . }}) {
+            return 301 https://{{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}{{ getenv "DOMAIN_NAME" }}{{ else }}$host{{ end }}$request_uri;
+        }
+        {{ end }}{{ end }}{{ end }}
+        return                          204;
     }
-    {{ end }}
-    {{ end }}
-    {{ end }}
-
-    return                              204;
 }
 
 server {

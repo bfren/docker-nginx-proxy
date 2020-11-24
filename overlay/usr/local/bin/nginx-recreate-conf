@@ -4,5 +4,8 @@
 # Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
+echo " - removing nginx configuration files..."
 rm ${SITES}/*
+echo " - done."
+
 ssl-init
