@@ -46,10 +46,10 @@ setup_ssl () {
     # replace config values with defaults
     replace "SANS" "${SANS:1}" ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${CERT}.crt" ${FILE}
-    replace "DOMAIN_KEY_LOCATION" "${CERT}.key" ${FILE}    
+    replace "DOMAIN_KEY_LOCATION" "${CERT}.key" ${FILE}
     replace_d "ACL" "(${ACL})" ${FILE}
 
-    # create self-signed certificate so nginx config will work
+    # create self-signed certificate so nginx will start before we request proper certificates
     generate_temp_cert ${CERT} ${DOMAIN_NAME}
     generate_temp_cert ${CERT}/fullchain ${DOMAIN_NAME}
 

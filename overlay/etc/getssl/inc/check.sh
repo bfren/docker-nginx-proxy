@@ -14,7 +14,7 @@ fi
 # Create arrays and include configuration
 #======================================================================================================================
 
-source /etc/getssl/directories.sh
+source /etc/getssl/inc/directories.sh
 
 SSL_CONF=${SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then

@@ -4,5 +4,5 @@
 # Run getssl-update executable
 #======================================================================================================================
 
-s6-setuidgid www /etc/getssl/getssl-update
+s6-setuidgid www /etc/getssl/update
 nginx-reload

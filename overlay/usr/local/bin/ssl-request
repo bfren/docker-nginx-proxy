@@ -4,5 +4,5 @@
 # Run getssl-request executable
 #======================================================================================================================
 
-s6-setuidgid www /etc/getssl/getssl-request
+s6-setuidgid www /etc/getssl/request
 nginx-reload
