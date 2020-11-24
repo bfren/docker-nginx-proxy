@@ -4,16 +4,14 @@
 # Run checks
 #======================================================================================================================
 
-source /etc/getssl/inc/check.sh
+source ${INC}/check.sh
 
 
 #======================================================================================================================
-# Request certificates for all domains
+# Run update
+#   -u = update
+#   -a = all certificates
+#   -q = quiet
 #======================================================================================================================
 
-echo " - requesting SSL certificates..."
-for D in "${!DOMAINS[@]}" ; do
-    echo " - ${D}..."
-    /etc/getssl/getssl -w ${SSL_CERTS} ${D}
-done
-echo " - done."
+/etc/ssl/getssl -u -a -w ${SSL_CERTS} 

@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Run getssl-init executable
+# Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
-s6-setuidgid www /etc/ssl/init
-nginx-reload
+rm ${SITES}/*
+ssl-init

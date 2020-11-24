@@ -2,7 +2,10 @@ server {
     server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
     listen                              80;
 
-    include                             helpers/acme-challenge.conf;
+    location ^~ /{{ getenv "ACME_CHALLENGE" }} {
+        allow                           all;
+        root                            {{ getenv "WWW" }};
+    }
 
     {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}
     {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
@@ -35,8 +38,8 @@ server {
         include                         helpers/secure-headers.conf;
     }
 
-    ssl_certificate                     {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
-    ssl_certificate_key                 {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_trusted_certificate             {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
-    ssl_dhparam                         {{ getenv "CERTS" }}/dhparam.pem;
+    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
+    ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
+    ssl_trusted_certificate             {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
+    ssl_dhparam                         {{ getenv "SSL_DHPARAM" }};
 }

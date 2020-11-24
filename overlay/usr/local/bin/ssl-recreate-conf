@@ -1,12 +1,9 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Define directories
+# Delete SSL configuration files and reinitialise
 #======================================================================================================================
 
-SSL=/ssl
-SSL_CERTS=${SSL}/certs
-NGINX_SITES=/sites
-WWW=/www
-
-[[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
+rm ${SSL_GLOBAL_CFG}
+rm ${SSL_CERTS}/*/${GETSSL_CFG}
+ssl-init

@@ -14,8 +14,6 @@ fi
 # Create arrays and include configuration
 #======================================================================================================================
 
-source /etc/getssl/inc/directories.sh
-
 SSL_CONF=${SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then
     echo " - you must create ${SSL_CONF} - see ssl-conf-sample.sh."
@@ -36,3 +34,10 @@ if [ "${#DOMAINS[@]}" = "0" ] ; then
     echo " - no domains have been registered for SSL."
     exit 1
 fi
+
+
+#======================================================================================================================
+# Ensure certs directory exists
+#======================================================================================================================
+
+[[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}

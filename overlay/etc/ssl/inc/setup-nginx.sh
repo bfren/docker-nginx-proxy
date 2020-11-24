@@ -13,8 +13,7 @@ setup_nginx () {
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
 
-    export CERTS=${SSL_CERTS}
-    local FILE=${NGINX_SITES}/${DOMAIN_NAME}
+    local FILE=${SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
     [[ -f ${FILE} ]] && return 0 || echo " - nginx..."
@@ -23,6 +22,6 @@ setup_nginx () {
     export DOMAIN_ALIASES_LIST=$(printf " %s" ${DOMAIN_ALIASES[@]})
     gomplate \
         -o ${FILE} \
-        -f /etc/templates/site.conf.tmpl
+        -f ${TEMPLATES}/site.conf.tmpl
 
 }

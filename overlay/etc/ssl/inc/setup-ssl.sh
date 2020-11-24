@@ -21,7 +21,7 @@ generate_temp_cert () {
 
 
 #======================================================================================================================
-# Set up SSL
+# Set up SSL for a domain
 #   $1  (string) Domain name
 #   $2  (string) Name of Domain Aliases array
 #======================================================================================================================
@@ -30,16 +30,16 @@ setup_ssl () {
 
     local DOMAIN_NAME=${1}
     local -n DOMAIN_ALIASES=${2}
-    local FILE=${SSL_CERTS}/${DOMAIN_NAME}/getssl.cfg
+    local FILE=${SSL_CERTS}/${DOMAIN_NAME}/${GETSSL_CFG}
 
     # check for existing configuration
-    [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - SSL..."
-    /etc/getssl/getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
+    [[ -f ${FILE} ]] && return 0 || echo " - SSL..."
+    /etc/ssl/getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
     local CERT=${SSL_CERTS}/${DOMAIN_NAME}
-    local ACL_DIR="'${WWW}/.well-known/acme-challenge'"
+    local ACL_DIR="'${WWW_ACME_CHALLENGE}'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
     local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
 

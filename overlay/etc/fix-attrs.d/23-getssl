@@ -1,4 +1,0 @@
-/etc/getssl/getssl false www:www 0500 0500
-/etc/getssl/init false www:www 0500 0500
-/etc/getssl/request false www:www 0500 0500
-/etc/getssl/update false www:www 0500 0500

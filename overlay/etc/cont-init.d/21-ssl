@@ -4,27 +4,17 @@
 # Check for clean install
 #======================================================================================================================
 
-source /etc/getssl/inc/directories.sh
+source ${INC}/setup-ssl.sh
 
-CONFIG=${SSL_CERTS}/getssl.cfg
-if [ ! -f ${CONFIG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
+if [ ! -f ${SSL_GLOBAL_CFG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
 
     if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
-        echo " - clean install detected, cleaning ${SSL_CERTS} and ${NGINX_SITES}..."
+        echo " - clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
+        rm ${SSL_GLOBAL_CFG}
         rm -rf ${SSL_CERTS}/*
-        rm -rf ${NGINX_SITES}/*
+        rm -rf ${SITES}/*
         echo " - done."
     fi
-
-    echo " - creating global configuration..."
-    gomplate \
-        -o ${CONFIG}\
-        -f /etc/templates/global.conf.tmpl
-    echo " - done."
-
-    echo " - generating dhparam..."
-    openssl dhparam -out ${SSL_CERTS}/dhparam.pem 2048
-    echo " - done."
     
 fi
 

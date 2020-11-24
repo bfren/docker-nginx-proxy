@@ -1,17 +1,27 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Run checks
+# Define variables
 #======================================================================================================================
 
-source /etc/getssl/inc/check.sh
+export ACME_CHALLENGE=.well-known/acme-challenge
+export GETSSL_CFG=getssl.cfg
 
 
 #======================================================================================================================
-# Run update
-#   -u = update
-#   -a = all certificates
-#   -q = quiet
+# Define paths to directories and files
 #======================================================================================================================
 
-/etc/getssl/getssl -u -a -w ${SSL_CERTS} 
+export INC=/etc/ssl/inc
+
+export TEMPLATES=/etc/templates
+
+export SSL=/ssl
+export SSL_CERTS=${SSL}/certs
+export SSL_DHPARAM=${SSL_CERTS}/dhparam.pem
+export SSL_GLOBAL_CFG=${SSL_CERTS}/${GETSSL_CFG}
+
+export SITES=/sites
+
+export WWW=/www
+export WWW_ACME_CHALLENGE=${WWW}/${ACME_CHALLENGE}
