@@ -1,8 +1,8 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Run update executable
+# Run getssl-update executable
 #======================================================================================================================
 
-s6-setuidgid www getssl-update
+s6-setuidgid www /etc/getssl/getssl-update
 nginx-reload
