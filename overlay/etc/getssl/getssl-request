@@ -4,7 +4,7 @@
 # Run checks
 #======================================================================================================================
 
-source /etc/functions/check.sh
+source ./inc/check.sh
 
 
 #======================================================================================================================
@@ -14,6 +14,6 @@ source /etc/functions/check.sh
 echo " - requesting SSL certificates..."
 for D in "${!DOMAINS[@]}" ; do
     echo " - ${D}..."
-    getssl -w ${SSL_CERTS} ${D}
+    /etc/getssl/getssl -w ${SSL_CERTS} ${D}
 done
 echo " - done."

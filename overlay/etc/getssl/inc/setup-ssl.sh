@@ -1,14 +1,14 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Generate an SSL certificate and key
+# Generate a temporary SSL certificate and key
 #   $1  (string) Base path
 #   $2  (string) Domain name
 #======================================================================================================================
 
-generate_cert () {
+generate_temp_cert () {
 
-    openssl req -newkey rsa:4096 \
+    openssl req -newkey rsa:2048 \
         -x509 \
         -sha256 \
         -days 3650 \
@@ -34,7 +34,7 @@ setup_ssl () {
 
     # check for existing configuration
     [[ -d ${SSL_CERTS}/${DOMAIN_NAME} ]] && return 0 || echo " - SSL..."
-    getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
+    /etc/getssl/getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
@@ -50,7 +50,7 @@ setup_ssl () {
     replace_d "ACL" "(${ACL})" ${FILE}
 
     # create self-signed certificate so nginx config will work
-    generate_cert ${CERT} ${DOMAIN_NAME}
-    generate_cert ${CERT}/chain ${DOMAIN_NAME}
+    generate_temp_cert ${CERT} ${DOMAIN_NAME}
+    generate_temp_cert ${CERT}/fullchain ${DOMAIN_NAME}
 
 }

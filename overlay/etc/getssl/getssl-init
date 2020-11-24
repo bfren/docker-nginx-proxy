@@ -4,16 +4,16 @@
 # Run checks
 #======================================================================================================================
 
-source /etc/functions/check.sh
+source ./inc/check.sh
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
-source /etc/functions/replace.sh
-source /etc/functions/setup-nginx.sh
-source /etc/functions/setup-ssl.sh
+source ./inc/replace.sh
+source ./inc/setup-nginx.sh
+source ./inc/setup-ssl.sh
 
 echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
@@ -31,5 +31,5 @@ echo " - done."
 #======================================================================================================================
 
 if [ "${SSL_REQUEST_ON_STARTUP}" = "1" ] ; then
-    request
+    ssl-request
 fi

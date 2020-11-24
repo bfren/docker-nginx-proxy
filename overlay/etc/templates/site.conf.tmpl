@@ -29,6 +29,6 @@ server {
 
     ssl_certificate                     {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
     ssl_certificate_key                 {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_trusted_certificate             {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}/chain.crt;
+    ssl_trusted_certificate             {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
     ssl_dhparam                         {{ getenv "CERTS" }}/dhparam.pem;
 }
