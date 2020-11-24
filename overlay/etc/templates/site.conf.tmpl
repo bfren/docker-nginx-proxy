@@ -1,6 +1,7 @@
 server {
     server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
     listen                              80;
+    listen                              [::]:80;
 
     location ^~ /{{ getenv "ACME_CHALLENGE" }} {
         allow                           all;
@@ -22,8 +23,8 @@ server {
 
 server {
     server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
-    listen                              [::]:443 ssl http2 ipv6only=on;
     listen                              443 ssl http2;
+    listen                              [::]:443 ssl http2 ipv6only=on;
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
