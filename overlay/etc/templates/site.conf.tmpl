@@ -4,15 +4,17 @@ server {
 
     include                             helpers/acme-challenge.conf;
 
-    {{/* {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
-        {{ if . }}
-        if ($host = {{ . }}) {
-            return 301 https://$host$request_uri;
-        }
-        {{ end }}
+    {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}
+    {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
+    {{ if . }}
+    if ($host = {{ . }}) {
+        return 301 https://$host$request_uri;
+    }
+    {{ end }}
+    {{ end }}
     {{ end }}
 
-    return 404; */}}
+    return                              204;
 }
 
 server {
@@ -20,6 +22,12 @@ server {
     listen                              443 ssl;
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
+
+    {{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}
+    if ($host != {{ getenv "DOMAIN_NAME" }}) {
+        return 301 https://{{ getenv "DOMAIN_NAME" }}$request_uri;
+    }
+    {{ end }}
 
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
