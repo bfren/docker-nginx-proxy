@@ -4,7 +4,7 @@
 # Check for clean install
 #======================================================================================================================
 
-source /etc/functions/directories.sh
+source /etc/getssl/inc/directories.sh
 
 CONFIG=${SSL_CERTS}/getssl.cfg
 if [ ! -f ${CONFIG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
