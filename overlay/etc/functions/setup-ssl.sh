@@ -51,6 +51,6 @@ setup_ssl () {
 
     # create self-signed certificate so nginx config will work
     generate_cert ${CERT} ${DOMAIN_NAME}
-    generate_cert ${CERT}/fullchain ${DOMAIN_NAME}
+    generate_cert ${CERT}/chain ${DOMAIN_NAME}
 
 }
