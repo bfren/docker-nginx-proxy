@@ -7,6 +7,6 @@
 SSL=/ssl
 SSL_CERTS=${SSL}/certs
 NGINX_SITES=/sites
-ACME_CHALLENGE=/www/.well-known/acme-challenge
+WWW=/www
 
 [[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}

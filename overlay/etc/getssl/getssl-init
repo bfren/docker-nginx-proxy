@@ -4,16 +4,16 @@
 # Run checks
 #======================================================================================================================
 
-source ./inc/check.sh
+source /etc/getssl/inc/check.sh
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
-source ./inc/replace.sh
-source ./inc/setup-nginx.sh
-source ./inc/setup-ssl.sh
+source /etc/getssl/inc/replace.sh
+source /etc/getssl/inc/setup-nginx.sh
+source /etc/getssl/inc/setup-ssl.sh
 
 echo " - setting up domains..."
 for D in "${!DOMAINS[@]}" ; do

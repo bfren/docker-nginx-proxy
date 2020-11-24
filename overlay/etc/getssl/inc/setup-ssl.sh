@@ -39,7 +39,7 @@ setup_ssl () {
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
     local CERT=${SSL_CERTS}/${DOMAIN_NAME}
-    local ACL_DIR="'${ACME_CHALLENGE}'"
+    local ACL_DIR="'${WWW}/.well-known/acme-challenge'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
     local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
 
