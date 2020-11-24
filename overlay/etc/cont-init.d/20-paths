@@ -1,27 +1,41 @@
-#!/usr/bin/with-contenv bash
+#!/bin/bash
+
+#======================================================================================================================
+# Add environment variable to S6 environment directory
+#======================================================================================================================
+
+add_env () { echo $2 > /var/run/s6/container_environment/$1; }
+
 
 #======================================================================================================================
 # Define variables
 #======================================================================================================================
 
-export ACME_CHALLENGE=.well-known/acme-challenge
-export GETSSL_CFG=getssl.cfg
+ACME_CHALLENGE=.well-known/acme-challenge
+add_env "ACME_CHALLENGE" "${ACME_CHALLENGE}"
+
+GETSSL_CFG=getssl.cfg
+add_env "GETSSL_CFG" "${GETSSL_CFG}"
 
 
 #======================================================================================================================
 # Define paths to directories and files
 #======================================================================================================================
 
-export INC=/etc/ssl/inc
+add_env "INC" "/etc/ssl/inc"
 
-export TEMPLATES=/etc/templates
+add_env "TEMPLATES" "/etc/templates"
 
-export SSL=/ssl
-export SSL_CERTS=${SSL}/certs
-export SSL_DHPARAM=${SSL_CERTS}/dhparam.pem
-export SSL_GLOBAL_CFG=${SSL_CERTS}/${GETSSL_CFG}
+SSL=/ssl
+add_env "SSL" ${SSL}
 
-export SITES=/sites
+SSL_CERTS=${SSL}/certs
+add_env "SSL_CERTS" "${SSL_CERTS}"
+add_env "SSL_DHPARAM" ${SSL_CERTS}/dhparam.pem
+add_env "SSL_GLOBAL_CFG" "${SSL_CERTS}/${GETSSL_CFG}"
 
-export WWW=/www
-export WWW_ACME_CHALLENGE=${WWW}/${ACME_CHALLENGE}
+add_env "SITES" "/sites"
+
+WWW=/www
+add_env "WWW" "${WWW}"
+add_env "WWW_ACME_CHALLENGE" "${WWW}/${ACME_CHALLENGE}"
