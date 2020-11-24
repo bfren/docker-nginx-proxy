@@ -1,9 +1,8 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Delete SSL configuration files and reinitialise
+# Delete SSL files and reinitialise
 #======================================================================================================================
 
-rm ${SSL_GLOBAL_CFG}
-rm ${SSL_CERTS}/*/${GETSSL_CFG}
+rm -rf ${SSL_CERTS}/*
 ssl-init
