@@ -4,7 +4,7 @@ server {
 
     include                             helpers/acme-challenge.conf;
 
-    {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
+    {{/* {{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}
         {{ if . }}
         if ($host = {{ . }}) {
             return 301 https://$host$request_uri;
@@ -12,9 +12,9 @@ server {
         {{ end }}
     {{ end }}
 
-    return 404;
+    return 404; */}}
 }
-
+{{/* 
 server {
     server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
     listen                              443 ssl;
@@ -31,4 +31,4 @@ server {
     ssl_certificate_key                 {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
     ssl_trusted_certificate             {{ getenv "CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
     ssl_dhparam                         {{ getenv "CERTS" }}/dhparam.pem;
-}
+} */}}
