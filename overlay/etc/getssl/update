@@ -14,4 +14,4 @@ source /etc/getssl/inc/check.sh
 #   -q = quiet
 #======================================================================================================================
 
-/etc/getssl/getssl -u -a -q -w ${SSL_CERTS} 
+/etc/getssl/getssl -u -a -w ${SSL_CERTS} 
