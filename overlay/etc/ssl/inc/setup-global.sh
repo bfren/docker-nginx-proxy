@@ -7,7 +7,7 @@
 setup_global () {
 
     if [ ! -f ${SSL_GLOBAL_CFG} ] ; then
-        echo " - creating global configuration..."
+        echo " - creating global configuration file..."
         gomplate \
             -o ${SSL_GLOBAL_CFG} \
             -f ${TEMPLATES}/global.conf.tmpl
