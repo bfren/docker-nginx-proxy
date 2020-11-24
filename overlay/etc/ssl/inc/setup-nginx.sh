@@ -19,7 +19,7 @@ setup_nginx () {
     [[ -f ${FILE} ]] && return 0 || echo " - nginx..."
 
     # setup domain
-    export DOMAIN_ALIASES_LIST=$(printf " %s" ${DOMAIN_ALIASES[@]})
+    export SERVER_NAMES="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
     gomplate \
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl

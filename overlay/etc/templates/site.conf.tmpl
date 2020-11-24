@@ -1,5 +1,5 @@
 server {
-    server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
+    server_name                         {{ getenv "SERVER_NAMES" }};
     listen                              80;
     listen                              [::]:80;
 
@@ -9,17 +9,17 @@ server {
     }
 
     location / {
-        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "DOMAIN_ALIASES_LIST") | strings.Split " " ) }}{{ if . }}
+        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "SERVER_NAMES") | strings.Split " " ) }}
         if ($host = {{ . }}) {
             return                      301 https://{{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}{{ getenv "DOMAIN_NAME" }}{{ else }}$host{{ end }}$request_uri;
         }
-        {{ end }}{{ end }}{{ end }}
+        {{ end }}{{ end }}
         return                          204;
     }
 }
 
 server {
-    server_name                         {{ getenv "DOMAIN_NAME" }}{{ getenv "DOMAIN_ALIASES_LIST" }};
+    server_name                         {{ getenv "SERVER_NAMES" }};
     listen                              443 ssl http2;
     listen                              [::]:443 ssl http2;
 
