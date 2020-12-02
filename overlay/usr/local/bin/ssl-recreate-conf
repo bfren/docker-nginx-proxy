@@ -4,8 +4,8 @@
 # Delete SSL files and reinitialise
 #======================================================================================================================
 
-echo " - removing SSL configuration files and certificates..."
+_echo "removing SSL configuration files and certificates..."
 rm -rf ${SSL_CERTS}/*
-echo " - done."
+_done
 
 ssl-init

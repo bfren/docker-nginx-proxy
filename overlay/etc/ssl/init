@@ -21,30 +21,28 @@ source ${INC}/setup-ssl.sh
 # Set up global SSL configuration
 #======================================================================================================================
 
-echo " - setting up getssl environment..."
+_echo "setting up getssl environment..."
 setup_global
-echo " - done."
+_done
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
-echo " - setting up domains..."
+_echo "setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
-    echo " - ${D}..."
+    _echo "${D}..."
     U=${DOMAINS[$D]}        # upstream server
     A=(${ALIASES[${D}]})    # domain aliases
     setup_nginx ${D} ${U} A
     setup_ssl ${D} A
 done
-echo " - done."
+_done
 
 
 #======================================================================================================================
 # Request certificates
 #======================================================================================================================
 
-if [ "${SSL_REQUEST_ON_STARTUP}" = "1" ] ; then
-    ssl-request
-fi
+[[ "${SSL_REQUEST_ON_STARTUP}" == "1" ]] && ssl-request

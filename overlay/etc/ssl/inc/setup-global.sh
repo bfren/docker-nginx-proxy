@@ -7,17 +7,17 @@
 setup_global () {
 
     if [ ! -f ${SSL_GLOBAL_CFG} ] ; then
-        echo " - creating global configuration file..."
+        _echo "creating global configuration file..."
         gomplate \
             -o ${SSL_GLOBAL_CFG} \
             -f ${TEMPLATES}/global.conf.tmpl
-        echo " - done."
+        _done
     fi
 
     if [ ! -f ${SSL_DHPARAM} ] ; then
-        echo " - generating dhparam..."
+        _echo "generating dhparam..."
         openssl dhparam -out ${SSL_DHPARAM} 2048
-        echo " - done."
+        _done
     fi
 
 }

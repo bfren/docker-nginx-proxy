@@ -9,11 +9,11 @@ source ${INC}/setup-ssl.sh
 if [ ! -f ${SSL_GLOBAL_CFG} ] || [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
 
     if [ "${SSL_CLEAN_INSTALL}" = "1" ] ; then
-        echo " - clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
+        _echo "clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
         rm ${SSL_GLOBAL_CFG}
         rm -rf ${SSL_CERTS}/*
         rm -rf ${SITES}/*
-        echo " - done."
+        _done
     fi
     
 fi

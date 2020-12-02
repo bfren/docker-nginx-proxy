@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 #======================================================================================================================
 # Reload nginx - but only if it is running
 #======================================================================================================================
 
 if [ ! -z "$(pidof nginx)" ] ; then
-    echo " - reloading nginx..."
+    _echo "reloading nginx..."
     nginx -t && nginx -s reload
-    echo " - done."
+    _done
 fi
