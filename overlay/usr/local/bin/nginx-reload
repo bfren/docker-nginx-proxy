@@ -5,7 +5,7 @@
 #======================================================================================================================
 
 if [ ! -z "$(pidof nginx)" ] ; then
-    _echo "reloading nginx..."
+    _echo "Reloading nginx..."
     nginx -t && nginx -s reload
     _done
 fi

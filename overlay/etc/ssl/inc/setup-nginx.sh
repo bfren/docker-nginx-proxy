@@ -16,7 +16,7 @@ setup_nginx () {
     local FILE=${SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && return 0 || _echo "nginx..."
+    [[ -f ${FILE} ]] && return 0 || _echo " - nginx..."
 
     # setup domain
     export SERVER_NAMES="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"

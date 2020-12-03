@@ -4,7 +4,7 @@
 # Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
-_echo "removing nginx configuration files..."
+_echo "Removing nginx configuration files..."
 rm ${SITES}/*
 _done
 

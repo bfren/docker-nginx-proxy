@@ -14,4 +14,6 @@ source ${INC}/check.sh
 #   -q = quiet
 #======================================================================================================================
 
+_echo "Updating all SSL certificates..."
 /etc/ssl/getssl -u -a -w ${SSL_CERTS} 
+_done

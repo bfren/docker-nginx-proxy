@@ -11,9 +11,9 @@ source ${INC}/check.sh
 # Request certificates for all domains
 #======================================================================================================================
 
-_echo "requesting SSL certificates..."
+_echo "Requesting SSL certificates..."
 for D in "${!DOMAINS[@]}" ; do
-    _echo "${D}..."
+    _echo " - ${D}"
     /etc/ssl/getssl -w ${SSL_CERTS} ${D}
 done
 _done

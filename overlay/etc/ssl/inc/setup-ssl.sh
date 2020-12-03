@@ -33,7 +33,7 @@ setup_ssl () {
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/${GETSSL_CFG}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && return 0 || _echo "SSL..."
+    [[ -f ${FILE} ]] && return 0 || _echo " - SSL..."
     /etc/ssl/getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
