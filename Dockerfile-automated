@@ -10,12 +10,12 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
 EXPOSE 443
 
 ENV \
+    # clean all config and certificates before doing anything else
+    CLEAN_INSTALL=0 \
     # used for renewal notification emails
     LETS_ENCRYPT_EMAIL= \
     # set to 1 to use live instead of staging server
     LETS_ENCRYPT_LIVE=0 \
-    # clean all config and certificates
-    SSL_CLEAN_INSTALL=0 \
     # automatically request certificates on startup - only used if you don't need any additional configuration
     SSL_REQUEST_ON_STARTUP=0 \
     # HTTPS redirection

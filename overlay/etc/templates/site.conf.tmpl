@@ -9,11 +9,11 @@ server {
     }
 
     location / {
-        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "SERVER_NAMES") | strings.Split " " ) }}
+        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "SERVER_NAMES") | strings.Split " " ) }}{{ if . }}
         if ($host = {{ . }}) {
             return                      301 https://{{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}{{ getenv "DOMAIN_NAME" }}{{ else }}$host{{ end }}$request_uri;
         }
-        {{ end }}{{ end }}
+        {{ end }}{{ end }}{{ end }}
         return                          204;
     }
 }
