@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 #======================================================================================================================
 # Add environment variable to S6 environment directory
