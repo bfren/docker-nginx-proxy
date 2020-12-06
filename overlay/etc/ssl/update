@@ -15,5 +15,8 @@ source ${INC}/check.sh
 #======================================================================================================================
 
 _echo "Updating all SSL certificates..."
-/etc/ssl/getssl -u -a -w ${SSL_CERTS} 
+# -U stop upgrade checks
+# -w set working directory
+# -a check all certificates
+/etc/ssl/getssl -U -w ${SSL_CERTS} -a
 _done

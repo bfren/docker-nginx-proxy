@@ -34,7 +34,11 @@ setup_ssl () {
 
     # check for existing configuration
     [[ -f ${FILE} ]] && return 0 || _echo " - SSL..."
-    /etc/ssl/getssl -w ${SSL_CERTS} -c ${DOMAIN_NAME}
+
+    # -U stop upgrade checks
+    # -w set working directory
+    # -c create default configuration files
+    /etc/ssl/getssl -U -w ${SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
