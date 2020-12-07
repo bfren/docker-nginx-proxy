@@ -16,7 +16,7 @@ setup_global () {
 
     if [ ! -f ${SSL_DHPARAM} ] ; then
         _echo " - generating dhparam..."
-        openssl dhparam -out ${SSL_DHPARAM} 2048
+        openssl dhparam -out ${SSL_DHPARAM} ${SSL_DHPARAM_BITS}
         _done
     fi
 

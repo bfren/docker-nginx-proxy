@@ -11,6 +11,25 @@ Nginx Proxy
 * 80 (from base image)
 * 443
 
+## Environment Variables
+
+Required:
+
+```bash
+LETS_ENCRYPT_EMAIL=         # used for renewal notification emails
+```
+
+Optional:
+
+```bash
+CLEAN_INSTALL=0             # clean all config and certificates before doing anything else
+LETS_ENCRYPT_LIVE=0         # set to 1 to use live instead of staging server
+SSL_DHPARAM_BITS=4096       # set to the number of bits to use for generating DH parameters
+SSL_REDIRECT_INSECURE=0     # HTTPS redirection
+SSL_REDIRECT_TO_CANONICAL=0 # canonical domain name redirection
+SSL_REQUEST_ON_STARTUP=0    # automatically request certificates on startup
+```
+
 ## Authors
 
 * [Ben Green](https://github.com/bencgreen)
