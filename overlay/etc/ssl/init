@@ -37,7 +37,7 @@ for D in "${!DOMAINS[@]}" ; do
     A=(${ALIASES[${D}]})    # domain aliases
     setup_nginx ${D} ${U} A
     setup_ssl ${D} A
-    _ok " - ${D} done."
+    _ok " - done."
 done
 _done
 
