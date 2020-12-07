@@ -29,7 +29,6 @@ ENV \
 
 RUN apk -U upgrade \
     && apk add \
-        coreutils \
         curl \
         gomplate \
         openssl \
