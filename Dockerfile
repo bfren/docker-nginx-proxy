@@ -25,12 +25,9 @@ ENV \
     # automatically request certificates on startup - only use if you don't need any additional configuration
     SSL_REQUEST_ON_STARTUP=0
 
-ENV \
-    # bash is required for all scripts
-    WITH_BASH=1
-
 RUN apk -U upgrade \
     && apk add \
+        bash \
         curl \
         gomplate \
         openssl \
