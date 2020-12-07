@@ -18,8 +18,11 @@ setup_nginx () {
     # check for existing configuration
     [[ -f ${FILE} ]] && return 0 || _echo " - nginx..."
 
-    # setup domain
-    export SERVER_NAMES="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
+    # build domain list and remove trailing / multiple spaces between domains
+    TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
+    export SERVER_NAMES=$(echo "${TMP}" | xargs)
+
+    # generate site configuration
     gomplate \
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl
