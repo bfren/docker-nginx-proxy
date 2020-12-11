@@ -23,7 +23,9 @@ ENV \
     # canonical domain name redirection
     SSL_REDIRECT_TO_CANONICAL=0 \
     # automatically request certificates on startup - only use if you don't need any additional configuration
-    SSL_REQUEST_ON_STARTUP=0
+    SSL_REQUEST_ON_STARTUP=0 \
+    # set to true to skip local HTTP token check
+    GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
 
 RUN apk -U upgrade \
     && apk add \
