@@ -13,7 +13,7 @@ generate_temp_cert () {
         -sha256 \
         -days 3650 \
         -nodes \
-        -out ${1}.crt \
+        -out ${1}/fullchain.crt \
         -keyout ${1}.key \
         -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${2}"
 
@@ -56,6 +56,5 @@ setup_ssl () {
 
     # create self-signed certificate so nginx will start before we request proper certificates
     generate_temp_cert ${CERT} ${DOMAIN_NAME}
-    generate_temp_cert ${FULLCHAIN} ${DOMAIN_NAME}
 
 }
