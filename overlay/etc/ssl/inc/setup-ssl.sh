@@ -57,7 +57,5 @@ setup_ssl () {
     generate_temp_cert ${CERT}/fullchain.crt ${CERT}.key ${DOMAIN_NAME}
     generate_temp_cert ${CERT}/chain.crt ${CERT}/chain.key ${DOMAIN_NAME}
     rm ${CERT}/chain.key
-    
-    _ok " - done."
 
 }

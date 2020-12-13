@@ -32,6 +32,7 @@ _done
 
 _echo "Setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
+
     U=${DOMAINS[$D]}        # upstream server
     A=(${ALIASES[${D}]})    # domain aliases
     
@@ -40,6 +41,8 @@ for D in "${!DOMAINS[@]}" ; do
 
     _echo " - ${D}: SSL..."
     setup_ssl ${D} A
+
     _ok " - ${D} done."
+
 done
-_done
+_ok "Domains set up."

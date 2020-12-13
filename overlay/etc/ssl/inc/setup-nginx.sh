@@ -27,6 +27,4 @@ setup_nginx () {
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl
 
-    _ok " - done."
-
 }
