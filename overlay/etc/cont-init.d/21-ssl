@@ -1,26 +1,34 @@
 #!/usr/bin/with-contenv bash
 
-set -euo pipefail
-
 #======================================================================================================================
 # Check for clean install
 #======================================================================================================================
-
-source ${INC}/setup-ssl.sh
 
 if [ ! -f ${SSL_GLOBAL_CFG} ] || [ "${CLEAN_INSTALL}" = "1" ] ; then
 
     if [ "${CLEAN_INSTALL}" = "1" ] ; then
         _echo "Clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
 
-        [[ ! -z "${SSL_GLOBAL_CFG}" ]] || _error "SSL_GLOBAL_CFG not defined."
-        [[ ! -f "${SSL_GLOBAL_CFG}" ]] || rm -f ${SSL_GLOBAL_CFG}
+        if [ -z "${SSL_GLOBAL_CFG}" ] ; then
+            _error "SSL_GLOBAL_CFG not defined."
+            exit 1
+        else
+            rm -f ${SSL_GLOBAL_CFG}
+        fi
 
-        [[ ! -z "${SSL_CERTS}" ]] || _error "SSL_CERTS not defined."
-        [[ ! -d "${SSL_CERTS}" ]] || rm -rf ${SSL_CERTS}/*
+        if [ -z "${SSL_CERTS}" ] ; then
+            _error "SSL_CERTS not defined."
+            exit 1
+        else
+            rm -rf ${SSL_CERTS}/*
+        fi
 
-        [[ ! -z "${SITES}" ]] || _error "SITES not defined."
-        [[ ! -d "${SITES}" ]] || rm -rf ${SITES}/*
+        if [ -z "${SITES}" ] ; then
+            _error "SITES not defined."
+            exit 1
+        else
+            rm -rf ${SITES}/*
+        fi
 
         _done
     fi
