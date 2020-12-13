@@ -11,13 +11,13 @@ source ${INC}/check.sh
 
 #======================================================================================================================
 # Request certificates for all domains
+#   -U stop upgrade checks
+#   -w set working directory
 #======================================================================================================================
 
 _echo "Requesting SSL certificates..."
 for D in "${!DOMAINS[@]}" ; do
     _echo " - ${D}"
-    # -U stop upgrade checks
-    # -w set working directory
     /etc/ssl/getssl -U -w ${SSL_CERTS} ${D}
 done
 _done

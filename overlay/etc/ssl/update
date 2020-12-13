@@ -11,14 +11,11 @@ source ${INC}/check.sh
 
 #======================================================================================================================
 # Run update
-#   -u = update
-#   -a = all certificates
-#   -q = quiet
+#   -U stop upgrade checks
+#   -w set working directory
+#   -a check all certificates
 #======================================================================================================================
 
 _echo "Updating all SSL certificates..."
-# -U stop upgrade checks
-# -w set working directory
-# -a check all certificates
 /etc/ssl/getssl -U -w ${SSL_CERTS} -a
 _done
