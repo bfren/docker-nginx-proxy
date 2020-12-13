@@ -6,7 +6,6 @@
 
 if [ -z "${LETS_ENCRYPT_EMAIL}" ] ; then
     _error "LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
-    #exit 1
 fi
 
 
@@ -17,7 +16,6 @@ fi
 SSL_CONF=${SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then
     _error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
-    #exit 1
 fi
 
 declare -A DOMAINS
@@ -32,7 +30,6 @@ source ${SSL_CONF}
 
 if [ "${#DOMAINS[@]}" = "0" ] ; then
     _error "No domains have been registered for SSL."
-    #exit 1
 fi
 
 

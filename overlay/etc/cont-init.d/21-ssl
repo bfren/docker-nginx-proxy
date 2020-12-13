@@ -13,15 +13,15 @@ if [ ! -f ${SSL_GLOBAL_CFG} ] || [ "${CLEAN_INSTALL}" = "1" ] ; then
     if [ "${CLEAN_INSTALL}" = "1" ] ; then
         _echo "Clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
 
-        [[ ! -z "${SSL_GLOBAL_CFG}" ]] && [[ -f "${SSL_GLOBAL_CFG}" ]] \
+        [[ ! -z "${SSL_GLOBAL_CFG}" ]] \
             && rm ${SSL_GLOBAL_CFG} \
             || _error "SSL_GLOBAL_CFG not defined."
 
-        [[ ! -z "${SSL_CERTS}" ]] && [[ -d "${SSL_CERTS}" ]] \
+        [[ ! -z "${SSL_CERTS}" ]] \
             && rm -rf ${SSL_CERTS}/* \
             || _error "SSL_CERTS not defined."
 
-        [[ ! -z "${SITES}" ]] && [[ -d "${SITES}" ]] \
+        [[ ! -z "${SITES}" ]] \
             && rm -rf ${SITES}/* \
             || _error "SITES not defined."
 
