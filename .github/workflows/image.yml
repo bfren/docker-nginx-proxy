@@ -3,6 +3,10 @@ name: build
 on:
   push:
     branches: main
+    paths-ignore:
+      - '*.code-workspace'
+      - 'README.md'
+      - 'ssl-conf.sample.sh'
 
 jobs:
   main:

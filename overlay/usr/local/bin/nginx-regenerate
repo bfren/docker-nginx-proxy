@@ -1,11 +1,13 @@
 #!/usr/bin/with-contenv bash
 
+set -euo pipefail
+
 #======================================================================================================================
 # Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
 _echo "Removing nginx configuration files..."
-rm ${SITES}/*
+[[ ! -z "${SITES}" ]] && rm ${SITES}/* || exit 1
 _done
 
 ssl-init

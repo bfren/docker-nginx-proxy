@@ -8,7 +8,7 @@
 
 generate_temp_cert () {
 
-    openssl req -newkey rsa:2048 \
+    openssl req -newkey rsa:1024 \
         -x509 \
         -sha256 \
         -days 3650 \

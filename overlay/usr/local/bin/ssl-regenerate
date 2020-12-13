@@ -1,11 +1,13 @@
 #!/usr/bin/with-contenv bash
 
+set -euo pipefail
+
 #======================================================================================================================
 # Delete SSL files and reinitialise
 #======================================================================================================================
 
 _echo "Removing SSL configuration files and certificates..."
-rm -rf ${SSL_CERTS}/*
+[[ ! -z "${SSL_CERTS}" ]] && rm -rf ${SSL_CERTS}/* || exit 1
 _done
 
 ssl-init
