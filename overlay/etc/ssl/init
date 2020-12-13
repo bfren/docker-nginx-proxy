@@ -21,7 +21,7 @@ source ${INC}/setup-ssl.sh
 # Set up global SSL configuration
 #======================================================================================================================
 
-_echo "Setting up getssl environment..."
+_echo "Setting up getssl..."
 setup_global
 _done
 
@@ -32,11 +32,14 @@ _done
 
 _echo "Setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
-    _echo " - ${D}"
     U=${DOMAINS[$D]}        # upstream server
     A=(${ALIASES[${D}]})    # domain aliases
+    
+    _echo " - ${D}: Nginx..."
     setup_nginx ${D} ${U} A
+
+    _echo " - ${D}: SSL..."
     setup_ssl ${D} A
-    _ok " - done."
+    _ok " - ${D} done."
 done
 _done

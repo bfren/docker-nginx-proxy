@@ -33,7 +33,7 @@ setup_ssl () {
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/${GETSSL_CFG}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && return 0 || _echo " - SSL..."
+    [[ -f ${FILE} ]] && _ok " - already set up." && return 0
 
     # -U stop upgrade checks
     # -w set working directory
@@ -56,5 +56,8 @@ setup_ssl () {
     # create self-signed certificate so nginx will start before we request proper certificates
     generate_temp_cert ${CERT}/fullchain.crt ${CERT}.key ${DOMAIN_NAME}
     generate_temp_cert ${CERT}/chain.crt ${CERT}/chain.key ${DOMAIN_NAME}
+    rm ${CERT}/chain.key
+    
+    _ok " - done."
 
 }

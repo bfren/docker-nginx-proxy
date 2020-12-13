@@ -16,7 +16,7 @@ setup_nginx () {
     local FILE=${SITES}/${DOMAIN_NAME}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && return 0 || _echo " - nginx..."
+    [[ -f ${FILE} ]] && _ok " - already set up." && return 0
 
     # build domain list and remove trailing / multiple spaces between domains
     TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
@@ -26,5 +26,7 @@ setup_nginx () {
     gomplate \
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl
+
+    _ok " - done."
 
 }
