@@ -7,7 +7,7 @@ set -euo pipefail
 #======================================================================================================================
 
 _echo "Removing nginx configuration files..."
-[[ ! -z "${SITES}" ]] && rm ${SITES}/* || exit 1
+[[ ! -z "${SITES}" ]] && rm ${SITES}/* || _error "SITES is not defined."
 _done
 
 ssl-init
