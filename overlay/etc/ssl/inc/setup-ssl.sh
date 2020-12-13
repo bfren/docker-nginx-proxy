@@ -13,9 +13,9 @@ generate_temp_cert () {
         -sha256 \
         -days 3650 \
         -nodes \
-        -out ${1}/fullchain.crt \
-        -keyout ${1}.key \
-        -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${2}"
+        -out ${1} \
+        -keyout ${2} \
+        -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${3}"
 
 }
 
@@ -43,7 +43,6 @@ setup_ssl () {
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
     local CERT=${SSL_CERTS}/${DOMAIN_NAME}
-    local FULLCHAIN=${CERT}/fullchain
     local ACL_DIR="'${WWW_ACME_CHALLENGE}'"
     local ACL_RPT=$((${#DOMAIN_ALIASES[@]} + 1))
     local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
@@ -55,6 +54,7 @@ setup_ssl () {
     replace_d "ACL" "(${ACL})" ${FILE}
 
     # create self-signed certificate so nginx will start before we request proper certificates
-    generate_temp_cert ${CERT} ${DOMAIN_NAME}
+    generate_temp_cert ${CERT}/fullchain.crt ${CERT}.key ${DOMAIN_NAME}
+    generate_temp_cert ${CERT}/chain.crt ${CERT}/chain.key ${DOMAIN_NAME}
 
 }
