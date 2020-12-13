@@ -37,8 +37,8 @@ server {
         include                         helpers/secure-headers.conf;
     }
 
-    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.crt;
+    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
     ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_trusted_certificate             {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
+    ssl_trusted_certificate             {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/chain.crt;
     ssl_dhparam                         {{ getenv "SSL_DHPARAM" }};
 }
