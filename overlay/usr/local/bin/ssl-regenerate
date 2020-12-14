@@ -8,7 +8,7 @@ set -euo pipefail
 #======================================================================================================================
 
 _echo "Removing SSL configuration files and certificates..."
-_rmrf ${SSL_CERTS}/*
+_rmrf "${SSL_CERTS}/*"
 _done
 
 ssl-init

@@ -8,7 +8,7 @@ set -euo pipefail
 #======================================================================================================================
 
 _echo "Removing nginx configuration files..."
-_rmrf ${SITES}/*
+_rmrf "${SITES}/*"
 _done
 
 ssl-init

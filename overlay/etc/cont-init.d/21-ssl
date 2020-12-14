@@ -9,10 +9,10 @@ set -euo pipefail
 
 if [ "${CLEAN_INSTALL}" = "1" ] ; then
 
-    _echo "Clean install detected, cleaning ${SSL_CERTS} and ${SITES}..."
-    _rmrf ${SSL_GLOBAL_CFG}
-    _rmrf ${SSL_CERTS}/*
-    _rmrf ${SITES}/*
+    _echo "Clean install detected..."
+    _rmrf "${SSL_GLOBAL_CFG}"
+    _rmrf "${SSL_CERTS}/*"
+    _rmrf "${SITES}/*"
     _done
 
 fi
