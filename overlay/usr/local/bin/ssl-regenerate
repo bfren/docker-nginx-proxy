@@ -8,7 +8,7 @@ set -euo pipefail
 #======================================================================================================================
 
 _echo "Removing SSL configuration files and certificates..."
-[[ ! -z "${SSL_CERTS}" ]] && rm -rf ${SSL_CERTS}/* || _error "SSL_CERTS is not defined."
+_rmrf ${SSL_CERTS}/*
 _done
 
 ssl-init
