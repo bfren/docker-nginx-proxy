@@ -1,2 +1,2 @@
-/sites true www:www 0644 0755
-/etc/nginx/sites false www:www 0644 0755
+/sites true www:www 0640 0750
+/etc/nginx/sites false www:www 0640 0750
