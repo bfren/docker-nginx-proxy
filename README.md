@@ -1,4 +1,4 @@
-# Docker Nginx PHP
+# Docker Nginx Proxy
 
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/bcgdesign/nginx-proxy?sort=semver) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bencgreen/docker-nginx-proxy/build?label=github) ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bcgdesign/nginx-proxy?label=docker) ![Docker Pulls](https://img.shields.io/docker/pulls/bcgdesign/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bcgdesign/nginx-proxy/latest?label=size)
 
