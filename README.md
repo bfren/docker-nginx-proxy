@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bcgdesign/nginx-proxy) - [bcg|design ecosystem](https://github.com/bencgreen/docker)
 
-Nginx Proxy
+Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.
 
 ## Ports
 
