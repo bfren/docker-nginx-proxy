@@ -247,11 +247,17 @@
 # 2020-12-18 Wrong SANS when domain contains a minus character (atisne)
 # 2020-12-22 Fixes to get_auth_dns
 # 2020-12-22 Check that dig doesn't return an error (#611)(2.32)
+# 2020-12-29 Fix dig SOA lookup (#617)(2.33)
+# 2021-01-05 Show error if running in POSIX mode (#611)
 # ----------------------------------------------------------------------------------------
+
+case :$SHELLOPTS: in
+  *:posix:*)   echo -e "${0##*/}: Running with POSIX mode enabled is not supported" >&2; exit 1;;
+esac
 
 PROGNAME=${0##*/}
 PROGDIR="$(cd "$(dirname "$0")" || exit; pwd -P;)"
-VERSION="2.32"
+VERSION="2.33"
 
 # defaults
 ACCOUNT_KEY_LENGTH=4096
@@ -268,6 +274,7 @@ DEACTIVATE_AUTH="false"
 DEFAULT_REVOKE_CA="https://acme-v02.api.letsencrypt.org"
 DOMAIN_KEY_LENGTH=4096
 DUAL_RSA_ECDSA="false"
+FTP_OPTIONS=""
 GETSSL_IGNORE_CP_PRESERVE="false"
 HTTP_TOKEN_CHECK_WAIT=0
 IGNORE_DIRECTORY_DOMAIN="false"
@@ -766,7 +773,9 @@ check_getssl_upgrade() { # check if a more recent version of code is available a
           getssl_versions=("${getssl_versions[@]:1}")
         done
       fi
-      eval "$ORIGCMD"
+      if ! eval "$ORIGCMD"; then
+        error_exit "Running upgraded getssl failed"
+      fi
       graceful_exit
     else
       info ""
@@ -834,6 +843,9 @@ copy_file_to_location() { # copies a file, using scp, sftp or ftp if required.
       if [[ "$cert" != "challenge token" ]] ; then
         error_exit "ftp is not a secure method for copying certificates or keys"
       fi
+      if [[ -z "$FTP_COMMAND" ]]; then
+        error_exit "No ftp command found"
+      fi
       debug "using ftp to copy the file from $from"
       ftpuser=$(echo "$to"| awk -F: '{print $2}')
       ftppass=$(echo "$to"| awk -F: '{print $3}')
@@ -845,9 +857,15 @@ copy_file_to_location() { # copies a file, using scp, sftp or ftp if required.
       fromfile=$(basename "$from")
       debug "ftp user=$ftpuser - pass=$ftppass - host=$ftphost dir=$ftpdirn file=$ftpfile"
       debug "from dir=$fromdir  file=$fromfile"
-      ftp -n <<- _EOF
+      if [ -n "$FTP_OPTIONS" ]; then
+        # Use eval to expand any variables in FTP_OPTIONS
+        FTP_OPTIONS=$(eval echo "$FTP_OPTIONS")
+        debug "FTP_OPTIONS=$FTP_OPTIONS"
+      fi
+      $FTP_COMMAND <<- _EOF
 			open $ftphost
-			user $ftpuser $ftppass
+      user $ftpuser $ftppass
+      $FTP_OPTIONS
 			cd $ftpdirn
 			lcd $fromdir
 			put ./$fromfile
@@ -878,12 +896,13 @@ copy_file_to_location() { # copies a file, using scp, sftp or ftp if required.
       davsport=$(echo "$to"| awk -F: '{print $5}')
       davslocn=$(echo "$to"| awk -F: '{print $6}')
       davsdirn=$(dirname "$davslocn")
+      davsdirn=$(echo "${davsdirn}/" | sed 's,//,/,g')
       davsfile=$(basename "$davslocn")
       fromdir=$(dirname "$from")
       fromfile=$(basename "$from")
       debug "davs user=$davsuser - pass=$davspass - host=$davshost port=$davsport dir=$davsdirn file=$davsfile"
       debug "from dir=$fromdir  file=$fromfile"
-      curl -u "${davsuser}:${davspass}" -T "${fromdir}/${fromfile}" "https://${davshost}:${davsport}${davsdirn}/${davsfile}"
+      curl -u "${davsuser}:${davspass}" -T "${fromdir}/${fromfile}" "https://${davshost}:${davsport}${davsdirn}${davsfile}"
     else
       if ! mkdir -p "$(dirname "$to")" ; then
         error_exit "cannot create ACL directory $(basename "$to")"
@@ -1110,6 +1129,18 @@ find_dns_utils() {
     fi
 }
 
+find_ftp_command() {
+  FTP_COMMAND=""
+  if [[ -n "$(command -v ftp 2>/dev/null)" ]]; then
+    debug "Has ftp"
+    FTP_COMMAND="ftp -n"
+  elif [[ -n "$(command -v lftp 2>/dev/null)" ]]; then
+    debug "Has lftp"
+    FTP_COMMAND="lftp"
+  fi
+}
+
+
 fulfill_challenges() {
 dn=0
 for d in "${alldomains[@]}"; do
@@ -1259,8 +1290,8 @@ for d in "${alldomains[@]}"; do
           ftppass=$(echo "${t_loc}"| awk -F: '{print $3}')
           ftphost=$(echo "${t_loc}"| awk -F: '{print $4}')
           ftplocn=$(echo "${t_loc}"| awk -F: '{print $5}')
-          debug "ftp user=$ftpuser - pass=$ftppass - host=$ftphost location=$ftplocn"
-          ftp -n <<- EOF
+          debug "$FTP_COMMAND user=$ftpuser - pass=$ftppass - host=$ftphost location=$ftplocn"
+          $FTP_COMMAND <<- EOF
 					open $ftphost
 					user $ftpuser $ftppass
 					cd $ftplocn
@@ -1310,11 +1341,11 @@ get_auth_dns() { # get the authoritative dns server for a domain (sets primary_n
       if [[ "$HAS_DIG_OR_DRILL" == "dig" ]]; then
         debug Using "$HAS_DIG_OR_DRILL SOA +trace +nocomments $gad_d $gad_s" to find primary nameserver
         test_output "Using $HAS_DIG_OR_DRILL SOA"
-        res=$($HAS_DIG_OR_DRILL SOA +trace +nocomments "$gad_d" "$gad_s" 2>/dev/null | grep "IN\WNS\W")
+        res=$($HAS_DIG_OR_DRILL SOA +trace +nocomments "$gad_d" $gad_s 2>/dev/null | grep "IN\WNS\W")
       else
         debug Using "$HAS_DIG_OR_DRILL -T $gad_d $gad_s" to find primary nameserver
         test_output "Using $HAS_DIG_OR_DRILL SOA"
-        res=$($HAS_DIG_OR_DRILL -T SOA "$gad_d" "$gad_s" 2>/dev/null | grep "IN\WNS\W")
+        res=$($HAS_DIG_OR_DRILL -T SOA "$gad_d" $gad_s 2>/dev/null | grep "IN\WNS\W")
       fi
     fi
 
@@ -1324,12 +1355,12 @@ get_auth_dns() { # get the authoritative dns server for a domain (sets primary_n
 
       # Two options here; either dig CNAME will return the CNAME and the NS or just the CNAME
       debug Checking for CNAME using "$HAS_DIG_OR_DRILL CNAME $gad_d $gad_s"
-      res=$($HAS_DIG_OR_DRILL CNAME "$gad_d" "$gad_s"| grep "^$gad_d")
+      res=$($HAS_DIG_OR_DRILL CNAME "$gad_d" $gad_s| grep "^$gad_d")
       cname=$(echo "$res"| awk '$4 ~ "CNAME" {print $5}' |sed 's/\.$//g')
 
       if [[ $_TEST_SKIP_CNAME_CALL == 0 ]]; then
         debug Checking if CNAME result contains NS records
-        res=$($HAS_DIG_OR_DRILL CNAME "$gad_d" "$gad_s"| grep -E "IN\W(NS|SOA)\W")
+        res=$($HAS_DIG_OR_DRILL CNAME "$gad_d" $gad_s| grep -E "IN\W(NS|SOA)\W")
       else
         res=""
       fi
@@ -1385,7 +1416,8 @@ get_auth_dns() { # get the authoritative dns server for a domain (sets primary_n
     if [[ -z "$gad_s" ]]; then
       res=$(host -t NS "$gad_d"| grep "name server")
     else
-      res=$(host -t NS "$gad_d" "$gad_s"| grep "name server")
+      # shellcheck disable=SC2086
+      res=$(host -t NS "$gad_d" $gad_s| grep "name server")
     fi
     if [[ -n "$res" ]]; then
       all_auth_dns_servers=$(echo "$res" | awk '{print $4}' | sed 's/\.$//g'|tr '\n' ' ')
@@ -2643,6 +2675,9 @@ set_server_type
 
 # check what dns utils are installed
 find_dns_utils
+
+# Find what ftp client is installed
+find_ftp_command
 
 # auto upgrade clients to v2
 auto_upgrade_v2
