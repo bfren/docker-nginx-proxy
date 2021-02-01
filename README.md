@@ -40,5 +40,5 @@ SSL_REQUEST_ON_STARTUP=0    # automatically request certificates on startup
 
 ## Copyright
 
-> Copyright (c) 2020 Ben Green <https://bcgdesign.com>  
+> Copyright (c) 2021 Ben Green <https://bcgdesign.com>  
 > Unless otherwise stated
