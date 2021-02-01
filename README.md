@@ -6,6 +6,15 @@
 
 Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every week - the last check can be viewed in the `/ssl` volume.
 
+## Contents
+
+* [Ports](#ports)
+* [Volumes](#volumes)
+* [Environment Variables](#environment-variables)
+* [Helper Functions](#helper-functions)
+* [Nginx Configuration Helpers](#nginx-configuration-helpers)
+* [Authors / Licence / Copyright](#authors)
+
 ## Ports
 
 For SSL certificate requests to work correctly, ports 80 and 443 need mapping from the host to your proxy container, e.g. adding `"0.0.0.0:80:80"` to the ports section of your docker compose file.
