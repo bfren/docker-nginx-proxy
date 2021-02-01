@@ -44,6 +44,16 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | `ssl-request`      | *None*    | Requests SSL certificates from Lets Encrypt.                                        |
 | `ssl-update`       | *None*    | Attempts to update SSL certificates manually.                                       |
 
+## Nginx Configuration Helpers
+
+The image contains a handful of useful Nginx configuration 'helper' files, which you can find in `/overlay/etc/nginx/helpers`.
+
+| Helper                | Description                                                                                                      |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `proxy-params.conf`   | Headers commonly required when proxying a site.                                                                  |
+| `secure-headers.conf` | Standard secure headers - see [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/).            |
+| `tls1_3-only.conf`    | If you want to be ultra-secure (and not support older browsers), this will disable all TLS protocols except 1.3. |
+
 ## Authors
 
 * [Ben Green](https://github.com/bencgreen)
