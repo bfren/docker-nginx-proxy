@@ -2,7 +2,7 @@
 
 #======================================================================================================================
 # This file should be modified to define domain arrays
-# and then stored in /ssl/conf/sites.sh
+# and then stored in /ssl/conf.sh
 #
 # DOMAINS is an associative array
 #   key:    (string) primary domain name
