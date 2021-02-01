@@ -1,2 +1,2 @@
-#!/bin/bash
-ssl-update > /ssl/update.log
+#!/usr/bin/with-contenv bash
+ssl-update > ${SSL}/update.log
