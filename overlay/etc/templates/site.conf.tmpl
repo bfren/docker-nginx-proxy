@@ -34,6 +34,7 @@ server {
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
+        #include                         helpers/proxy-params-websockets.conf;
         include                         helpers/secure-headers.conf;
     }
 
