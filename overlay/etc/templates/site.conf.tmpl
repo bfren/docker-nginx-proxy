@@ -1,4 +1,11 @@
-server {
+{{ if ne (getenv "DOMAIN_NGXCONF") "" }}
+#======================================================================================================================
+# WARNING: This file is generated. Do not make changes to this file.
+# Changes will be overwritten the next time the container is started.
+# If you need a custom configuration then add the following to /ssl/conf.sh:
+#   NGXCONF["{{ getenv "DOMAIN_NAME" }}"]="custom"
+#======================================================================================================================
+{{ end }}server {
     server_name                         {{ getenv "SERVER_NAMES" }};
     listen                              80;
     listen                              [::]:80;
