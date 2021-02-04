@@ -1,4 +1,4 @@
-{{ if ne (getenv "DOMAIN_NGXCONF") "" }}
+{{ if eq (getenv "DOMAIN_NGXCONF") "" }}
 #======================================================================================================================
 # WARNING: This file is generated. Do not make changes to this file.
 # Changes will be overwritten the next time the container is started.
