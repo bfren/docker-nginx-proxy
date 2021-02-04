@@ -20,8 +20,8 @@ setup_nginx () {
     # check for existing configuration file
     if [ -f ${FILE} ] ; then
 
-        # if set, remove config so it can be regenerated
-        if [ -n "${DOMAIN_NGXCONF}" ] ; then
+        # if empty, remove config so it can be regenerated
+        if [ -z "${DOMAIN_NGXCONF}" ] ; then
             _echo "    removing and regnerating Nginx configuration"
             rm ${FILE}
 
