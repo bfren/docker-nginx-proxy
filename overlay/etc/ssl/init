@@ -33,9 +33,9 @@ _done
 _echo "Setting up domains..."
 for D in "${!DOMAINS[@]}" ; do
 
-    U=${DOMAINS[${D}]}      # upstream server
+    U="${DOMAINS[${D}]}"    # upstream server
     A=(${ALIASES[${D}]})    # domain aliases
-    C=${NGXCONF[${D}]}      # domain Nginx configuration default / custom
+    C="${NGXCONF[${D}]}"    # domain Nginx configuration default / custom
 
     _echo " .. ${D}"
     
