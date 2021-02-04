@@ -31,18 +31,21 @@ _done
 #======================================================================================================================
 
 _echo "Setting up domains..."
-for D in "${!DOMAINS[@]}" ; do
+for DN in "${!DOMAINS[@]}" ; do
 
-    U=${DOMAINS[$D]}        # upstream server
-    A=(${ALIASES[${D}]})    # domain aliases
+    UP=${DOMAINS[${DN}]}     # upstream server
+    AL=(${ALIASES[${DN}]})   # domain aliases
+    CF=${NGXCONF[${DN}]}     # domain Nginx configuration default / custom
+
+    _echo " .. ${D}"
     
-    _echo " - ${D}: Nginx..."
-    setup_nginx ${D} ${U} A
+    _echo "    Nginx..."
+    setup_nginx ${DN} ${UP} AL ${CF}
 
-    _echo " - ${D}: SSL..."
-    setup_ssl ${D} A
+    _echo "    SSL..."
+    setup_ssl ${DN} AL
 
-    _ok " - ${D} done."
+    _ok "    done."
 
 done
 _ok "Domains set up."

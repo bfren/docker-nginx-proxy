@@ -22,6 +22,7 @@ fi
 
 declare -A DOMAINS
 declare -A ALIASES
+declare -A NGXCONF
 
 source ${SSL_CONF}
 
