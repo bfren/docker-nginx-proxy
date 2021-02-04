@@ -22,7 +22,7 @@
 #======================================================================================================================
 
 DOMAINS["example.com"]="http://example"
-ALIASES["example.com"]="www.example.com" "ex.com" "www.ex.com"
+ALIASES["example.com"]="www.example.com ex.com www.ex.com"
 NGXCONF["example.com"]="custom"
 
 DOMAINS["test.com"]="http://test"
