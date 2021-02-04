@@ -10,10 +10,10 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
 EXPOSE 443
 
 ENV \
-    # clean all config and certificates before doing anything else
-    CLEAN_INSTALL=0 \
     # used for renewal notification emails
     LETS_ENCRYPT_EMAIL= \
+    # clean all config and certificates before doing anything else
+    CLEAN_INSTALL=0 \
     # set to 1 to use live instead of staging server
     LETS_ENCRYPT_LIVE=0 \
     # set to the number of bits to use for generating DHPARAM
@@ -22,8 +22,6 @@ ENV \
     SSL_REDIRECT_INSECURE=0 \
     # canonical domain name redirection
     SSL_REDIRECT_TO_CANONICAL=0 \
-    # automatically request certificates on startup - only use if you don't need any additional configuration
-    SSL_REQUEST_ON_STARTUP=0 \
     # set to true to skip local HTTP token check
     GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
 

@@ -34,7 +34,7 @@ add_env "SSL" ${SSL}
 
 SSL_CERTS=${SSL}/certs
 add_env "SSL_CERTS" "${SSL_CERTS}"
-add_env "SSL_DHPARAM" ${SSL_CERTS}/dhparam.pem
+add_env "SSL_DHPARAM" "${SSL_CERTS}/dhparam.pem"
 add_env "SSL_GLOBAL_CFG" "${SSL_CERTS}/${GETSSL_CFG}"
 
 add_env "SITES" "/sites"
