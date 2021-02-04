@@ -5,6 +5,7 @@
 #   $1  (string) Domain name
 #   $2  (string) Upstream URL
 #   $3  (string) Name of Domain Aliases array
+#   $4  (string) Blank (regenerate) or 'custom' (keep) Nginx configuration file
 #======================================================================================================================
 
 setup_nginx () {
@@ -12,7 +13,7 @@ setup_nginx () {
     export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
-    DOMAIN_NGXCONF=${4}
+    local DOMAIN_NGXCONF=${4}
 
     local FILE=${SITES}/${DOMAIN_NAME}
 
@@ -20,13 +21,13 @@ setup_nginx () {
     if [ -f ${FILE} ] ; then
 
         # if set, remove config so it can be regenerated
-        if [ -n "${DOMAIN_NGXCONF}"] &&  ; then
+        if [ -n "${DOMAIN_NGXCONF}" ] &&  ; then
             _echo "    removing and regnerating Nginx configuration"
             rm ${FILE}
 
         # otherwise, leave file (allows custom config)
         else
-            _ok "    already set up."
+            _echo "    keeping existing configuration."
             return 0
         fi
 
