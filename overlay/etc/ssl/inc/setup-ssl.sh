@@ -33,7 +33,7 @@ setup_ssl () {
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/${GETSSL_CFG}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && _ok " - already set up." && return 0
+    [[ -f ${FILE} ]] && _ok " .. already set up." && return 0
 
     # -U stop upgrade checks
     # -w set working directory
