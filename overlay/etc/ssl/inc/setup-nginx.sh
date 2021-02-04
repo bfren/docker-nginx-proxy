@@ -17,6 +17,10 @@ setup_nginx () {
 
     local FILE=${SITES}/${DOMAIN_NAME}
 
+    # check for custom site configuration directory
+    export SITE_CONF="${FILE}.d"
+    [[ ! -d ${SITE_CONF} ]] && mkdir ${SITE_CONF}
+
     # check for existing configuration file
     if [ -f ${FILE} ] ; then
 
@@ -46,9 +50,5 @@ setup_nginx () {
     gomplate \
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl
-
-    # create custom site configuration directory
-    export SITE_CONF="${FILE}.d"
-    mkdir ${SITE_CONF}
 
 }
