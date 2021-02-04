@@ -37,8 +37,8 @@ for DN in "${!DOMAINS[@]}" ; do
     AL=(${ALIASES[${DN}]})   # domain aliases
     CF=${NGXCONF[${DN}]}     # domain Nginx configuration default / custom
 
-    _echo " .. ${D}"
-    
+    _echo " .. ${DN}"
+
     _echo "    Nginx..."
     setup_nginx ${DN} ${UP} AL ${CF}
 
