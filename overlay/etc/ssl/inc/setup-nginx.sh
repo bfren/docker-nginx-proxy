@@ -12,11 +12,30 @@ setup_nginx () {
     export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
+    DOMAIN_NGXCONF=${4}
 
     local FILE=${SITES}/${DOMAIN_NAME}
 
-    # check for existing configuration
-    [[ -f ${FILE} ]] && _ok "    already set up." && return 0
+    # check for existing configuration file
+    if [ -f ${FILE} ] ; then
+
+        # if set, remove config so it can be regenerated
+        if [ -n "${DOMAIN_NGXCONF}"] &&  ; then
+            _echo "    removing and regnerating Nginx configuration"
+            rm ${FILE}
+
+        # otherwise, leave file (allows custom config)
+        else
+            _ok "    already set up."
+            return 0
+        fi
+
+    else
+
+        # no need to do anything, be a good log citizen
+        _echo "    generating default Nginx configuration"
+
+    fi
 
     # build domain list and remove trailing / multiple spaces between domains
     TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
