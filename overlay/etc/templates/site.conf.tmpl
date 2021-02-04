@@ -35,7 +35,7 @@ server {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
         include                         helpers/secure-headers.conf;
-        include                         {{ getenv "SITE_CONF" }}/*.conf;
+        include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
 
     ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
