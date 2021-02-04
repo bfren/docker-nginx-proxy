@@ -14,7 +14,7 @@ setup_nginx () {
     export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
-    local DOMAIN_NGXCONF=${4}
+    export DOMAIN_NGXCONF=${4}
 
     # paths to site configuration and custom config directory
     local SITE="${SITES}/${DOMAIN_NAME}"
