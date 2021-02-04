@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bcgdesign/nginx-proxy) - [bcg|design ecosystem](https://github.com/bencgreen/docker)
 
-Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every week - the last check can be viewed in the `/ssl` volume.
+Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.
 
 ## Contents
 
@@ -40,7 +40,6 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | `SSL_DHPARAM_BITS`             | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                              | 4096                  |
 | `SSL_REDIRECT_INSECURE`        | 0 or 1                | If 1, all insecured (HTTP) requests will be upgraded by Nginx to secure (HTTPS).                                                             | 0                     |
 | `SSL_REDIRECT_TO_CANONICAL`    | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.sh`).                                                          | 0                     |
-| `SSL_REQUEST_ON_STARTUP`       | 0 or 1                | If 1, SSL certificates will be automatically requested - otherwise you'll need to use `ssl-request`.                                         | 0                     |
 | `GETSSL_SKIP_HTTP_TOKEN_CHECK` | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse). | false                 |
 
 ## Helper Functions
@@ -73,5 +72,5 @@ The image contains a handful of useful Nginx configuration 'helper' files, which
 
 ## Copyright
 
-> Copyright (c) 2021 Ben Green <https://bcgdesign.com>  
+> Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 > Unless otherwise stated
