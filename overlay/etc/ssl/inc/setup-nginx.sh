@@ -47,4 +47,8 @@ setup_nginx () {
         -o ${FILE} \
         -f ${TEMPLATES}/site.conf.tmpl
 
+    # create custom site configuration directory
+    export SITE_CONF="${FILE}.d"
+    mkdir ${SITE_CONF}
+
 }
