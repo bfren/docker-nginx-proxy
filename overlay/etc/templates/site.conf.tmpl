@@ -1,10 +1,16 @@
-{{ if eq (getenv "DOMAIN_NGXCONF") "" }}
-#======================================================================================================================
+{{ if eq (getenv "DOMAIN_NGXCONF") "" }}#======================================================================================================================
 # WARNING: This file is generated. Do not make changes to this file.
 # Changes will be overwritten the next time the container is started.
-# If you need a custom configuration then add the following to /ssl/conf.sh:
+#
+# To add server names or aliases please use /ssl/conf.sh
+#
+# If you need a fully custom configuration then add the following to /ssl/conf.sh:
 #   NGXCONF["{{ getenv "DOMAIN_NAME" }}"]="custom"
+# This will stop this file being generated next time the container is started.
+#
+# Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
+
 {{ end }}server {
     server_name                         {{ getenv "SERVER_NAMES" }};
     listen                              80;
@@ -32,11 +38,9 @@ server {
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
-    {{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}
-    if ($host != {{ getenv "DOMAIN_NAME" }}) {
+    {{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}if ($host != {{ getenv "DOMAIN_NAME" }}) {
         return                          301 https://{{ getenv "DOMAIN_NAME" }}$request_uri;
-    }
-    {{ end }}
+    }{{ end }}
 
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
