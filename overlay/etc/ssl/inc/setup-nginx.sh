@@ -10,20 +10,27 @@
 
 setup_nginx () {
 
+    # give arguments friendly names
     export DOMAIN_NAME=${1}
     export UPSTREAM=${2}
     local -n DOMAIN_ALIASES=${3}
     local DOMAIN_NGXCONF=${4}
 
-    local FILE=${SITES}/${DOMAIN_NAME}
+    # paths to site configuration and custom config directory
+    local SITE="${SITES}/${DOMAIN_NAME}"
+    local CONF="${SITE}.conf"
+    export CUSTOM_CONF="${SITE}.d"
+
+    # check for custom site configuration directory
+    [[ ! -d ${CUSTOM_CONF} ]] && mkdir ${CUSTOM_CONF}
 
     # check for existing configuration file
-    if [ -f ${FILE} ] ; then
+    if [ -f ${CONF} ] ; then
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
             _echo "    removing and regnerating Nginx configuration"
-            rm ${FILE}
+            rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
@@ -44,7 +51,7 @@ setup_nginx () {
 
     # generate site configuration
     gomplate \
-        -o ${FILE} \
+        -o ${CONF} \
         -f ${TEMPLATES}/site.conf.tmpl
 
 }

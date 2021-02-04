@@ -35,8 +35,7 @@ server {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
         include                         helpers/secure-headers.conf;
-        # uncomment this helper to set http upgrade headers (required to support websockets)
-        #include                         helpers/proxy-params-websockets.conf;
+        include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
 
     ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
