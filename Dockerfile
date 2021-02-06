@@ -1,4 +1,4 @@
-FROM bcgdesign/nginx:alpine-3.13-1.2.2
+FROM bcgdesign/nginx:alpine-3.13-1.2.4
 
 LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
     org.label-schema.name="Nginx Proxy" \
@@ -32,7 +32,8 @@ RUN apk -U upgrade \
         curl \
         gomplate=${GOMPLATE_VERSION} \
         openssl \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites /www/* /tmp/*
+    && mv /etc/nginx/sites/localhost.conf /etc/nginx/http.d/default.conf \
+    && rm -rf /var/cache/apk/* /etc/nginx/sites /tmp/*
 
 COPY ./overlay /
 
