@@ -33,7 +33,7 @@ RUN apk -U upgrade \
         gomplate=${GOMPLATE_VERSION} \
         openssl \
     && mv /etc/nginx/sites/localhost.conf /etc/nginx/http.d/default.conf \
-    rm -rf /var/cache/apk/* /etc/nginx/sites /tmp/*
+    && rm -rf /var/cache/apk/* /etc/nginx/sites /tmp/*
 
 COPY ./overlay /
 
