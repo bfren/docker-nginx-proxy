@@ -1,5 +1,8 @@
 #!/usr/bin/with-contenv bash
 
+set -euo pipefail
+
+
 #======================================================================================================================
 # Generate a temporary SSL certificate and key
 #   $1  (string) Base path

@@ -1,5 +1,8 @@
 #!/usr/bin/with-contenv bash
 
+set -euo pipefail
+
+
 #======================================================================================================================
 # Set up global configuration
 #======================================================================================================================
@@ -10,7 +13,7 @@ setup_global () {
         _echo " .. creating global configuration file..."
         gomplate \
             -o ${SSL_GLOBAL_CFG} \
-            -f ${TEMPLATES}/global.conf.tmpl
+            -f ${TEMPLATES}/getssl-global.conf.tmpl
     fi
 
     if [ ! -f ${SSL_DHPARAM} ] ; then

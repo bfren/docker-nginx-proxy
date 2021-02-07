@@ -1,5 +1,8 @@
 #!/usr/bin/with-contenv bash
 
+set -euo pipefail
+
+
 #======================================================================================================================
 # Set up Nginx
 #   $1  (string) Domain name
@@ -52,6 +55,6 @@ setup_nginx () {
     # generate site configuration
     gomplate \
         -o ${CONF} \
-        -f ${TEMPLATES}/site.conf.tmpl
+        -f ${TEMPLATES}/nginx-site.conf.tmpl
 
 }
