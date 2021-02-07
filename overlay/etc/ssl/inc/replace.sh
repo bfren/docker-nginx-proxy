@@ -1,8 +1,5 @@
 #!/usr/bin/with-contenv bash
 
-set -euo pipefail
-
-
 #======================================================================================================================
 # Replace a key/value pair in a file
 #   $1  (string) Key
