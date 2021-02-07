@@ -52,6 +52,6 @@ setup_nginx () {
     # generate site configuration
     gomplate \
         -o ${CONF} \
-        -f ${TEMPLATES}/site.conf.tmpl
+        -f ${TEMPLATES}/nginx-site.conf.tmpl
 
 }
