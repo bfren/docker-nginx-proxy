@@ -2,7 +2,7 @@
 # WARNING: This file is generated. Do not make changes to this file.
 # Changes will be overwritten the next time the container is started.
 #
-# To add server names or aliases please use /ssl/conf.sh
+# To add server names or aliases please use /ssl/conf.sh.
 #
 # If you need a fully custom configuration then add the following to /ssl/conf.sh:
 #   NGXCONF["{{ getenv "DOMAIN_NAME" }}"]="custom"
@@ -13,8 +13,8 @@
 
 {{ end }}server {
     server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              80;
-    listen                              [::]:80;
+    listen                              80{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
+    listen                              [::]:80{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
 
     location ^~ /{{ getenv "ACME_CHALLENGE" }} {
         allow                           all;
@@ -33,8 +33,8 @@
 
 server {
     server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              443 ssl http2;
-    listen                              [::]:443 ssl http2;
+    listen                              443 ssl http2{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
+    listen                              [::]:443 ssl http2{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
@@ -45,9 +45,12 @@ server {
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
-        include                         helpers/secure-headers.conf;
+        include                         helpers/proxy-secure-headers.conf;
+        error_page                      502 503 504 /maintenance.html;
         include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
+
+    include                             helpers/proxy-maintenance.conf;
 
     ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
     ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;

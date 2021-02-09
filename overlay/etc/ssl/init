@@ -27,6 +27,24 @@ _done
 
 
 #======================================================================================================================
+# Check for PROXY_URI
+#======================================================================================================================
+
+[[ -z "${PROXY_URI-}" ]] && _error "PROXY_URI must be set."
+
+_echo "Setting up default server ${PROXY_URI}..."
+declare -a BLANK_ALIAS=()
+
+_echo "  . Nginx..."
+setup_nginx 1 ${PROXY_URI} "http://localhost" BLANK_ALIAS ""
+
+_echo "  . SSL..."
+setup_ssl ${PROXY_URI} BLANK_ALIAS
+
+_ok "  . done."
+
+
+#======================================================================================================================
 # Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
@@ -40,7 +58,7 @@ for DN in "${!DOMAINS[@]}" ; do
     _echo " .. ${DN}"
 
     _echo "  . Nginx..."
-    setup_nginx ${DN} ${UP} AL ${CF}
+    setup_nginx 0 ${DN} ${UP} AL ${CF}
 
     _echo "  . SSL..."
     setup_ssl ${DN} AL

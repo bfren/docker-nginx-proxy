@@ -11,10 +11,11 @@
 setup_nginx () {
 
     # give arguments friendly names
-    export DOMAIN_NAME=${1}
-    export UPSTREAM=${2}
-    local -n DOMAIN_ALIASES=${3}
-    export DOMAIN_NGXCONF=${4}
+    export IS_DEFAULT=${1}
+    export DOMAIN_NAME=${2}
+    export UPSTREAM=${3}
+    local -n DOMAIN_ALIASES=${4}
+    export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
     local SITE="${SITES}/${DOMAIN_NAME}"
@@ -50,8 +51,14 @@ setup_nginx () {
     export SERVER_NAMES=$(echo "${TMP}" | xargs)
 
     # generate site configuration
+    if [ "${IS_DEFAULT}" = "1" ] ; then
+        NGINX_CONF="default"
+    else
+        NGINX_CONF="site"
+    fi
+
     gomplate \
         -o ${CONF} \
-        -f ${TEMPLATES}/nginx-site.conf.tmpl
+        -f ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
 
 }
