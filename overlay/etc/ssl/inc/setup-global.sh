@@ -9,7 +9,7 @@ setup_global () {
     if [ ! -f ${SSL_GLOBAL_CFG} ] ; then
         _echo " .. creating global configuration file..."
         esh -o ${SSL_GLOBAL_CFG} \
-            ${TEMPLATES}/getssl-global.conf.tmpl
+            ${TEMPLATES}/getssl-global.conf.esh
     fi
 
     if [ ! -f ${SSL_DHPARAM} ] ; then

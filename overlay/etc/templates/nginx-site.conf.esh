@@ -16,15 +16,15 @@
     listen                              80;
     listen                              [::]:80;
 
-    <%+ ./nginx-acme-challenge.part %>
+    <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
         <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        <% for DN in "${!SERVER_NAMES[@]}" ; do ; if [ -n "${DN}" ] ; then -%>
+        <% for DN in "${!SERVER_NAMES[@]}" ; do [[ -z "${DN}" ]] && continue -%>
         if ($host = <%= ${DN} %>) {
-            return                      301 https://<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %><%= ${DOMAIN_NAME} %><% else %>$host<% fi %>$request_uri;
+            return                      301 https://<%= [[ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ]] && ${DOMAIN_NAME} || '$host' ?>$request_uri;
         }
-        <% fi ; done -%>
+        <% done -%>
         <% fi -%>
 
         return                          204;
@@ -54,5 +54,5 @@ server {
 
     include                             helpers/proxy-maintenance.conf;
 
-    <%+ ./nginx-ssl-certs.part %>
+    <%+ ./nginx-ssl-certs.part.esh %>
 }

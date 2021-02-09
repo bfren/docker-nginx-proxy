@@ -11,7 +11,7 @@ server {
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
-    <%+ ./nginx-acme-challenge.part %>
+    <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
         <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
@@ -34,5 +34,5 @@ server {
         include                         <%= ${CUSTOM_CONF}/*.conf %>;
     }
 
-    <%+ ./nginx-ssl-certs.part %>
+    <%+ ./nginx-ssl-certs.part.esh %>
 }

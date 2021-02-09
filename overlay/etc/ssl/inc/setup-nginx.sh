@@ -58,6 +58,6 @@ setup_nginx () {
     fi
 
     esh -o ${CONF} \
-        ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
+        ${TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }
