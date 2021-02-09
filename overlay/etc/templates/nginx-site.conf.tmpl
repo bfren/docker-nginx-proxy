@@ -46,7 +46,7 @@ server {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
         include                         helpers/proxy-secure-headers.conf;
-        error_page                      502 /maintenance.html;
+        error_page                      502 503 504 /maintenance.html;
         include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
 
