@@ -57,8 +57,7 @@ setup_nginx () {
         NGINX_CONF="site"
     fi
 
-    gomplate \
-        -o ${CONF} \
-        -f ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
+    esh -o ${CONF} \
+        ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
 
 }
