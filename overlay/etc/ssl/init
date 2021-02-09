@@ -33,12 +33,13 @@ _done
 [[ -z "${PROXY_URI}" ]] && _error "PROXY_URI must be set."
 
 _echo "Setting up default server ${PROXY_URI}..."
+declare -a BLANK_ALIAS=()
 
 _echo "  . Nginx..."
-setup_nginx true ${PROXY_URI} "http://localhost" ("") ""
+setup_nginx true ${PROXY_URI} "http://localhost" BLANK_ALIAS ""
 
 _echo "  . SSL..."
-setup_ssl ${PROXY_URI} ("")
+setup_ssl ${PROXY_URI} BLANK_ALIAS
 
 _ok "  . done."
 
