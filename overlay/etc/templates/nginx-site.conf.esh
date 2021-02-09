@@ -1,4 +1,5 @@
-{{ if eq (getenv "DOMAIN_NGXCONF") "" }}#======================================================================================================================
+<% if [ -z "${DOMAIN_NGXCONF}" ] ; then -%>
+#======================================================================================================================
 # WARNING: This file is generated. Do not make changes to this file.
 # Changes will be overwritten the next time the container is started.
 #
@@ -10,8 +11,8 @@
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
-
-{{ end }}server {
+<% fi -%>
+server {
     server_name                         <%= ${SERVER_NAMES} %>;
     listen                              80;
     listen                              [::]:80;
