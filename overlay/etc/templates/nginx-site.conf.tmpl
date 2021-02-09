@@ -46,8 +46,11 @@ server {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
         include                         helpers/proxy-secure-headers.conf;
+        error_page                      502 /maintenance.html;
         include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
+
+    include                             helpers/proxy-maintenance.conf;
 
     ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
     ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
