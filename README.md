@@ -55,14 +55,14 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 ## Nginx Configuration Helpers
 
-The image contains a handful of useful Nginx configuration 'helper' files, which you can find in `/overlay/etc/nginx/helpers`.
+The image contains a handful of useful Nginx configuration 'helper' files, which you can find in `/overlay/etc/nginx/helpers`.  They all begin with the prefix 'proxy':
 
-| Helper                            | Description                                                                                                      |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `proxy-params.conf`               | Headers commonly required when proxying a site.                                                                  |
-| `proxy-params-websockets.conf`    | Headers required to use websockets.                                                                              |
-| `secure-headers.conf`             | Standard secure headers - see [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/).            |
-| `tls1_3-only.conf`                | If you want to be ultra-secure (and not support older browsers), this will disable all TLS protocols except 1.3. |
+| Helper                    | Description                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `-params.conf`            | Headers commonly required when proxying a site.                                                                  |
+| `-params-websockets.conf` | Headers required to use websockets.                                                                              |
+| `-secure-headers.conf`    | Standard secure headers - see [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/).            |
+| `-tls1_3-only.conf`       | If you want to be ultra-secure (and not support older browsers), this will disable all TLS protocols except 1.3. |
 
 ## Authors
 
