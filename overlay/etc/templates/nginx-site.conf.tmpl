@@ -5,55 +5,54 @@
 # To add server names or aliases please use /ssl/conf.sh.
 #
 # If you need a fully custom configuration then add the following to /ssl/conf.sh:
-#   NGXCONF["{{ getenv "DOMAIN_NAME" }}"]="custom"
+#   NGXCONF["<%= ${DOMAIN_NAME} %>"]="custom"
 # This will stop this file being generated next time the container is started.
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
 
 {{ end }}server {
-    server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              80{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
-    listen                              [::]:80{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
+    server_name                         <%= ${SERVER_NAMES} %>;
+    listen                              80;
+    listen                              [::]:80;
 
-    location ^~ /{{ getenv "ACME_CHALLENGE" }} {
-        allow                           all;
-        root                            {{ getenv "WWW" }};
-    }
+    <%+ ./nginx-acme-challenge.part %>
 
     location / {
-        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}{{ range ( (getenv "SERVER_NAMES") | strings.Split " " ) }}{{ if . }}
-        if ($host = {{ . }}) {
-            return                      301 https://{{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}{{ getenv "DOMAIN_NAME" }}{{ else }}$host{{ end }}$request_uri;
+        <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+        <% for DN in "${!SERVER_NAMES[@]}" ; do ; if [ -n "${DN}" ] ; then -%>
+        if ($host = <%= ${DN} %>) {
+            return                      301 https://<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %><%= ${DOMAIN_NAME} %><% else %>$host<% fi %>$request_uri;
         }
-        {{ end }}{{ end }}{{ end }}
+        <% fi ; done -%>
+        <% fi -%>
+
         return                          204;
     }
 }
 
 server {
-    server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              443 ssl http2{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
-    listen                              [::]:443 ssl http2{{ if eq (getenv "IS_DEFAULT") "1" }} default_server{{ end }};
+    server_name                         <%= ${SERVER_NAMES} %>;
+    listen                              443 ssl http2;
+    listen                              [::]:443 ssl http2;
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
-    {{ if eq (getenv "SSL_REDIRECT_TO_CANONICAL") "1" }}if ($host != {{ getenv "DOMAIN_NAME" }}) {
-        return                          301 https://{{ getenv "DOMAIN_NAME" }}$request_uri;
-    }{{ end }}
+    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+    if ($host != <%= ${DOMAIN_NAME} %>) {
+        return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
+    }
+    <% fi -%>
 
     location / {
-        proxy_pass                      {{ getenv "UPSTREAM" }};
+        proxy_pass                      <%= ${UPSTREAM} %>;
         include                         helpers/proxy-params.conf;
         include                         helpers/proxy-secure-headers.conf;
         error_page                      502 503 504 /maintenance.html;
-        include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
+        include                         <%= ${CUSTOM_CONF}/*.conf %>;
     }
 
     include                             helpers/proxy-maintenance.conf;
 
-    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
-    ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_trusted_certificate             {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/chain.crt;
-    ssl_dhparam                         {{ getenv "SSL_DHPARAM" }};
+    <%+ ./nginx-ssl-certs.part %>
 }

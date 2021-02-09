@@ -11,17 +11,14 @@ server {
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
-    location ^~ /{{ getenv "ACME_CHALLENGE" }} {
-        allow                           all;
-        root                            {{ getenv "WWW" }};
-    }
+    <%+ ./nginx-acme-challenge.part %>
 
     location / {
-        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}
-        return                          301 https://{{ getenv "DOMAIN_NAME" }}$request_uri;
-        {{ else }}
-        root                            {{ getenv "WWW" }};
-        {{ end }}
+        <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+        return                          301 https://<%= ${DOMAIN_NAME} %>$request_uri;
+        <% else -%>
+        root                            <%= ${WWW} %>;
+        <% fi -%>
     }
 }
 
@@ -32,13 +29,10 @@ server {
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
     location / {
-        root                            {{ getenv "WWW" }};
+        root                            <%= ${WWW} %>;
         include                         helpers/proxy-secure-headers.conf;
-        include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
+        include                         <%= ${CUSTOM_CONF}/*.conf %>;
     }
 
-    ssl_certificate                     {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/fullchain.crt;
-    ssl_certificate_key                 {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}.key;
-    ssl_trusted_certificate             {{ getenv "SSL_CERTS" }}/{{ getenv "DOMAIN_NAME" }}/chain.crt;
-    ssl_dhparam                         {{ getenv "SSL_DHPARAM" }};
+    <%+ ./nginx-ssl-certs.part %>
 }
