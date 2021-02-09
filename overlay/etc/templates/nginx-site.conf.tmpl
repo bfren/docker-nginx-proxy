@@ -13,8 +13,8 @@
 
 {{ end }}server {
     server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              80;
-    listen                              [::]:80;
+    listen                              80{{ if getenv "IS_DEFAULT" }} default_server{{ end }};
+    listen                              [::]:80{{ if getenv "IS_DEFAULT" }} default_server{{ end }};
 
     location ^~ /{{ getenv "ACME_CHALLENGE" }} {
         allow                           all;
@@ -33,8 +33,8 @@
 
 server {
     server_name                         {{ getenv "SERVER_NAMES" }};
-    listen                              443 ssl http2;
-    listen                              [::]:443 ssl http2;
+    listen                              443 ssl http2{{ if getenv "IS_DEFAULT" }} default_server{{ end }};
+    listen                              [::]:443 ssl http2{{ if getenv "IS_DEFAULT" }} default_server{{ end }};
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 

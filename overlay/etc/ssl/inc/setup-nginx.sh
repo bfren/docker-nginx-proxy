@@ -11,10 +11,11 @@
 setup_nginx () {
 
     # give arguments friendly names
-    export DOMAIN_NAME=${1}
-    export UPSTREAM=${2}
-    local -n DOMAIN_ALIASES=${3}
-    export DOMAIN_NGXCONF=${4}
+    export IS_DEFAULT=${1}
+    export DOMAIN_NAME=${2}
+    export UPSTREAM=${3}
+    local -n DOMAIN_ALIASES=${4}
+    export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
     local SITE="${SITES}/${DOMAIN_NAME}"

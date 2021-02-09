@@ -35,7 +35,7 @@ _done
 _echo "Setting up default server ${PROXY_URI}..."
 
 _echo "  . Nginx..."
-setup_nginx ${PROXY_URI} "http://localhost" ("") ""
+setup_nginx true ${PROXY_URI} "http://localhost" ("") ""
 
 _echo "  . SSL..."
 setup_ssl ${PROXY_URI} ("")
@@ -57,12 +57,14 @@ for DN in "${!DOMAINS[@]}" ; do
     _echo " .. ${DN}"
 
     _echo "  . Nginx..."
-    setup_nginx ${DN} ${UP} AL ${CF}
+    setup_nginx false ${DN} ${UP} AL ${CF}
 
     _echo "  . SSL..."
     setup_ssl ${DN} AL
 
     _ok "  . done."
+
+    FIRST=false
 
 done
 _ok "Domains set up."
