@@ -45,7 +45,7 @@ server {
     location / {
         proxy_pass                      {{ getenv "UPSTREAM" }};
         include                         helpers/proxy-params.conf;
-        include                         helpers/secure-headers.conf;
+        include                         helpers/proxy-secure-headers.conf;
         include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
 

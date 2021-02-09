@@ -11,10 +11,17 @@ server {
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
-    add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
+    location ^~ /{{ getenv "ACME_CHALLENGE" }} {
+        allow                           all;
+        root                            {{ getenv "WWW" }};
+    }
 
     location / {
+        {{ if eq (getenv "SSL_REDIRECT_INSECURE") "1" }}
+        return                          301 https://{{ getenv "DOMAIN_NAME" }}$request_uri;
+        {{ else }}
         root                            {{ getenv "WWW" }};
+        {{ end }}
     }
 }
 
@@ -26,7 +33,7 @@ server {
 
     location / {
         root                            {{ getenv "WWW" }};
-        include                         helpers/secure-headers.conf;
+        include                         helpers/proxy-secure-headers.conf;
         include                         {{ getenv "CUSTOM_CONF" }}/*.conf;
     }
 
