@@ -51,8 +51,14 @@ setup_nginx () {
     export SERVER_NAMES=$(echo "${TMP}" | xargs)
 
     # generate site configuration
+    if [ "${IS_DEFAULT}" = "1" ] ; then
+        NGINX_CONF="default"
+    else
+        NGINX_CONF="site"
+    fi
+
     gomplate \
         -o ${CONF} \
-        -f ${TEMPLATES}/nginx-site.conf.tmpl
+        -f ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
 
 }
