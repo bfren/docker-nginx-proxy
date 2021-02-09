@@ -12,6 +12,8 @@ EXPOSE 443
 ENV \
     # used for renewal notification emails
     LETS_ENCRYPT_EMAIL= \
+    # the base URI of the proxy server (will be used when SSL bindings fail)
+    PROXY_URI= \
     # clean all config and certificates before doing anything else
     CLEAN_INSTALL=0 \
     # set to 1 to use live instead of staging server
