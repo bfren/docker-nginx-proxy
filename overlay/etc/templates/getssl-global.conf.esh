@@ -19,9 +19,9 @@ CA="https://acme-staging-v02.api.letsencrypt.org"
 #AGREEMENT=""
 
 # Set an email address associated with your account - generally set at account level rather than domain.
-ACCOUNT_EMAIL=<%= ${LETS_ENCRYPT_EMAIL} %>
+ACCOUNT_EMAIL=<%= "${LETS_ENCRYPT_EMAIL}" %>
 ACCOUNT_KEY_LENGTH=4096
-ACCOUNT_KEY="<%= ${SSL_CERTS} %>account.key"
+ACCOUNT_KEY="<%= "${SSL_CERTS}account.key" %>"
 
 # Account key and private key types - can be rsa, prime256v1, secp384r1 or secp521r1
 #ACCOUNT_KEY_TYPE="rsa"
@@ -49,4 +49,4 @@ CHECK_REMOTE="true"
 #DNS_ADD_COMMAND=
 #DNS_DEL_COMMAND=
 
-SKIP_HTTP_TOKEN_CHECK=<%= ${GETSSL_SKIP_HTTP_TOKEN_CHECK} %>
+SKIP_HTTP_TOKEN_CHECK=<%= "${GETSSL_SKIP_HTTP_TOKEN_CHECK}" %>

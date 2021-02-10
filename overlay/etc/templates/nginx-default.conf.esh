@@ -11,13 +11,13 @@ server {
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
-    <%+ ./nginx-acme-challenge.part.esh %>
+<%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
 <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        return                          301 https://<%= ${DOMAIN_NAME} %>$request_uri;
+        return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
-        root                            <%= ${WWW} %>;
+        root                            <%= "${WWW}" %>;
 <% fi -%>
     }
 }
@@ -29,10 +29,10 @@ server {
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
     location / {
-        root                            <%= ${WWW} %>;
+        root                            <%= "${WWW}" %>;
         include                         helpers/proxy-secure-headers.conf;
-        include                         <%= ${CUSTOM_CONF}/*.conf %>;
+        include                         <%= "${CUSTOM_CONF}/*.conf" %>;
     }
 
-    <%+ ./nginx-ssl-certs.part.esh %>
+<%+ ./nginx-ssl-certs.part.esh %>
 }
