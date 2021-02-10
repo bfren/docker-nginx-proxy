@@ -57,10 +57,10 @@ for DN in "${!DOMAINS[@]}" ; do
     bcg-echo " .. ${DN}"
 
     bcg-echo "  . Nginx..."
-    setup_nginx 0 ${DN} ${UP} ${AL} ${CF}
+    setup_nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
 
     bcg-echo "  . SSL..."
-    setup_ssl ${DN} ${AL}
+    setup_ssl ${DN} "${AL}"
 
     bcg-ok "  . done."
 
