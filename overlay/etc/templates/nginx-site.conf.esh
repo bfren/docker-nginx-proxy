@@ -20,18 +20,19 @@ server {
     <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-        <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
+<% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
             return                      301 <%= https://${DOMAIN_NAME} %>$request_uri;
-        <% else -%>
-            <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
-            <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
-            <% [[ -z "${DN}" ]] && continue %>
+<% else -%>
+<% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
+<% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
+<% [[ -z "${DN}" ]] && continue %>
         if ($host = <%= ${DN} %>) {
             return                      301 https://$host$request_uri;
         }
-            <% done -%>
-        return                          204;<% fi ; fi %>
+<% done %>
+        return                          204;
+<% fi ; fi %>
     }
 }
 
@@ -41,11 +42,11 @@ server {
     listen                              [::]:443 ssl http2;
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
-    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
+<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
     if ($host != <%= ${DOMAIN_NAME} %>) {
         return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
     }
-    <% fi -%>
+<% fi -%>
 
     location / {
         proxy_pass                      <%= ${UPSTREAM} %>;
