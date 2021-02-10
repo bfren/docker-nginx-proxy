@@ -33,13 +33,12 @@ bcg-done
 [[ -z "${PROXY_URI-}" ]] && bcg-error "PROXY_URI must be set."
 
 bcg-echo "Setting up default server ${PROXY_URI}..."
-declare -a BLANK_ALIAS=()
 
 bcg-echo "  . Nginx..."
-setup_nginx 1 ${PROXY_URI} "http://localhost" BLANK_ALIAS ""
+setup_nginx 1 ${PROXY_URI} "http://localhost" ""
 
 bcg-echo "  . SSL..."
-setup_ssl ${PROXY_URI} BLANK_ALIAS
+setup_ssl ${PROXY_URI} ""
 
 bcg-ok "  . done."
 
@@ -61,7 +60,7 @@ for DN in "${!DOMAINS[@]}" ; do
     setup_nginx 0 ${DN} ${UP} ${AL} ${CF}
 
     bcg-echo "  . SSL..."
-    setup_ssl ${DN} AL
+    setup_ssl ${DN} ${AL}
 
     bcg-ok "  . done."
 

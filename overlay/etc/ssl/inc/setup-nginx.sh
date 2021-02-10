@@ -11,11 +11,11 @@
 setup_nginx () {
 
     # give arguments friendly names
-    export IS_DEFAULT="${1}"
-    export DOMAIN_NAME="${2}"
-    export UPSTREAM="${3}"
-    local DOMAIN_ALIASES="${4}"
-    export DOMAIN_NGXCONF="${5}"
+    export IS_DEFAULT=${1}
+    export DOMAIN_NAME=${2}
+    export UPSTREAM=${3}
+    local DOMAIN_ALIASES=${4}
+    export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
     local SITE="${SITES}/${DOMAIN_NAME}"
@@ -47,8 +47,7 @@ setup_nginx () {
     fi
 
     # build domain list and remove trailing / multiple spaces between domains
-    TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES})"
-    export SERVER_NAMES=$(echo "${TMP}" | xargs)
+    export SERVER_NAMES=$(echo "${DOMAIN_NAME} ${DOMAIN_ALIASES}" | xargs)
 
     # generate site configuration
     if [ "${IS_DEFAULT}" = "1" ] ; then

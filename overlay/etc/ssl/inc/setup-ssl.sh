@@ -29,7 +29,7 @@ generate_temp_cert () {
 setup_ssl () {
 
     local DOMAIN_NAME=${1}
-    local -n DOMAIN_ALIASES=${2}
+    local DOMAIN_ALIASES=(${2})
     local FILE=${SSL_CERTS}/${DOMAIN_NAME}/${GETSSL_CFG}
 
     # check for existing configuration
