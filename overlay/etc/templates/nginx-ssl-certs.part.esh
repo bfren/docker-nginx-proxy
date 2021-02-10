@@ -1,4 +1,4 @@
-    ssl_certificate                     <%= ${SSL_CERTS}/${DOMAIN_NAME}/fullchain.crt %>;
+ssl_certificate                     <%= ${SSL_CERTS}/${DOMAIN_NAME}/fullchain.crt %>;
     ssl_certificate_key                 <%= ${SSL_CERTS}/${DOMAIN_NAME}.key %>;
     ssl_trusted_certificate             <%= ${SSL_CERTS}/${DOMAIN_NAME}/chain.crt %>;
     ssl_dhparam                         <%= ${SSL_DHPARAM} %>;

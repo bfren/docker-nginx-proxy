@@ -23,7 +23,7 @@ server {
         <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
         <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
         <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
-        <% [[ -z "${DN}" ]] && continue -%>
+        <% [[ -z "${DN}" ]] && continue %>
         if ($host = <%= ${DN} %>) {
             return                      301 https://<% [[ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ]] && printf '%s' ${DOMAIN_NAME} || printf '%s' '$host' -%>$request_uri;
         }
@@ -40,7 +40,7 @@ server {
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
-    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
     if ($host != <%= ${DOMAIN_NAME} %>) {
         return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
     }

@@ -1,4 +1,4 @@
-    location ^~ /<%= ${ACME_CHALLENGE} %> {
+location ^~ /<%= ${ACME_CHALLENGE} %> {
         allow                           all;
         root                            <%= ${WWW} %>;
     }
