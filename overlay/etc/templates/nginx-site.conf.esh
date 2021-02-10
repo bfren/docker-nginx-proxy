@@ -11,7 +11,7 @@
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
-<% fi -%>
+<% fi %>
 server {
     server_name                         <%= ${SERVER_NAMES} %>;
     listen                              80;
@@ -21,13 +21,17 @@ server {
 
     location / {
         <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
-        <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
-        <% [[ -z "${DN}" ]] && continue %>
+        <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+            return                      301 <%= https://${DOMAIN_NAME} %>$request_uri;
+        <% else -%>
+            <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
+            <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
+                <% [[ -z "${DN}" ]] && continue -%>
         if ($host = <%= ${DN} %>) {
-            return                      301 https://<% [[ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ]] && printf '%s' ${DOMAIN_NAME} || printf '%s' '$host' -%>$request_uri;
+            return                      301 https://$host$request_uri;
         }
-        <% done ; fi -%>
+            <% done -%>
+        <% fi ; fi -%>
 
         return                          204;
     }
