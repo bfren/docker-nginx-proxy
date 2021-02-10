@@ -14,11 +14,11 @@ server {
     <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-        <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+<% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
         return                          301 https://<%= ${DOMAIN_NAME} %>$request_uri;
-        <% else -%>
+<% else -%>
         root                            <%= ${WWW} %>;
-        <% fi -%>
+<% fi -%>
     }
 }
 
