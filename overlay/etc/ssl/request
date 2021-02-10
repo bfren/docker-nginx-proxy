@@ -15,10 +15,10 @@ source ${INC}/check.sh
 
 request() { /etc/ssl/getssl -U -w ${SSL_CERTS} ${1} ; }
 
-_echo "Requesting SSL certificates..."
+bcg-echo "Requesting SSL certificates..."
 request "${PROXY_URI}"
 for DN in "${!DOMAINS[@]}" ; do
-    _echo " .. ${DN}"
+    bcg-echo " .. ${DN}"
     request ${DN}
 done
-_done
+bcg-done

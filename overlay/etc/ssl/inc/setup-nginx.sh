@@ -30,19 +30,19 @@ setup_nginx () {
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            _echo "    removing and regnerating Nginx configuration"
+            bcg-echo "    removing and regnerating Nginx configuration"
             rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
-            _echo "    keeping existing configuration."
+            bcg-echo "    keeping existing configuration."
             return 0
         fi
 
     else
 
         # no need to do anything, be a good log citizen
-        _echo "    generating default Nginx configuration"
+        bcg-echo "    generating default Nginx configuration"
 
     fi
 

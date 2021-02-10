@@ -21,49 +21,49 @@ source ${INC}/setup-ssl.sh
 # Set up global SSL configuration
 #======================================================================================================================
 
-_echo "Setting up getssl..."
+bcg-echo "Setting up getssl..."
 setup_global
-_done
+bcg-done
 
 
 #======================================================================================================================
 # Check for PROXY_URI
 #======================================================================================================================
 
-[[ -z "${PROXY_URI-}" ]] && _error "PROXY_URI must be set."
+[[ -z "${PROXY_URI-}" ]] && bcg-error "PROXY_URI must be set."
 
-_echo "Setting up default server ${PROXY_URI}..."
+bcg-echo "Setting up default server ${PROXY_URI}..."
 declare -a BLANK_ALIAS=()
 
-_echo "  . Nginx..."
+bcg-echo "  . Nginx..."
 setup_nginx 1 ${PROXY_URI} "http://localhost" BLANK_ALIAS ""
 
-_echo "  . SSL..."
+bcg-echo "  . SSL..."
 setup_ssl ${PROXY_URI} BLANK_ALIAS
 
-_ok "  . done."
+bcg-ok "  . done."
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each primary domain
 #======================================================================================================================
 
-_echo "Setting up domains..."
+bcg-echo "Setting up domains..."
 for DN in "${!DOMAINS[@]}" ; do
 
     UP=${DOMAINS[${DN}]}     # upstream server
     AL=(${ALIASES[${DN}]})   # domain aliases
     CF=${NGXCONF[${DN}]}     # domain Nginx configuration default / custom
 
-    _echo " .. ${DN}"
+    bcg-echo " .. ${DN}"
 
-    _echo "  . Nginx..."
+    bcg-echo "  . Nginx..."
     setup_nginx 0 ${DN} ${UP} AL ${CF}
 
-    _echo "  . SSL..."
+    bcg-echo "  . SSL..."
     setup_ssl ${DN} AL
 
-    _ok "  . done."
+    bcg-ok "  . done."
 
 done
-_ok "Domains set up."
+bcg-ok "Domains set up."

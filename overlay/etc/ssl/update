@@ -14,6 +14,6 @@ source ${INC}/check.sh
 #   -a check all certificates
 #======================================================================================================================
 
-_echo "Updating all SSL certificates..."
+bcg-echo "Updating all SSL certificates..."
 /etc/ssl/getssl -U -w ${SSL_CERTS} -a
-_done
+bcg-done
