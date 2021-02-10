@@ -25,7 +25,8 @@ server {
             return                      301 <%= https://${DOMAIN_NAME} %>$request_uri;
         <% else -%>
             <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
-            <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do ; [[ -z "${DN}" ]] && continue %>
+            <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
+            <% [[ -z "${DN}" ]] && continue %>
         if ($host = <%= ${DN} %>) {
             return                      301 https://$host$request_uri;
         }
