@@ -7,7 +7,7 @@ set -euo pipefail
 # Add environment variable to S6 environment directory
 #======================================================================================================================
 
-add_env () { _echo "${1}=${2}" && printf "%s" $2 > /var/run/s6/container_environment/$1; }
+add_env () { bcg-echo "${1}=${2}" && printf "%s" $2 > /var/run/s6/container_environment/$1; }
 
 
 #======================================================================================================================

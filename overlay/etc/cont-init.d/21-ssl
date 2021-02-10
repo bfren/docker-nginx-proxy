@@ -9,11 +9,11 @@ set -euo pipefail
 
 if [ "${CLEAN_INSTALL}" = "1" ] ; then
 
-    _echo "Clean install detected..."
-    _rmrf "${SSL_GLOBAL_CFG}"
-    _rmrf "${SSL_CERTS}/*"
-    _rmrf "${SITES}/*"
-    _done
+    bcg-echo "Clean install detected..."
+    bcg-rmrf "${SSL_GLOBAL_CFG}"
+    bcg-rmrf "${SSL_CERTS}/*"
+    bcg-rmrf "${SITES}/*"
+    bcg-done
 
 fi
 

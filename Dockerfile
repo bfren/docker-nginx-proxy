@@ -1,4 +1,4 @@
-FROM bcgdesign/nginx:alpine-3.13-1.3.2
+FROM bcgdesign/nginx:alpine-3.13-1.4.1
 
 LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
     org.label-schema.name="Nginx Proxy" \
@@ -27,12 +27,10 @@ ENV \
     # set to true to skip local HTTP token check
     GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
 
-ARG GOMPLATE_VERSION=3.8.0-r0
 RUN apk -U upgrade \
     && apk add \
         bash \
         curl \
-        gomplate=${GOMPLATE_VERSION} \
         openssl \
     && rm -rf /var/cache/apk/* /etc/nginx/sites /tmp/*
 

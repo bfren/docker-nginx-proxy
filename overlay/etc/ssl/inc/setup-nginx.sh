@@ -14,7 +14,7 @@ setup_nginx () {
     export IS_DEFAULT=${1}
     export DOMAIN_NAME=${2}
     export UPSTREAM=${3}
-    local -n DOMAIN_ALIASES=${4}
+    local DOMAIN_ALIASES=${4}
     export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
@@ -30,25 +30,24 @@ setup_nginx () {
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            _echo "    removing and regnerating Nginx configuration"
+            bcg-echo "    removing and regnerating Nginx configuration"
             rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
-            _echo "    keeping existing configuration."
+            bcg-echo "    keeping existing configuration."
             return 0
         fi
 
     else
 
         # no need to do anything, be a good log citizen
-        _echo "    generating default Nginx configuration"
+        bcg-echo "    generating default Nginx configuration"
 
     fi
 
     # build domain list and remove trailing / multiple spaces between domains
-    TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
-    export SERVER_NAMES=$(echo "${TMP}" | xargs)
+    export SERVER_NAMES=$(echo "${DOMAIN_NAME} ${DOMAIN_ALIASES}" | xargs)
 
     # generate site configuration
     if [ "${IS_DEFAULT}" = "1" ] ; then
@@ -57,8 +56,8 @@ setup_nginx () {
         NGINX_CONF="site"
     fi
 
-    gomplate \
+    esh -s /bin/bash \
         -o ${CONF} \
-        -f ${TEMPLATES}/nginx-${NGINX_CONF}.conf.tmpl
+        ${TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }

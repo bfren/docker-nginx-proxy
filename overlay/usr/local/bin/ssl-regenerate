@@ -7,8 +7,8 @@ set -euo pipefail
 # Delete SSL files and reinitialise
 #======================================================================================================================
 
-_echo "Removing SSL configuration files and certificates..."
-_rmrf "${SSL_CERTS}/*"
-_done
+bcg-echo "Removing SSL configuration files and certificates..."
+bcg-rmrf "${SSL_CERTS}/*"
+bcg-done
 
 ssl-init

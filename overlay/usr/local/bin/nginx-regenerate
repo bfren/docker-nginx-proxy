@@ -7,8 +7,8 @@ set -euo pipefail
 # Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
-_echo "Removing nginx configuration files..."
-_rmrf "${SITES}/*"
-_done
+bcg-echo "Removing nginx configuration files..."
+bcg-rmrf "${SITES}/*"
+bcg-done
 
 ssl-init

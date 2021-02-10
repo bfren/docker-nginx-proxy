@@ -3,25 +3,25 @@
 # Uncomment and modify any variables you need
 # see https://github.com/srvrco/getssl/wiki/Config-variables for details
 #
-{{ if eq (getenv "LETS_ENCRYPT_LIVE") "1" }}
+<% if [ "${LETS_ENCRYPT_LIVE}" = "1" ] ; then %>
 # The staging server is best for testing (hence set as default)
 #CA="https://acme-staging-v02.api.letsencrypt.org"
 # This server issues full certificates, however has rate limits
 CA="https://acme-v02.api.letsencrypt.org"
-{{ else }}
+<% else %>
 # The staging server is best for testing (hence set as default)
 CA="https://acme-staging-v02.api.letsencrypt.org"
 # This server issues full certificates, however has rate limits
 #CA="https://acme-v02.api.letsencrypt.org"
-{{ end }}
+<% fi %>
 
 # The agreement that must be signed with the CA, if not defined the default agreement will be used
 #AGREEMENT=""
 
 # Set an email address associated with your account - generally set at account level rather than domain.
-ACCOUNT_EMAIL={{ getenv "LETS_ENCRYPT_EMAIL" }}
+ACCOUNT_EMAIL=<%= ${LETS_ENCRYPT_EMAIL} %>
 ACCOUNT_KEY_LENGTH=4096
-ACCOUNT_KEY="{{ getenv "SSL_CERTS" }}account.key"
+ACCOUNT_KEY="<%= ${SSL_CERTS} %>account.key"
 
 # Account key and private key types - can be rsa, prime256v1, secp384r1 or secp521r1
 #ACCOUNT_KEY_TYPE="rsa"
@@ -49,4 +49,4 @@ CHECK_REMOTE="true"
 #DNS_ADD_COMMAND=
 #DNS_DEL_COMMAND=
 
-SKIP_HTTP_TOKEN_CHECK={{ getenv "GETSSL_SKIP_HTTP_TOKEN_CHECK" }}
+SKIP_HTTP_TOKEN_CHECK=<%= ${GETSSL_SKIP_HTTP_TOKEN_CHECK} %>
