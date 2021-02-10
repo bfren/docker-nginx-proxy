@@ -6,7 +6,7 @@
 # To add server names or aliases please use /ssl/conf.sh.
 #
 # If you need a fully custom configuration then add the following to /ssl/conf.sh:
-#   NGXCONF["<%= "${DOMAIN_NAME}"" %>"]="custom"
+#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]="custom"
 # This will stop this file being generated next time the container is started.
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
