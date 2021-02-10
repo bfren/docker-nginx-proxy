@@ -249,6 +249,12 @@
 # 2020-12-22 Check that dig doesn't return an error (#611)(2.32)
 # 2020-12-29 Fix dig SOA lookup (#617)(2.33)
 # 2021-01-05 Show error if running in POSIX mode (#611)
+# 2021-01-16 Fix double slash when using root directory with DAVS (ionos)
+# 2021-01-22 Add FTP_OPTIONS
+# 2021-01-27 Add the ability to set several reload commands (atisne)
+# 2021-01-29 Use dig -r (if supported) to ignore.digrc (#630)
+# 2021-02-07 Allow -u --upgrade without any domain, so that one can only update the script (2.34)
+# 2021-02-09 Prevent listing the complete file if version tag missing (#637)
 # ----------------------------------------------------------------------------------------
 
 case :$SHELLOPTS: in
@@ -257,7 +263,7 @@ esac
 
 PROGNAME=${0##*/}
 PROGDIR="$(cd "$(dirname "$0")" || exit; pwd -P;)"
-VERSION="2.33"
+VERSION="2.34"
 
 # defaults
 ACCOUNT_KEY_LENGTH=4096
@@ -487,8 +493,9 @@ check_challenge_completion() { # checks with the ACME server if our challenge is
       error_exit "$domain:Verify error:$err_detail"
     fi
 
-    # if ACME response is pending ( they haven't completed checks yet) then wait and try again.
-    if [[ "$status" == "pending" ]] ; then
+    # if ACME response is pending (they haven't completed checks yet)
+    # or valid (completed checks but not created certificate) then wait and try again.
+    if [[ "$status" == "pending" ]] || [[ "$status" == "valid" ]]; then
       info "Pending"
     else
       err_detail=$(echo "$response" | grep "detail")
@@ -747,10 +754,10 @@ check_getssl_upgrade() { # check if a more recent version of code is available a
       fi
       if [[ ${_MUTE} -eq 0 ]]; then
         echo "Updated getssl from v${VERSION} to v${latestversion}"
-        echo "these update notification can be turned off using the -Q option"
+        echo "These update notifications can be turned off using the -Q option"
         echo ""
         echo "Updates are;"
-        awk "/\(${VERSION}\)$/ {s=1} s; /\(${latestversion}\)$/ {s=0}" "$TEMP_UPGRADE_FILE" | awk '{if(NR>1)print}'
+        awk "/\(${VERSION}\)$/ {s=1} s; /\(${latestversion}\)$/ || /^# ----/ {s=0}" "$TEMP_UPGRADE_FILE" | awk '{if(NR>1)print}'
         echo ""
       fi
       if [[ -n "$_KEEP_VERSIONS" ]] && [[ "$_KEEP_VERSIONS" =~ ^[0-9]+$ ]]; then
@@ -780,7 +787,7 @@ check_getssl_upgrade() { # check if a more recent version of code is available a
     else
       info ""
       info "A more recent version (v${latestversion}) of getssl is available, please update"
-      info "the easiest way is to use the -u or --upgrade flag"
+      info "The easiest way is to use the -u or --upgrade flag"
       info ""
     fi
   fi
@@ -1119,8 +1126,13 @@ find_dns_utils() {
         debug "HAS DIG_OR_DRILL=drill"
         HAS_DIG_OR_DRILL="drill"
     elif [[ -n "$(command -v dig 2>/dev/null)" ]] && dig >/dev/null 2>&1; then
-        debug "HAS DIG_OR_DRILL=dig"
-        HAS_DIG_OR_DRILL="dig"
+        if [[ $(dig -r >/dev/null 2>&1) ]]; then
+          # use dig -r so ~/.digrc is not used
+          HAS_DIG_OR_DRILL="dig -r"
+        else
+          HAS_DIG_OR_DRILL="dig"
+        fi
+        debug "HAS DIG_OR_DRILL=$HAS_DIG_OR_DRILL"
     fi
 
     if [[ -n "$(command -v host 2>/dev/null)" ]]; then
@@ -1338,14 +1350,14 @@ get_auth_dns() { # get the authoritative dns server for a domain (sets primary_n
 
     # Use SOA +trace to find the name server
     if [[ $_TEST_SKIP_SOA_CALL == 0 ]]; then
-      if [[ "$HAS_DIG_OR_DRILL" == "dig" ]]; then
-        debug Using "$HAS_DIG_OR_DRILL SOA +trace +nocomments $gad_d $gad_s" to find primary nameserver
-        test_output "Using $HAS_DIG_OR_DRILL SOA"
-        res=$($HAS_DIG_OR_DRILL SOA +trace +nocomments "$gad_d" $gad_s 2>/dev/null | grep "IN\WNS\W")
-      else
+      if [[ "$HAS_DIG_OR_DRILL" == "drill" ]]; then
         debug Using "$HAS_DIG_OR_DRILL -T $gad_d $gad_s" to find primary nameserver
         test_output "Using $HAS_DIG_OR_DRILL SOA"
         res=$($HAS_DIG_OR_DRILL -T SOA "$gad_d" $gad_s 2>/dev/null | grep "IN\WNS\W")
+      else
+        debug Using "$HAS_DIG_OR_DRILL SOA +trace +nocomments $gad_d $gad_s" to find primary nameserver
+        test_output "Using $HAS_DIG_OR_DRILL SOA"
+        res=$($HAS_DIG_OR_DRILL SOA +trace +nocomments "$gad_d" $gad_s 2>/dev/null | grep "IN\WNS\W")
       fi
     fi
 
@@ -1659,7 +1671,7 @@ help_message() { # print out the help message
 	  -q, --quiet        Quiet mode (only outputs on error, success of new cert, or getssl was upgraded)
 	  -Q, --mute         Like -q, but also mute notification about successful upgrade
 	  -r, --revoke   "cert" "key" [CA_server] Revoke a certificate (the cert and key are required)
-	  -u, --upgrade      Upgrade getssl if a more recent version is available
+	  -u, --upgrade      Upgrade getssl if a more recent version is available - can be used with or without domain(s)
 	  -k, --keep     "#" Maximum number of old getssl versions to keep when upgrading
 	  -U, --nocheck      Do not check if a more recent version is available
 	  -w working_dir "Working directory"
@@ -1957,22 +1969,25 @@ purge_archive() { # purge archive of old, invalid, certificates
 reload_service() {  # Runs a command to reload services ( via ssh if needed)
   if [[ -n "$RELOAD_CMD" ]]; then
     info "reloading SSL services"
-    if [[ "${RELOAD_CMD:0:4}" == "ssh:" ]] ; then
-      sshhost=$(echo "$RELOAD_CMD"| awk -F: '{print $2}')
-      command=${RELOAD_CMD:(( ${#sshhost} + 5))}
-      debug "running following command to reload cert"
-      debug "ssh $SSH_OPTS $sshhost ${command}"
-      # shellcheck disable=SC2029
-      # shellcheck disable=SC2086
-      ssh $SSH_OPTS "$sshhost" "${command}" 1>/dev/null 2>&1
-      # allow 2 seconds for services to restart
-      sleep 2
-    else
-      debug "running reload command $RELOAD_CMD"
-      if ! eval "$RELOAD_CMD" ; then
-        error_exit "error running $RELOAD_CMD"
+    for ARELOAD_CMD in "${RELOAD_CMD[@]}"
+    do
+      if [[ "${ARELOAD_CMD:0:4}" == "ssh:" ]] ; then
+        sshhost=$(echo "$ARELOAD_CMD"| awk -F: '{print $2}')
+        command=${ARELOAD_CMD:(( ${#sshhost} + 5))}
+        debug "running following command to reload cert:"
+        debug "ssh $SSH_OPTS $sshhost ${command}"
+        # shellcheck disable=SC2029
+        # shellcheck disable=SC2086
+        ssh $SSH_OPTS "$sshhost" "${command}" 1>/dev/null 2>&1
+        # allow 2 seconds for services to restart
+        sleep 2
+      else
+        debug "running reload command: $ARELOAD_CMD"
+        if ! eval "$ARELOAD_CMD" ; then
+          error_exit "error running: $ARELOAD_CMD"
+        fi
       fi
-    fi
+    done
   fi
 }
 
@@ -2326,7 +2341,9 @@ write_domain_template() { # write out a template file for a domain.
 		#DOMAIN_CHAIN_LOCATION="" # this is the domain cert and CA cert
 		#DOMAIN_PEM_LOCATION="" # this is the domain key, domain cert and CA cert
 
-		# The command needed to reload apache / nginx or whatever you use
+		# The command needed to reload apache / nginx or whatever you use.
+		# Several (ssh) commands may be given using a bash array:
+		# RELOAD_CMD=('ssh:sshuserid@server5:systemctl reload httpd' 'logger getssl for server5 efficient.')
 		#RELOAD_CMD=""
 
 		# Uncomment the following line to prevent non-interactive renewals of certificates
@@ -2370,7 +2387,9 @@ write_getssl_template() { # write out the main template file
 	PRIVATE_KEY_ALG="rsa"
 	#REUSE_PRIVATE_KEY="true"
 
-	# The command needed to reload apache / nginx or whatever you use
+	# The command needed to reload apache / nginx or whatever you use.
+	# Several (ssh) commands may be given using a bash array:
+	# RELOAD_CMD=('ssh:sshuserid@server5:systemctl reload httpd' 'logger getssl for server5 efficient.')
 	#RELOAD_CMD=""
 
 	# The time period within which you want to allow renewal of a certificate
@@ -2496,6 +2515,11 @@ requires mktemp
 # Check if upgrades are available (unless they have specified -U to ignore Upgrade checks)
 if [[ $_UPGRADE_CHECK -eq 1 ]]; then
   check_getssl_upgrade
+  # if nothing in command line and no revocation and not only config check,
+  # then exit after upgrade
+  if [[ -z "$DOMAIN" ]] && [[ ${_CHECK_ALL} -ne 1 ]] && [[ ${_REVOKE} -ne 1 ]] && [ "${_ONLY_CHECK_CONFIG}" -ne 1 ]; then
+    graceful_exit
+  fi
 fi
 
 # Revoke a certificate if requested
