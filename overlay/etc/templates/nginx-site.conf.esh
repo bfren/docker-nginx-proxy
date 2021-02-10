@@ -44,7 +44,7 @@ server {
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
-    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
+    <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
     if ($host != <%= ${DOMAIN_NAME} %>) {
         return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
     }
