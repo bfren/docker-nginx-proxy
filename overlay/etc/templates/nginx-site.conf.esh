@@ -6,28 +6,28 @@
 # To add server names or aliases please use /ssl/conf.sh.
 #
 # If you need a fully custom configuration then add the following to /ssl/conf.sh:
-#   NGXCONF["<%= ${DOMAIN_NAME} %>"]="custom"
+#   NGXCONF["<%= "${DOMAIN_NAME}"" %>"]="custom"
 # This will stop this file being generated next time the container is started.
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
 <% fi %>
 server {
-    server_name                         <%= ${SERVER_NAMES} %>;
+    server_name                         <%= "${SERVER_NAMES}" %>;
     listen                              80;
     listen                              [::]:80;
 
-    <%+ ./nginx-acme-challenge.part.esh %>
+<%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
 <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
 <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
-        return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
+        return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
 <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
 <% for DN in "${SERVER_NAMES_ARRAY[@]}" ; do -%>
 <% [[ -z "${DN}" ]] && continue -%>
-        if ($host = <%= ${DN} %>) {
+        if ($host = <%= "${DN}" %>) {
             return                      301 https://$host$request_uri;
         }
 <% done -%>
@@ -37,26 +37,26 @@ server {
 }
 
 server {
-    server_name                         <%= ${SERVER_NAMES} %>;
+    server_name                         <%= "${SERVER_NAMES}" %>;
     listen                              443 ssl http2;
     listen                              [::]:443 ssl http2;
 
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
-    if ($host != <%= ${DOMAIN_NAME} %>) {
-        return                          301 <%= https://${DOMAIN_NAME} %>$request_uri;
+    if ($host != <%= "${DOMAIN_NAME}" %>) {
+        return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
 <% fi -%>
 
     location / {
-        proxy_pass                      <%= ${UPSTREAM} %>;
+        proxy_pass                      <%= "${UPSTREAM}" %>;
         include                         helpers/proxy-params.conf;
         include                         helpers/proxy-secure-headers.conf;
         error_page                      502 503 504 /maintenance.html;
-        include                         <%= ${CUSTOM_CONF}/*.conf %>;
+        include                         <%= "${CUSTOM_CONF}/*.conf" %>;
     }
 
     include                             helpers/proxy-maintenance.conf;
 
-    <%+ ./nginx-ssl-certs.part.esh %>
+%+ ./nginx-ssl-certs.part.esh %>
 }
