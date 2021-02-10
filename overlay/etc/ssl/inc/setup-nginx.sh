@@ -14,7 +14,7 @@ setup_nginx () {
     export IS_DEFAULT=${1}
     export DOMAIN_NAME=${2}
     export UPSTREAM=${3}
-    local -n DOMAIN_ALIASES=${4}
+    local DOMAIN_ALIASES=${4}
     export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
@@ -47,7 +47,7 @@ setup_nginx () {
     fi
 
     # build domain list and remove trailing / multiple spaces between domains
-    TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES[@]})"
+    TMP="${DOMAIN_NAME}$(printf " %s" ${DOMAIN_ALIASES})"
     export SERVER_NAMES=$(echo "${TMP}" | xargs)
 
     # generate site configuration
@@ -57,7 +57,8 @@ setup_nginx () {
         NGINX_CONF="site"
     fi
 
-    esh -o ${CONF} \
+    esh -s /bin/bash \
+        -o ${CONF} \
         ${TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }

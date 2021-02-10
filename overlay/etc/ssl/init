@@ -51,14 +51,14 @@ bcg-ok "  . done."
 bcg-echo "Setting up domains..."
 for DN in "${!DOMAINS[@]}" ; do
 
-    UP=${DOMAINS[${DN}]}     # upstream server
-    AL=(${ALIASES[${DN}]})   # domain aliases
-    CF=${NGXCONF[${DN}]}     # domain Nginx configuration default / custom
+    UP=${DOMAINS[${DN}]}  # upstream server
+    AL=${ALIASES[${DN}]}  # aliases
+    CF=${NGXCONF[${DN}]}  # use default / custom Nginx config
 
     bcg-echo " .. ${DN}"
 
     bcg-echo "  . Nginx..."
-    setup_nginx 0 ${DN} ${UP} AL ${CF}
+    setup_nginx 0 ${DN} ${UP} ${AL} ${CF}
 
     bcg-echo "  . SSL..."
     setup_ssl ${DN} AL
