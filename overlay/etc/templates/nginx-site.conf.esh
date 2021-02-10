@@ -21,7 +21,7 @@ server {
 
     location / {
         <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+        <% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then %>
             return                      301 <%= https://${DOMAIN_NAME} %>$request_uri;
         <% else -%>
             <% SERVER_NAMES_ARRAY=(${SERVER_NAMES}) -%>
@@ -31,9 +31,9 @@ server {
             return                      301 https://$host$request_uri;
         }
             <% done -%>
-        <% fi ; fi -%>
 
         return                          204;
+        <% fi ; fi -%>
     }
 }
 
