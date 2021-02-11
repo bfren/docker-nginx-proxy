@@ -61,7 +61,7 @@ server {
 <% fi -%>
 
     # optional file to have multiple upstream servers
-    include                             <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]upstream" %>
+    include                             <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]upstream" %>;
 
     # main site configuration block
     location / {
