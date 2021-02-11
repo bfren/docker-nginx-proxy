@@ -48,6 +48,8 @@ server {
     }
 <% fi -%>
 
+    include                             <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]upstream" %>
+
     location / {
         proxy_pass                      <%= "${UPSTREAM}" %>;
         include                         helpers/proxy-params.conf;
