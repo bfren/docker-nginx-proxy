@@ -31,8 +31,8 @@ create_pem () {
     local CERT=${SSL_CERTS}/${DOMAIN_NAME}
     local PEM=${CERT}/${DOMAIN_NAME}.pem
 
-    ${CERT}.key > ${PEM}
-    ${CERT}/fullchain.cert >> ${PEM}
+    cat ${CERT}.key > ${PEM}
+    cat ${CERT}/fullchain.crt >> ${PEM}
 
 }
 
