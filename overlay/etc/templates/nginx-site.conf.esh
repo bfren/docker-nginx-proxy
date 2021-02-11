@@ -11,12 +11,33 @@
 #
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
+<% else -%>
+#======================================================================================================================
+# You can make changes to this file.
+#
+# Be warned that:
+#   a) changes could break the normal functioning of your sites
+#   b) you will need to add bug fixes and features from future releases manually
+#
+# Custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
+# these are loaded as part of the HTTPS server block below.
+#
+# If you would like to return to the generated configuration then remove the following from /ssl/conf.sh:
+#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]=""
+# This will cause this file to be regenerated next time the container is started.
+#
+# Copyright (c) 2021 Ben Green <https://bcgdesign.com>
+#======================================================================================================================
 <% fi %>
+#======================================================================================================================
+# HTTP
+#======================================================================================================================
+
 server {
     # serve site for these domain names only
     server_name                         <%= "${SERVER_NAMES}" %>;
 
-    # listen on HTTP port
+    # listen on HTTP port for both IPv4 and IPv6
     listen                              80;
     listen                              [::]:80;
 
@@ -43,11 +64,16 @@ server {
     }
 }
 
+
+#======================================================================================================================
+# HTTPS
+#======================================================================================================================
+
 server {
     # serve site for these domain names only
     server_name                         <%= "${SERVER_NAMES}" %>;
 
-    # listen on default SSL port and use HTTP/2
+    # listen on SSL port for both IPv4 and IPv6, and enable HTTP/2
     listen                              443 ssl http2;
     listen                              [::]:443 ssl http2;
 

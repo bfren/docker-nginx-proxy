@@ -7,8 +7,12 @@
 # Copyright (c) 2021 Ben Green <https://bcgdesign.com>
 #======================================================================================================================
 
+#======================================================================================================================
+# HTTP
+#======================================================================================================================
+
 server {
-    # listen on HTTP port for all requests that don't match a defined site
+    # handle requests that don't match a defined site
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
@@ -20,25 +24,29 @@ server {
         # redirect to root domain name
         return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
-        # serve <%= "${WWW}" %> pages
+        # serve pages in <%= "${WWW}" %> (map volume to override default pages)
         root                            <%= "${WWW}" %>;
 <% fi -%>
     }
 }
 
+
+#======================================================================================================================
+# HTTPS
+#======================================================================================================================
+
 server {
-    # listen on default SSL port and use HTTP/2 for all requests that don't match a defined site
+    # handle requests that don't match a defined site
     listen                              443 ssl http2 default_server;
     listen                              [::]:443 ssl http2 default_server;
 
     # because he was a legend
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
-    # main site configuration block
+    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
     location / {
         root                            <%= "${WWW}" %>;
         include                         helpers/proxy-secure-headers.conf;
-        include                         <%= "${CUSTOM_CONF}/*.conf" %>;
     }
 
 <%+ ./nginx-ssl-certs.part.esh %>
