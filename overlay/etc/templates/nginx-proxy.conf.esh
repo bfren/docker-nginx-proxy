@@ -50,7 +50,7 @@ server {
     include                         helpers/nginx-static-files.conf;
 
     # serve pages in <%= "${WWW}" %> (map volume to override default pages)
-    root                        <%= "${WWW}" %>;
+    root                            <%= "${WWW}" %>;
 
 <%+ ./nginx-ssl-certs.part.esh %>
 }

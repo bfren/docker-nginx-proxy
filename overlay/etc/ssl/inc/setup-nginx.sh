@@ -56,9 +56,8 @@ setup_nginx () {
         NGINX_CONF="site"
     fi
 
-    # generate config - /bin/bash is required to support arrays
-    esh -s /bin/bash \
-        -o ${CONF} \
+    # generate config
+    esh -o ${CONF} \
         ${TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }
