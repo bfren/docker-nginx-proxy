@@ -1,0 +1,51 @@
+#======================================================================================================================
+# WARNING: This file is generated. Do not make changes to this file.
+# Changes will be overwritten the next time the container is started.
+#
+# Use environment variable PROXY_URI to change this file.
+#
+# Copyright (c) 2021 Ben Green <https://bcgdesign.com>
+#======================================================================================================================
+
+#======================================================================================================================
+# HTTP
+#======================================================================================================================
+
+server {
+    # handle requests that don't match a defined site
+    listen                              80 default_server;
+    listen                              [::]:80 default_server;
+
+<% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+    # redirect to HTTPS
+    return                              301 $host$request_uri;
+<% else -%>
+    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
+    root                                <%= "${WWW}" %>;
+
+<%+ ./nginx-proxy-common.part.esh %>
+<% fi -%>
+}
+
+
+#======================================================================================================================
+# HTTPS
+#======================================================================================================================
+
+server {
+    # handle requests that don't match a defined site
+    listen                              443 ssl http2 default_server;
+    listen                              [::]:443 ssl http2 default_server;
+
+    # include secure headers
+    include                             helpers/proxy-secure-headers.conf;
+
+<%+ ./nginx-proxy-common.part.esh %>
+
+    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
+    location / {
+        root                            <%= "${WWW}" %>;
+    }
+
+<%+ ./nginx-ssl-certs.part.esh %>
+}

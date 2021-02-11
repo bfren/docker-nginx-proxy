@@ -4,12 +4,12 @@
 # see https://github.com/srvrco/getssl/wiki/Config-variables for details
 #
 <% if [ "${LETS_ENCRYPT_LIVE}" = "1" ] ; then %>
-# The staging server is best for testing (hence set as default)
+# The staging server is best for testing
 #CA="https://acme-staging-v02.api.letsencrypt.org"
 # This server issues full certificates, however has rate limits
 CA="https://acme-v02.api.letsencrypt.org"
 <% else %>
-# The staging server is best for testing (hence set as default)
+# The staging server is best for testing
 CA="https://acme-staging-v02.api.letsencrypt.org"
 # This server issues full certificates, however has rate limits
 #CA="https://acme-v02.api.letsencrypt.org"

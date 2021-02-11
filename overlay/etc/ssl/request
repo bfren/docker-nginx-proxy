@@ -1,24 +1,41 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Run checks
+# Run checks and include ssl functions
 #======================================================================================================================
 
 source ${INC}/check.sh
+source ${INC}/setup-ssl.sh
 
 
 #======================================================================================================================
 # Request certificates for all domains
-#   -U stop upgrade checks
-#   -w set working directory
+#   -U  stop upgrade checks
+#   -w  set working directory
 #======================================================================================================================
 
-request() { /etc/ssl/getssl -U -w ${SSL_CERTS} ${1} ; }
+request() {
+    /etc/ssl/getssl -U -w "${SSL_CERTS}" "${1}"
+    create_pem "${1}"
+}
 
-bcg-echo "Requesting SSL certificates..."
+
+#======================================================================================================================
+# Get certificate for the proxy server base domain
+#======================================================================================================================
+
+bcg-echo "Requesting proxy server certificate..."
 request "${PROXY_URI}"
+bcg-done
+
+
+#======================================================================================================================
+# Get certificates for all registered domains
+#======================================================================================================================
+
+bcg-echo "Requesting domain certificates..."
 for DN in "${!DOMAINS[@]}" ; do
     bcg-echo " .. ${DN}"
-    request ${DN}
+    request "${DN}"
 done
 bcg-done

@@ -1,19 +1,30 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Run checks
+# Run checks and include ssl functions
 #======================================================================================================================
 
 source ${INC}/check.sh
+source ${INC}/setup-ssl.sh
 
 
 #======================================================================================================================
 # Run update
-#   -U stop upgrade checks
-#   -w set working directory
-#   -a check all certificates
+#   -U  stop upgrade checks
+#   -w  set working directory
+#   -a  check all certificates
 #======================================================================================================================
 
 bcg-echo "Updating all SSL certificates..."
-/etc/ssl/getssl -U -w ${SSL_CERTS} -a
+/etc/ssl/getssl -U -w "${SSL_CERTS}" -a
+bcg-done
+
+
+#======================================================================================================================
+# Update all pem files (easier than working out which have been changed)
+#======================================================================================================================
+
+bcg-echo "Updating pem files..."
+create_pem "${PROXY_URI}"
+for DN in "${!DOMAINS[@]}" ; do create_pem "${DN}" ; done
 bcg-done
