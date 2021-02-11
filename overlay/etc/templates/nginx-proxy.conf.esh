@@ -16,18 +16,15 @@ server {
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
-<%+ ./nginx-acme-challenge.part.esh %>
-
-    # handle all non-secure requests
-    location / {
 <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-        # redirect to root domain name
-        return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
+    # redirect to HTTPS
+    return                              301 $host$request_uri;
 <% else -%>
-        # serve pages in <%= "${WWW}" %> (map volume to override default pages)
-        root                            <%= "${WWW}" %>;
+    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
+    root                                <%= "${WWW}" %>;
+
+<%+ ./nginx-proxy-common.part.esh %>
 <% fi -%>
-    }
 }
 
 
@@ -40,13 +37,14 @@ server {
     listen                              443 ssl http2 default_server;
     listen                              [::]:443 ssl http2 default_server;
 
-    # because he was a legend
-    add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
+    # include secure headers
+    include                             helpers/proxy-secure-headers.conf;
+
+<%+ ./nginx-proxy-common.part.esh %>
 
     # serve pages in <%= "${WWW}" %> (map volume to override default pages)
     location / {
         root                            <%= "${WWW}" %>;
-        include                         helpers/proxy-secure-headers.conf;
     }
 
 <%+ ./nginx-ssl-certs.part.esh %>
