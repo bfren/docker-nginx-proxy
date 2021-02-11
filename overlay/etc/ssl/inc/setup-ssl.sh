@@ -21,6 +21,23 @@ generate_temp_cert () {
 
 
 #======================================================================================================================
+# Create PEM file out of the private key, server certificate, and intermediate certificate
+#   $1  (string) Domain name
+#======================================================================================================================
+
+create_pem () {
+
+    local DOMAIN_NAME=${1}
+    local CERT=${SSL_CERTS}/${DOMAIN_NAME}
+    local PEM=${CERT}/${DOMAIN_NAME}.pem
+
+    ${CERT}.key > ${PEM}
+    ${CERT}/fullchain.cert >> ${PEM}
+
+}
+
+
+#======================================================================================================================
 # Set up SSL for a domain
 #   $1  (string) Domain name
 #   $2  (string) Name of Domain Aliases array
@@ -57,5 +74,8 @@ setup_ssl () {
     generate_temp_cert ${CERT}/fullchain.crt ${CERT}.key ${DOMAIN_NAME}
     generate_temp_cert ${CERT}/chain.crt ${CERT}/chain.key ${DOMAIN_NAME}
     rm ${CERT}/chain.key
+
+    # create pem file
+    create_pem "${DOMAIN_NAME}"
 
 }
