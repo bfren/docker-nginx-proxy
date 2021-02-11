@@ -8,26 +8,33 @@
 #======================================================================================================================
 
 server {
+    # listen on HTTP port for all requests that don't match a defined site
     listen                              80 default_server;
     listen                              [::]:80 default_server;
 
 <%+ ./nginx-acme-challenge.part.esh %>
 
+    # handle all non-secure requests
     location / {
 <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
+        # redirect to root domain name
         return                          301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
+        # serve <%= "${WWW}" %> pages
         root                            <%= "${WWW}" %>;
 <% fi -%>
     }
 }
 
 server {
+    # listen on default SSL port and use HTTP/2 for all requests that don't match a defined site
     listen                              443 ssl http2 default_server;
     listen                              [::]:443 ssl http2 default_server;
 
+    # because he was a legend
     add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
 
+    # main site configuration block
     location / {
         root                            <%= "${WWW}" %>;
         include                         helpers/proxy-secure-headers.conf;
