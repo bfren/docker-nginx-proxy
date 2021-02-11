@@ -58,6 +58,7 @@ The image contains a handful of useful Nginx configuration 'helper' files, which
 
 | Helper                    | Description                                                                                                      |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `-maintenance.conf`       | Displays a maintenance page (used when upstream server is returning an error 50x).                               |
 | `-params.conf`            | Headers commonly required when proxying a site.                                                                  |
 | `-params-websockets.conf` | Headers required to use websockets.                                                                              |
 | `-secure-headers.conf`    | Standard secure headers - see [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/).            |
