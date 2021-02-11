@@ -18,7 +18,7 @@ server {
 
 <% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
     # redirect to HTTPS
-    return                              301 $host$request_uri;
+    return                              301 https://$host$request_uri;
 <% else -%>
     # serve pages in <%= "${WWW}" %> (map volume to override default pages)
     root                                <%= "${WWW}" %>;
