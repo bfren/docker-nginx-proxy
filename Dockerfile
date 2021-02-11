@@ -1,4 +1,4 @@
-FROM bcgdesign/nginx:alpine-3.13-1.4.1
+FROM bcgdesign/nginx:alpine-3.13-1.4.2
 
 LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
     org.label-schema.name="Nginx Proxy" \
@@ -20,8 +20,6 @@ ENV \
     LETS_ENCRYPT_LIVE=0 \
     # set to the number of bits to use for generating DHPARAM
     SSL_DHPARAM_BITS=4096 \
-    # HTTPS redirection
-    SSL_REDIRECT_INSECURE=0 \
     # canonical domain name redirection
     SSL_REDIRECT_TO_CANONICAL=0 \
     # set to true to skip local HTTP token check

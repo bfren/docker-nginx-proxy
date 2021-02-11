@@ -1,6 +1,6 @@
     # allow acme challenge from anywhere (so SSL certificates can still be requested,
     # but all other requests can be blocked from outside the local network, for example)
     location ^~ /<%= "${ACME_CHALLENGE}" %> {
-        allow                           all;
-        root                            <%= "${WWW}" %>;
+        allow                       all;
+        root                        <%= "${WWW}" %>;
     }

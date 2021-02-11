@@ -1,6 +1,0 @@
-    # because he was a legend
-    add_header                          X-Clacks-Overhead "GNU Terry Pratchett";
-
-    # include standard helpers
-    include                             helpers/nginx-ignore-favicon.conf;
-    include                             helpers/nginx-static-files.conf;
