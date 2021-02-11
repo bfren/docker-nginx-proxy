@@ -26,7 +26,7 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 | Volume   | Purpose                                                                                                                                                                                                                                                |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/www`   | *From base image*                                                                                                                                                                                                                                      |
+| `/www`   | *From base image.*                                                                                                                                                                                                                                     |
 | `/sites` | Nginx site configuration, auto-generated on first run based on `conf.sh`.  After they are generated, you can alter them to suit their needs.  Running `nginx-regenerate` will wipe them all and start again.                                           |
 | `/ssl`   | Contains auto-generated SSL configuration and certificates (for backup purposes).  Your `conf.sh` file should be stored in here for auto-configuration (see `ssl-conf-sample.sh`).  Certificate update log (`update.log`) will be created here weekly. |
 
