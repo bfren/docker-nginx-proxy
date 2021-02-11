@@ -15,14 +15,13 @@
 #======================================================================================================================
 # You can make changes to this file.
 #
-# Be warned that:
-#   a) changes could break the normal functioning of your sites
-#   b) you will need to add bug fixes and features from future releases manually
+# WARNING:
+#   a) changes you make could break the normal functioning of your sites if you don't know what you're doing
+#   b) you will need to add future bug fixes and features manually
+#   c) custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
+#      these are loaded as part of the HTTPS server block below.
 #
-# Custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
-# these are loaded as part of the HTTPS server block below.
-#
-# If you would like to return to the generated configuration then remove the following from /ssl/conf.sh:
+# If you would like to return to using generated configuration then remove the following from /ssl/conf.sh:
 #   NGXCONF["<%= "${DOMAIN_NAME}" %>"]=""
 # This will cause this file to be regenerated next time the container is started.
 #
