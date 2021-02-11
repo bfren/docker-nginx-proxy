@@ -11,7 +11,7 @@
 setup_nginx () {
 
     # give arguments friendly names
-    export IS_DEFAULT=${1}
+    export IS_PROXY=${1}
     export DOMAIN_NAME=${2}
     export UPSTREAM=${3}
     local DOMAIN_ALIASES=${4}
@@ -50,12 +50,13 @@ setup_nginx () {
     export SERVER_NAMES=$(echo "${DOMAIN_NAME} ${DOMAIN_ALIASES}" | xargs)
 
     # generate site configuration
-    if [ "${IS_DEFAULT}" = "1" ] ; then
-        NGINX_CONF="default"
+    if [ "${IS_PROXY}" = "1" ] ; then
+        NGINX_CONF="proxy"
     else
         NGINX_CONF="site"
     fi
 
+    # generate config - /bin/bash is required to support arrays
     esh -s /bin/bash \
         -o ${CONF} \
         ${TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
