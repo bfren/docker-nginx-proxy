@@ -13,18 +13,15 @@
 
 server {
     # handle requests that don't match a defined site
-    listen                              80 default_server;
-    listen                              [::]:80 default_server;
+    listen                          80 default_server;
+    listen                          [::]:80 default_server;
 
-<% if [ "${SSL_REDIRECT_INSECURE}" = "1" ] ; then -%>
-    # redirect to HTTPS
-    return                              301 https://$host$request_uri;
-<% else -%>
-    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
-    root                                <%= "${WWW}" %>;
+<%+ ./nginx-acme-challenge.part.esh %>
 
-<%+ ./nginx-proxy-common.part.esh %>
-<% fi -%>
+    location / {
+        # redirect to HTTPS
+        return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
+    }
 }
 
 
@@ -34,18 +31,26 @@ server {
 
 server {
     # handle requests that don't match a defined site
-    listen                              443 ssl http2 default_server;
-    listen                              [::]:443 ssl http2 default_server;
+    listen                          443 ssl http2 default_server;
+    listen                          [::]:443 ssl http2 default_server;
+
+    # redirect to Proxy URI to avoid certificate errors
+    if ($host != <%= "${DOMAIN_NAME}" %>) {
+        return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
+    }
+
+    # because he was a legend
+    include                         helpers/nginx-discworld.conf;
 
     # include secure headers
-    include                             helpers/proxy-secure-headers.conf;
+    include                         helpers/proxy-secure-headers.conf;
 
-<%+ ./nginx-proxy-common.part.esh %>
+    # include standard helpers
+    include                         helpers/nginx-ignore-favicon.conf;
+    include                         helpers/nginx-static-files.conf;
 
     # serve pages in <%= "${WWW}" %> (map volume to override default pages)
-    location / {
-        root                            <%= "${WWW}" %>;
-    }
+    root                        <%= "${WWW}" %>;
 
 <%+ ./nginx-ssl-certs.part.esh %>
 }
