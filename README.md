@@ -39,7 +39,6 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | `CLEAN_INSTALL`                | 0 or 1                | If 1, all Nginx and SSL configuration and certificates will be deleted and regenerated.                                                      | 0                     |
 | `LETS_ENCRYPT_LIVE`            | 0 or 1                | Only set to 1 (to request live certificates) when your config is correct - Lets Encrypt rate limit certificate requests.                     | 0                     |
 | `SSL_DHPARAM_BITS`             | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                              | 4096                  |
-| `SSL_REDIRECT_INSECURE`        | 0 or 1                | If 1, all insecured (HTTP) requests will be upgraded by Nginx to secure (HTTPS).                                                             | 0                     |
 | `SSL_REDIRECT_TO_CANONICAL`    | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.sh`).                                                          | 0                     |
 | `GETSSL_SKIP_HTTP_TOKEN_CHECK` | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse). | false                 |
 
