@@ -19,7 +19,7 @@ server {
 <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-        # redirect to HTTPS
+        # redirect all other requests to HTTPS using PROXY_URI
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
 }
@@ -34,7 +34,7 @@ server {
     listen                          443 ssl http2 default_server;
     listen                          [::]:443 ssl http2 default_server;
 
-    # redirect to Proxy URI to avoid certificate errors
+    # redirect to PROXY_URI to avoid certificate errors
     if ($host != <%= "${DOMAIN_NAME}" %>) {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
