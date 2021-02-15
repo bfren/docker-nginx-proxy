@@ -18,6 +18,8 @@ ENV \
     CLEAN_INSTALL=0 \
     # set to 1 to use live instead of staging server
     LETS_ENCRYPT_LIVE=0 \
+    # set to the number of bits to use for generating private key
+    SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
     SSL_DHPARAM_BITS=4096 \
     # canonical domain name redirection
