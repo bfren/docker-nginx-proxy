@@ -8,13 +8,14 @@
 
 generate_temp_cert () {
 
-    openssl req -newkey rsa:1024 \
+    openssl req \
         -x509 \
         -sha256 \
-        -days 3650 \
         -nodes \
-        -out ${1} \
+        -days 3650 \
+        -newkey rsa:${SSL_KEY_BITS} \
         -keyout ${2} \
+        -out ${1} \
         -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${3}"
 
 }

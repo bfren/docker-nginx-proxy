@@ -11,6 +11,7 @@ if [ "${CLEAN_INSTALL}" = "1" ] ; then
 
     bcg-echo "Clean install detected..."
     bcg-rmrf "${SSL_GLOBAL_CFG}"
+    bcg-rmrf "${SSL_DHPARAM}"
     bcg-rmrf "${SSL_CERTS}/*"
     bcg-rmrf "${SITES}/*"
     bcg-done

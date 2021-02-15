@@ -7,8 +7,10 @@ set -euo pipefail
 # Delete SSL files and reinitialise
 #======================================================================================================================
 
-bcg-echo "Removing SSL certificates and configuration..."
-bcg-rmrf "${SSL_CERTS}/*"
+ssl-regenerate
+
+bcg-echo "Removing DH parameters..."
+bcg-rmrf "${SSL_DHPARAM}"
 bcg-done
 
 ssl-init
