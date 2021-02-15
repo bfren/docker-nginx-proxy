@@ -7,8 +7,12 @@ set -euo pipefail
 # Delete SSL files and reinitialise
 #======================================================================================================================
 
-bcg-echo "Removing SSL certificates..."
-bcg-rmrf "${SSL_CERTS}/*"
+ssl-regenerate
+
+bcg-echo "Removing SSL configuration..."
+bcg-rmrf "${SSL_DHPARAM}"
+bcg-rmrf "${SSL_GLOBAL_CFG}"
+bcg-rmrf "${SSL_ACCOUNT_KEY}"
 bcg-done
 
 ssl-init
