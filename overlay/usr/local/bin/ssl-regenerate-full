@@ -9,10 +9,8 @@ set -euo pipefail
 
 ssl-regenerate
 
-bcg-echo "Removing SSL configuration..."
+bcg-echo "Removing DH parameters..."
 bcg-rmrf "${SSL_DHPARAM}"
-bcg-rmrf "${SSL_GLOBAL_CFG}"
-bcg-rmrf "${SSL_ACCOUNT_KEY}"
 bcg-done
 
 ssl-init
