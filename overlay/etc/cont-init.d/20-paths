@@ -31,6 +31,7 @@ add_env "TEMPLATES" "/etc/templates"
 
 SSL=/ssl
 add_env "SSL" ${SSL}
+add_env "SSL_ACCOUNT_KEY" "${SSL}/account.key"
 add_env "SSL_CERTS" "${SSL}/certs"
 add_env "SSL_DHPARAM" "${SSL}/dhparam.pem"
 add_env "SSL_GLOBAL_CFG" "${SSL}/${GETSSL_CFG}"
