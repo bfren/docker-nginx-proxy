@@ -11,4 +11,5 @@ bcg-echo "Removing SSL certificates and configuration..."
 bcg-rmrf "${SSL_CERTS}/*"
 bcg-done
 
-ssl-init
+ssl-init 0
+ssl-request
