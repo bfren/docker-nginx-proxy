@@ -13,7 +13,7 @@ generate_temp_cert () {
         -sha256 \
         -nodes \
         -days 3650 \
-        -newkey rsa:${SSL_KEY_BITS} \
+        -newkey rsa:${PROXY_SSL_KEY_BITS} \
         -keyout ${2} \
         -out ${1} \
         -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=${3}"

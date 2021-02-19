@@ -7,7 +7,7 @@ set -euo pipefail
 # Check for clean install
 #======================================================================================================================
 
-if [ "${CLEAN_INSTALL}" = "1" ] ; then
+if [ "${PROXY_CLEAN_INSTALL}" = "1" ] ; then
 
     bcg-echo "Clean install detected..."
     bcg-rmrf "${SSL_GLOBAL_CFG}"

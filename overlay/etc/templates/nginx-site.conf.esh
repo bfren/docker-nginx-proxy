@@ -18,7 +18,7 @@
 # WARNING:
 #   a) changes you make could break the normal functioning of your sites if you don't know what you're doing
 #   b) you will need to add future bug fixes and features manually
-#   c) if you change any environment variables (e.g. SSL_REDIRECT_TO_CANONICAL) nothing will happen as certain
+#   c) if you change any environment variables (e.g. PROXY_SSL_REDIRECT_TO_CANONICAL) nothing will happen as certain
 #      features require the Nginx configuration files to be regenerated when the container environment is changed
 #   d) custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
 #      these are loaded as part of the HTTPS server block below
@@ -45,7 +45,7 @@ server {
 <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+<% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
         # redirect all other requests to HTTPS using primary domain name
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
@@ -71,7 +71,7 @@ server {
     # because he was a legend
     include                         helpers/nginx-discworld.conf;
 
-<% if [ "${SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+<% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
     # redirect to primary domain name
     if ($host != <%= "${DOMAIN_NAME}" %>) {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;

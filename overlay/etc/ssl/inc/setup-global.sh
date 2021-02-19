@@ -14,7 +14,7 @@ setup_global () {
 
     if [ ! -f ${SSL_DHPARAM} ] ; then
         bcg-echo " .. generating dhparam..."
-        openssl dhparam -out ${SSL_DHPARAM} ${SSL_DHPARAM_BITS}
+        openssl dhparam -out ${SSL_DHPARAM} ${PROXY_SSL_DHPARAM_BITS}
     fi
 
 }

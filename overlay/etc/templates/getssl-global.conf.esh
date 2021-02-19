@@ -3,7 +3,7 @@
 # Uncomment and modify any variables you need
 # see https://github.com/srvrco/getssl/wiki/Config-variables for details
 #
-<% if [ "${LETS_ENCRYPT_LIVE}" = "1" ] ; then %>
+<% if [ "${PROXY_LETS_ENCRYPT_LIVE}" = "1" ] ; then %>
 # The staging server is best for testing
 #CA="https://acme-staging-v02.api.letsencrypt.org"
 # This server issues full certificates, however has rate limits
@@ -19,7 +19,7 @@ CA="https://acme-staging-v02.api.letsencrypt.org"
 #AGREEMENT=""
 
 # Set an email address associated with your account - generally set at account level rather than domain.
-ACCOUNT_EMAIL=<%= ${LETS_ENCRYPT_EMAIL} %>
+ACCOUNT_EMAIL=<%= ${PROXY_LETS_ENCRYPT_EMAIL} %>
 ACCOUNT_KEY_LENGTH=4096
 ACCOUNT_KEY="<%= ${SSL_ACCOUNT_KEY} %>"
 
@@ -49,4 +49,4 @@ CHECK_REMOTE="true"
 #DNS_ADD_COMMAND=
 #DNS_DEL_COMMAND=
 
-SKIP_HTTP_TOKEN_CHECK=<%= ${GETSSL_SKIP_HTTP_TOKEN_CHECK} %>
+SKIP_HTTP_TOKEN_CHECK=<%= ${PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK} %>

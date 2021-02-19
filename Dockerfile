@@ -10,32 +10,25 @@ LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
 EXPOSE 443
 
 ENV \
-    # used for renewal notification emails
-    LETS_ENCRYPT_EMAIL= \
-    # the base URI of the proxy server (will be used when SSL bindings fail)
     PROXY_URI= \
     # clean all config and certificates before doing anything else
-    CLEAN_INSTALL=0 \
+    PROXY_CLEAN_INSTALL=0 \
+    # used for renewal notification emails
+    PROXY_LETS_ENCRYPT_EMAIL= \
+    # the base URI of the proxy server (will be used when SSL bindings fail)
     # set to 1 to use live instead of staging server
-    LETS_ENCRYPT_LIVE=0 \
+    PROXY_LETS_ENCRYPT_LIVE=0 \
     # set to the number of bits to use for generating private key
-    SSL_KEY_BITS=4096 \
+    PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
-    SSL_DHPARAM_BITS=4096 \
+    PROXY_SSL_DHPARAM_BITS=4096 \
     # canonical domain name redirection
-    SSL_REDIRECT_TO_CANONICAL=0 \
+    PROXY_SSL_REDIRECT_TO_CANONICAL=0 \
     # set to true to skip local HTTP token check
-    GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
-
-RUN apk -U upgrade \
-    && apk add \
-        bash \
-        curl \
-        openssl \
-    && rm -rf /var/cache/apk/* /etc/nginx/sites /tmp/*
+    PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
 
 COPY ./overlay /
 
-RUN ln -s /ssl/certs /etc/ssl/certs
-RUN ln -s /sites /etc/nginx/sites
+RUN bcg-install
+
 VOLUME [ "/ssl", "/sites" ]

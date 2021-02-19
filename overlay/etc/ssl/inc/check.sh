@@ -14,8 +14,8 @@ fi
 # Ensure email is set
 #======================================================================================================================
 
-if [ -z "${LETS_ENCRYPT_EMAIL}" ] ; then
-    bcg-error "LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
+if [ -z "${PROXY_LETS_ENCRYPT_EMAIL}" ] ; then
+    bcg-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
     exit 1
 fi
 
