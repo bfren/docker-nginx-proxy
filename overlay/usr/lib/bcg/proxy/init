@@ -7,17 +7,17 @@ export BCG_E=`basename ${0}`
 # Run checks.
 #======================================================================================================================
 
-source ${INC}/proxy-check.sh
+source ${LIB_INC}/proxy-check.sh
 
 
 #======================================================================================================================
 # Require source files.
 #======================================================================================================================
 
-source ${INC}/proxy-replace.sh
-source ${INC}/proxy-setup-global.sh
-source ${INC}/proxy-setup-nginx.sh
-source ${INC}/proxy-setup-ssl.sh
+source ${LIB_INC}/proxy-replace.sh
+source ${LIB_INC}/proxy-setup-global.sh
+source ${LIB_INC}/proxy-setup-nginx.sh
+source ${LIB_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
