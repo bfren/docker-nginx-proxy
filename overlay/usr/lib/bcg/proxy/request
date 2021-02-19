@@ -7,8 +7,8 @@ export BCG_E=`basename ${0}`
 # Run checks and include ssl functions.
 #======================================================================================================================
 
-source ${INC}/check.sh
-source ${INC}/setup-ssl.sh
+source ${INC}/proxy-check.sh
+source ${INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
