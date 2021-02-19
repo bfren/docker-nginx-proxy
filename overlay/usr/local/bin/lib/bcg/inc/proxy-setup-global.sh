@@ -4,17 +4,17 @@
 # Set up global configuration
 #======================================================================================================================
 
-setup_global () {
+setup-global () {
 
-    if [ ! -f ${SSL_GLOBAL_CFG} ] ; then
-        bcg-echo " .. creating global configuration file..."
-        esh -o ${SSL_GLOBAL_CFG} \
+    if [ ! -f ${PROXY_SSL_GLOBAL_CFG} ] ; then
+        bcg-debug " .. creating global configuration file..."
+        esh -o ${PROXY_SSL_GLOBAL_CFG} \
             ${TEMPLATES}/getssl-global.conf.esh
     fi
 
-    if [ ! -f ${SSL_DHPARAM} ] ; then
-        bcg-echo " .. generating dhparam..."
-        openssl dhparam -out ${SSL_DHPARAM} ${PROXY_SSL_DHPARAM_BITS}
+    if [ ! -f ${PROXY_SSL_DHPARAM} ] ; then
+        bcg-debug " .. generating dhparam..."
+        openssl dhparam -out ${PROXY_SSL_DHPARAM} ${PROXY_PROXY_SSL_DHPARAM_BITS}
     fi
 
 }

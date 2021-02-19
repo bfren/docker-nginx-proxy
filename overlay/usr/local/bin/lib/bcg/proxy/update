@@ -19,7 +19,7 @@ source ${INC}/setup-ssl.sh
 #======================================================================================================================
 
 bcg-echo "Updating all SSL certificates..."
-/etc/ssl/getssl -U -w "${SSL_CERTS}" -a
+${PROXY_GETSSL} -U -w "${PROXY_SSL_CERTS}" -a
 bcg-done
 
 
@@ -28,6 +28,6 @@ bcg-done
 #======================================================================================================================
 
 bcg-echo "Updating pem files..."
-create_pem "${PROXY_URI}"
-for DN in "${!DOMAINS[@]}" ; do create_pem "${DN}" ; done
+create-pem "${PROXY_URI}"
+for DN in "${!DOMAINS[@]}" ; do create-pem "${DN}" ; done
 bcg-done

@@ -14,10 +14,10 @@ source ${INC}/check.sh
 # Require source files
 #======================================================================================================================
 
-source ${INC}/replace.sh
-source ${INC}/setup-global.sh
-source ${INC}/setup-nginx.sh
-source ${INC}/setup-ssl.sh
+source ${INC}/proxy-replace.sh
+source ${INC}/proxy-setup-global.sh
+source ${INC}/proxy-setup-nginx.sh
+source ${INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
@@ -25,7 +25,7 @@ source ${INC}/setup-ssl.sh
 #======================================================================================================================
 
 bcg-echo "Setting up getssl..."
-setup_global
+setup-global
 bcg-done
 
 
@@ -36,10 +36,10 @@ bcg-done
 bcg-echo "Setting up default server ${PROXY_URI}..."
 
 bcg-echo "  . Nginx..."
-setup_nginx 1 ${PROXY_URI} "http://localhost" ""
+setup-nginx 1 ${PROXY_URI} "http://localhost" ""
 
 bcg-echo "  . SSL..."
-setup_ssl ${PROXY_URI} ""
+setup-ssl ${PROXY_URI} ""
 
 bcg-ok "  . done."
 
@@ -58,10 +58,10 @@ for DN in "${!DOMAINS[@]}" ; do
     bcg-echo " .. ${DN}"
 
     bcg-echo "  . Nginx..."
-    setup_nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
+    setup-nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
 
     bcg-echo "  . SSL..."
-    setup_ssl ${DN} "${AL}"
+    setup-ssl ${DN} "${AL}"
 
     bcg-ok "  . done."
 

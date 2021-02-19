@@ -24,7 +24,7 @@ fi
 # Create arrays and include configuration
 #======================================================================================================================
 
-SSL_CONF=${SSL}/conf.sh
+SSL_CONF=${PROXY_SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then
     bcg-error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
     exit 1
@@ -51,4 +51,4 @@ fi
 # Ensure certs directory exists
 #======================================================================================================================
 
-[[ ! -d ${SSL_CERTS} ]] && mkdir ${SSL_CERTS}
+[[ ! -d ${PROXY_SSL_CERTS} ]] && mkdir ${PROXY_SSL_CERTS}

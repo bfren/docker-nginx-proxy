@@ -8,7 +8,7 @@
 #   $4  (string) Blank (regenerate) or 'custom' (keep) Nginx configuration file
 #======================================================================================================================
 
-setup_nginx () {
+setup-nginx () {
 
     # give arguments friendly names
     export IS_PROXY=${1}
@@ -18,7 +18,7 @@ setup_nginx () {
     export DOMAIN_NGXCONF=${5}
 
     # paths to site configuration and custom config directory
-    local SITE="${SITES}/${DOMAIN_NAME}"
+    local SITE="${PROXY_SITES}/${DOMAIN_NAME}"
     local CONF="${SITE}.conf"
     export CUSTOM_CONF="${SITE}.d"
 
@@ -30,19 +30,19 @@ setup_nginx () {
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            bcg-echo "    removing and regnerating Nginx configuration"
+            bcg-debug "    removing and regnerating Nginx configuration"
             rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
-            bcg-echo "    keeping existing configuration."
+            bcg-debug "    keeping existing configuration."
             return 0
         fi
 
     else
 
         # no need to do anything, be a good log citizen
-        bcg-echo "    generating default Nginx configuration"
+        bcg-debug "    generating default Nginx configuration"
 
     fi
 

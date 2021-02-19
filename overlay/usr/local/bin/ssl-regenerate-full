@@ -9,11 +9,11 @@ export BCG_E=`basename ${0}`
 #======================================================================================================================
 
 bcg-echo "Removing SSL certificates and configuration..."
-bcg-rmrf "${SSL_CERTS}/*"
+bcg-rmrf "${PROXY_SSL_CERTS}/*"
 bcg-done
 
 bcg-echo "Removing DH parameters..."
-bcg-rmrf "${SSL_DHPARAM}"
+bcg-rmrf "${PROXY_SSL_DHPARAM}"
 bcg-done
 
 ssl-init 0

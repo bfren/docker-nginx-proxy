@@ -18,8 +18,8 @@ source ${INC}/setup-ssl.sh
 #======================================================================================================================
 
 request() {
-    /etc/ssl/getssl -U -w "${SSL_CERTS}" "${1}"
-    create_pem "${1}"
+    ${PROXY_GETSSL} -U -w "${PROXY_SSL_CERTS}" "${1}"
+    create-pem "${1}"
 }
 
 

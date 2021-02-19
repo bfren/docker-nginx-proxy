@@ -5,8 +5,8 @@ export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run /etc/ssl/update executable
+# Run update executable
 #======================================================================================================================
 
-s6-setuidgid www /etc/ssl/update
+s6-setuidgid www ${LIB_PROXY}/update
 nginx-reload
