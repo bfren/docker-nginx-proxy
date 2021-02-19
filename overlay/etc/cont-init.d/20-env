@@ -1,0 +1,37 @@
+#!/usr/bin/with-contenv bash
+
+set -euo pipefail
+export BCG_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Define variables
+#======================================================================================================================
+
+PROXY_ACME_CHALLENGE=.well-known/acme-challenge
+bcg-env "PROXY_ACME_CHALLENGE" "${PROXY_ACME_CHALLENGE}"
+
+
+#======================================================================================================================
+# Define paths to directories and files
+#======================================================================================================================
+
+LIB_PROXY=${LIB}/proxy
+bcg-env "LIB_PROXY" "${LIB_PROXY}"
+bcg-env "PROXY_GETSSL" "${LIB_PROXY}/getssl"
+
+PROXY_SSL=/ssl
+bcg-env "PROXY_SSL" ${PROXY_SSL}
+bcg-env "PROXY_SSL_DHPARAM" "${PROXY_SSL}/dhparam.pem"
+
+PROXY_SSL_CERTS=${PROXY_SSL}/certs
+bcg-env "PROXY_SSL_CERTS" "${PROXY_SSL_CERTS}"
+
+PROXY_GETSSL_CFG=getssl.cfg
+bcg-env "PROXY_GETSSL_CFG" "${PROXY_GETSSL_CFG}"
+bcg-env "PROXY_SSL_GLOBAL_CFG" "${PROXY_SSL_CERTS}/${PROXY_GETSSL_CFG}"
+bcg-env "PROXY_SSL_ACCOUNT_KEY" "${PROXY_SSL_CERTS}/account.key"
+
+bcg-env "PROXY_SITES" "/sites"
+
+bcg-env "PROXY_WWW_ACME_CHALLENGE" "${NGINX_WWW}/${PROXY_ACME_CHALLENGE}"

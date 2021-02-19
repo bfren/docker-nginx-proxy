@@ -14,7 +14,7 @@ setup-global () {
 
     if [ ! -f ${PROXY_SSL_DHPARAM} ] ; then
         bcg-debug " .. generating dhparam..."
-        openssl dhparam -out ${PROXY_SSL_DHPARAM} ${PROXY_PROXY_SSL_DHPARAM_BITS}
+        openssl dhparam -out ${PROXY_SSL_DHPARAM} ${PROXY_SSL_DHPARAM_BITS}
     fi
 
 }

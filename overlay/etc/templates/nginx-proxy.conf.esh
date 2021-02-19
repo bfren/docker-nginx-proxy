@@ -49,8 +49,8 @@ server {
     include                         helpers/nginx-ignore-favicon.conf;
     include                         helpers/nginx-static-files.conf;
 
-    # serve pages in <%= "${WWW}" %> (map volume to override default pages)
-    root                            <%= "${WWW}" %>;
+    # serve pages in <%= "${NGINX_WWW}" %> (map volume to override default pages)
+    root                            <%= "${NGINX_WWW}" %>;
 
 <%+ ./nginx-ssl-certs.part.esh %>
 }

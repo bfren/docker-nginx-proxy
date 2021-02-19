@@ -11,10 +11,10 @@ export BCG_E=`basename ${0}`
 if [ "${PROXY_CLEAN_INSTALL}" = "1" ] ; then
 
     bcg-echo "Clean install detected..."
-    bcg-rmrf "${SSL_GLOBAL_CFG}"
-    bcg-rmrf "${SSL_DHPARAM}"
-    bcg-rmrf "${SSL_CERTS}/*"
-    bcg-rmrf "${SITES}/*"
+    bcg-rmrf "${PROXY_SSL_GLOBAL_CFG}"
+    bcg-rmrf "${PROXY_SSL_DHPARAM}"
+    bcg-rmrf "${PROXY_SSL_CERTS}/*"
+    bcg-rmrf "${PROXY_SITES}/*"
     bcg-done
 
 fi

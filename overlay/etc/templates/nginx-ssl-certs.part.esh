@@ -1,5 +1,5 @@
     # paths to SSL certificates and configuration
-    ssl_certificate                 <%= "${SSL_CERTS}/${DOMAIN_NAME}/fullchain.crt" %>;
-    ssl_certificate_key             <%= "${SSL_CERTS}/${DOMAIN_NAME}.key" %>;
-    ssl_trusted_certificate         <%= "${SSL_CERTS}/${DOMAIN_NAME}/chain.crt" %>;
-    ssl_dhparam                     <%= "${SSL_DHPARAM}" %>;
+    ssl_certificate                 <%= "${PROXY_SSL_CERTS}/${DOMAIN_NAME}/fullchain.crt" %>;
+    ssl_certificate_key             <%= "${PROXY_SSL_CERTS}/${DOMAIN_NAME}.key" %>;
+    ssl_trusted_certificate         <%= "${PROXY_SSL_CERTS}/${DOMAIN_NAME}/chain.crt" %>;
+    PROXY_SSL_DHPARAM                     <%= "${PROXY_SSL_DHPARAM}" %>;

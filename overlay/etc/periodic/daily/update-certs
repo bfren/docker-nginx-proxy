@@ -8,4 +8,4 @@ export BCG_E=`basename ${0}`
 # Run SSL update executable and log output to /ssl directory
 #======================================================================================================================
 
-ssl-update > ${SSL}/update.log
+ssl-update > ${PROXY_SSL}/update.log

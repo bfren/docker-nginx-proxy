@@ -8,8 +8,8 @@ export BCG_E=`basename ${0}`
 # Delete Nginx configuration files and reinitialise
 #======================================================================================================================
 
-bcg-echo "Removing nginx configuration files..."
-bcg-rmrf "${SITES}/*.conf"
+bcg-echo "Removing Nginx configuration files..."
+bcg-rmrf "${PROXY_SITES}/*.conf"
 bcg-done
 
 ssl-init
