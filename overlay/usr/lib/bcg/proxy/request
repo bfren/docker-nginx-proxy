@@ -20,7 +20,7 @@ source ${LIB_INC}/proxy-setup-ssl.sh
 #======================================================================================================================
 
 request() {
-    ${PROXY_GETSSL} -U -w "${PROXY_SSL_CERTS}" "${1}"
+    ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} "${1}"
     create-pem "${1}"
 }
 
@@ -40,7 +40,7 @@ bcg-done
 
 bcg-echo "Requesting domain certificates..."
 for DN in "${!DOMAINS[@]}" ; do
-    bcg-echo " .. ${DN}"
+    bcg-debug " .. ${DN}"
     request "${DN}"
 done
 bcg-done

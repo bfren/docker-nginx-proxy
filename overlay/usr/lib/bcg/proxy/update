@@ -21,7 +21,7 @@ source ${LIB_INC}/proxy-setup-ssl.sh
 #======================================================================================================================
 
 bcg-echo "Updating all SSL certificates..."
-${PROXY_GETSSL} -U -w "${PROXY_SSL_CERTS}" -a
+${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -a
 bcg-done
 
 
