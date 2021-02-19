@@ -1,11 +1,13 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Set up Nginx
-#   $1  (string) Domain name
-#   $2  (string) Upstream URL
-#   $3  (string) Name of Domain Aliases array
-#   $4  (string) Blank (regenerate) or 'custom' (keep) Nginx configuration file
+# Set up Nginx.
+#
+# Arguments
+#   1   Domain name
+#   2   Upstream URL
+#   3   Name of Domain Aliases array
+#   4   Blank (regenerate) or 'custom' (keep) Nginx configuration file
 #======================================================================================================================
 
 setup-nginx () {

@@ -5,7 +5,7 @@ export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Delete Nginx configuration files and reinitialise
+# Delete Nginx configuration files and reinitialise.
 #======================================================================================================================
 
 bcg-echo "Removing Nginx configuration files..."

@@ -1,10 +1,12 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Replace a key/value pair in a file
-#   $1  (string) Key
-#   $2  (string) Value
-#   $3  (string) File path
+# Replace a key/value pair in a file.
+#
+# Arguments
+#   1   Key
+#   2   Value
+#   3   File path
 #======================================================================================================================
 
 replace () { replace-d "${1}" "\"${2}\"" ${3}; }

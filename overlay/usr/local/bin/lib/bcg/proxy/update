@@ -4,7 +4,7 @@ export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run checks and include ssl functions
+# Run checks and include ssl functions.
 #======================================================================================================================
 
 source ${INC}/check.sh
@@ -12,7 +12,9 @@ source ${INC}/setup-ssl.sh
 
 
 #======================================================================================================================
-# Run update
+# Run update.
+#
+# getssl flags
 #   -U  stop upgrade checks
 #   -w  set working directory
 #   -a  check all certificates
@@ -24,10 +26,10 @@ bcg-done
 
 
 #======================================================================================================================
-# Update all pem files (easier than working out which have been changed)
+# Update all pem files (easier than working out which have been changed).
 #======================================================================================================================
 
 bcg-echo "Updating pem files..."
-create-pem "${PROXY_URI}"
+create-pem ${PROXY_URI}
 for DN in "${!DOMAINS[@]}" ; do create-pem "${DN}" ; done
 bcg-done

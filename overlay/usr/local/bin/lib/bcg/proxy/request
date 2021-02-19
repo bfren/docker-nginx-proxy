@@ -4,7 +4,7 @@ export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run checks and include ssl functions
+# Run checks and include ssl functions.
 #======================================================================================================================
 
 source ${INC}/check.sh
@@ -12,7 +12,9 @@ source ${INC}/setup-ssl.sh
 
 
 #======================================================================================================================
-# Request certificates for all domains
+# Request certificates for all domains.
+#
+# getssl flags
 #   -U  stop upgrade checks
 #   -w  set working directory
 #======================================================================================================================
@@ -24,7 +26,7 @@ request() {
 
 
 #======================================================================================================================
-# Get certificate for the proxy server base domain
+# Get certificate for the proxy server base domain.
 #======================================================================================================================
 
 bcg-echo "Requesting proxy server certificate..."
@@ -33,7 +35,7 @@ bcg-done
 
 
 #======================================================================================================================
-# Get certificates for all registered domains
+# Get certificates for all registered domains.
 #======================================================================================================================
 
 bcg-echo "Requesting domain certificates..."

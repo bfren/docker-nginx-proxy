@@ -2,8 +2,10 @@
 
 #======================================================================================================================
 # Generate a temporary SSL certificate and key
-#   $1  (string) Base path
-#   $2  (string) Domain name
+#
+# Arguments
+#   1   Base path
+#   2   Domain name
 #======================================================================================================================
 
 generate-temp-cert () {
@@ -23,7 +25,9 @@ generate-temp-cert () {
 
 #======================================================================================================================
 # Create PEM file out of the private key, server certificate, and intermediate certificate
-#   $1  (string) Domain name
+#
+# Arguments
+#   1   Domain name
 #======================================================================================================================
 
 create-pem () {
@@ -39,9 +43,11 @@ create-pem () {
 
 
 #======================================================================================================================
-# Set up SSL for a domain
-#   $1  (string) Domain name
-#   $2  (string) Name of Domain Aliases array
+# Set up SSL for a domain.
+#
+# Arguments
+#   1   Domain name
+#   2   Name of Domain Aliases array
 #======================================================================================================================
 
 setup-ssl () {
@@ -53,9 +59,10 @@ setup-ssl () {
     # check for existing configuration
     [[ -f ${FILE} ]] && bcg-debug "    already set up." && return 0
 
-    # -U stop upgrade checks
-    # -w set working directory
-    # -c create default configuration files
+    # getssl flags
+    #   -U  stop upgrade checks
+    #   -w  set working directory
+    #   -c  create default configuration files
     ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values

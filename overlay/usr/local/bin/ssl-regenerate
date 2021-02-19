@@ -5,7 +5,7 @@ export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Delete SSL files and reinitialise
+# Delete SSL files and reinitialise.
 #======================================================================================================================
 
 bcg-echo "Removing SSL certificates and configuration..."
