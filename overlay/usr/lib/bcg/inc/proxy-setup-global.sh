@@ -6,9 +6,9 @@
 
 setup-global () {
 
-    if [ ! -f ${PROXY_SSL_GLOBAL_CFG} ] ; then
+    if [ ! -f ${PROXY_GETSSL_GLOBAL_CFG} ] ; then
         bcg-debug " .. creating global configuration file..."
-        esh -o ${PROXY_SSL_GLOBAL_CFG} \
+        esh -o ${PROXY_GETSSL_GLOBAL_CFG} \
             ${TEMPLATES}/getssl-global.conf.esh
     fi
 
