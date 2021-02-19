@@ -12,5 +12,6 @@ bcg-echo "Removing SSL certificates and configuration..."
 bcg-rmrf "${PROXY_SSL_CERTS}/*"
 bcg-done
 
-ssl-init 0
-ssl-request
+cd ${LIB_PROXY}
+s6-setuidgid www ./init && ./request
+nginx-reload
