@@ -16,6 +16,6 @@ bcg-echo "Removing DH parameters..."
 bcg-rmrf "${PROXY_SSL_DHPARAM}"
 bcg-done
 
-cd ${LIB_PROXY}
+cd ${PROXY_LIB}
 s6-setuidgid www ./init && ./request
 nginx-reload

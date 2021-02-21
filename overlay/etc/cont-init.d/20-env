@@ -8,9 +8,9 @@ export BCG_E=`basename ${0}`
 # Define environment variables.
 #======================================================================================================================
 
-LIB_PROXY=${LIB}/proxy
-bcg-env "LIB_PROXY" "${LIB_PROXY}"
-bcg-env "PROXY_GETSSL" "${LIB_PROXY}/getssl"
+PROXY_LIB=${BCG_LIB}/proxy
+bcg-env "PROXY_LIB" "${PROXY_LIB}"
+bcg-env "PROXY_GETSSL" "${PROXY_LIB}/getssl"
 
 PROXY_SSL=/ssl
 bcg-env "PROXY_SSL" ${PROXY_SSL}

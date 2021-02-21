@@ -8,5 +8,5 @@ export BCG_E=`basename ${0}`
 # Run request executable.
 #======================================================================================================================
 
-s6-setuidgid www ${LIB_PROXY}/request
+s6-setuidgid www ${PROXY_LIB}/request
 nginx-reload
