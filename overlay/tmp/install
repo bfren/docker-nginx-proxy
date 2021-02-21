@@ -20,15 +20,19 @@ bcg-done
 # Cleanup.
 #======================================================================================================================
 
-bcg-debug "Cleanup Nginx sites definitions."
-rm -rf /etc/nginx/sites
+bcg-debug "Cleaning up Nginx sites definitions."
+rm -rf /etc/nginx/sites /etc/ssl/certs
 bcg-done
 
 
 #======================================================================================================================
-# Linking Nginx directories to volumes.
+# Create and link Nginx directories.
 #======================================================================================================================
 
-bcg-debug "Linking Nginx directories to volumes."
-ln -s /ssl/certs /etc/ssl/certs
+bcg-debug "Creating and linking Nginx directories."
+
+mkdir /sites
 ln -s /sites /etc/nginx/sites
+
+mkdir -p /ssl/certs
+ln -s /ssl/certs /etc/ssl/certs
