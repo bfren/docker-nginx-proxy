@@ -77,6 +77,7 @@ setup-ssl () {
     replace "SANS" "${SANS:1}" ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${CERT}.crt" ${FILE}
     replace "DOMAIN_KEY_LOCATION" "${CERT}.key" ${FILE}
+    replace "CA_CERT_LOCATION" "${CERT}/chain.crt" ${FILE}
     replace-d "ACL" "(${ACL})" ${FILE}
 
     # create self-signed certificate so nginx will start before we request proper certificates
