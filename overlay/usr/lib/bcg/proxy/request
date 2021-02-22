@@ -1,27 +1,32 @@
 #!/usr/bin/with-contenv bash
 
-#======================================================================================================================
-# Run checks and include ssl functions
-#======================================================================================================================
-
-source ${INC}/check.sh
-source ${INC}/setup-ssl.sh
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Request certificates for all domains
+# Run checks and include ssl functions.
+#======================================================================================================================
+
+source ${BCG_INC}/proxy-check.sh
+source ${BCG_INC}/proxy-setup-ssl.sh
+
+
+#======================================================================================================================
+# Request certificates for all domains.
+#
+# getssl flags
 #   -U  stop upgrade checks
 #   -w  set working directory
 #======================================================================================================================
 
 request() {
-    /etc/ssl/getssl -U -w "${SSL_CERTS}" "${1}"
-    create_pem "${1}"
+    ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} "${1}"
+    create-pem "${1}"
 }
 
 
 #======================================================================================================================
-# Get certificate for the proxy server base domain
+# Get certificate for the proxy server base domain.
 #======================================================================================================================
 
 bcg-echo "Requesting proxy server certificate..."
@@ -30,12 +35,12 @@ bcg-done
 
 
 #======================================================================================================================
-# Get certificates for all registered domains
+# Get certificates for all registered domains.
 #======================================================================================================================
 
 bcg-echo "Requesting domain certificates..."
 for DN in "${!DOMAINS[@]}" ; do
-    bcg-echo " .. ${DN}"
+    bcg-debug " .. ${DN}"
     request "${DN}"
 done
 bcg-done

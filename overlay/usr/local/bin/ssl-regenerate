@@ -1,14 +1,17 @@
 #!/usr/bin/with-contenv bash
 
 set -euo pipefail
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Delete SSL files and reinitialise
+# Delete SSL files and reinitialise.
 #======================================================================================================================
 
 bcg-echo "Removing SSL certificates and configuration..."
-bcg-rmrf "${SSL_CERTS}/*"
+bcg-rmrf "${PROXY_SSL_CERTS}/*"
 bcg-done
 
-ssl-init
+cd ${PROXY_LIB}
+s6-setuidgid www ./init && ./request
+nginx-reload

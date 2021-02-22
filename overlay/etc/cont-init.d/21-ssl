@@ -1,26 +1,27 @@
 #!/usr/bin/with-contenv bash
 
 set -euo pipefail
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Check for clean install
+# Check for clean install.
 #======================================================================================================================
 
-if [ "${CLEAN_INSTALL}" = "1" ] ; then
+if [ "${PROXY_CLEAN_INSTALL}" = "1" ] ; then
 
     bcg-echo "Clean install detected..."
-    bcg-rmrf "${SSL_GLOBAL_CFG}"
-    bcg-rmrf "${SSL_DHPARAM}"
-    bcg-rmrf "${SSL_CERTS}/*"
-    bcg-rmrf "${SITES}/*"
+    bcg-rmrf "${PROXY_GETSSL_GLOBAL_CFG}"
+    bcg-rmrf "${PROXY_SSL_DHPARAM}"
+    bcg-rmrf "${PROXY_SSL_CERTS}/*"
+    bcg-rmrf "${PROXY_SITES}/*"
     bcg-done
 
 fi
 
 
 #======================================================================================================================
-# Run initialisation script
+# Run initialisation script.
 #======================================================================================================================
 
 ssl-init

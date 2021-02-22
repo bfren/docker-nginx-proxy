@@ -1,48 +1,51 @@
 #!/usr/bin/with-contenv bash
 
-#======================================================================================================================
-# Run checks
-#======================================================================================================================
-
-source ${INC}/check.sh
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Require source files
+# Run checks.
 #======================================================================================================================
 
-source ${INC}/replace.sh
-source ${INC}/setup-global.sh
-source ${INC}/setup-nginx.sh
-source ${INC}/setup-ssl.sh
+source ${BCG_INC}/proxy-check.sh
 
 
 #======================================================================================================================
-# Set up global SSL configuration
+# Require source files.
+#======================================================================================================================
+
+source ${BCG_INC}/proxy-replace.sh
+source ${BCG_INC}/proxy-setup-global.sh
+source ${BCG_INC}/proxy-setup-nginx.sh
+source ${BCG_INC}/proxy-setup-ssl.sh
+
+
+#======================================================================================================================
+# Set up global SSL configuration.
 #======================================================================================================================
 
 bcg-echo "Setting up getssl..."
-setup_global
+setup-global
 bcg-done
 
 
 #======================================================================================================================
-# Set up Nginx and SSL for proxy server
+# Set up Nginx and SSL for proxy server.
 #======================================================================================================================
 
 bcg-echo "Setting up default server ${PROXY_URI}..."
 
 bcg-echo "  . Nginx..."
-setup_nginx 1 ${PROXY_URI} "http://localhost" ""
+setup-nginx 1 ${PROXY_URI} "http://localhost" ""
 
 bcg-echo "  . SSL..."
-setup_ssl ${PROXY_URI} ""
+setup-ssl ${PROXY_URI} ""
 
 bcg-ok "  . done."
 
 
 #======================================================================================================================
-# Set up Nginx and SSL for each domain
+# Set up Nginx and SSL for each domain.
 #======================================================================================================================
 
 bcg-echo "Setting up domains..."
@@ -55,10 +58,10 @@ for DN in "${!DOMAINS[@]}" ; do
     bcg-echo " .. ${DN}"
 
     bcg-echo "  . Nginx..."
-    setup_nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
+    setup-nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
 
     bcg-echo "  . SSL..."
-    setup_ssl ${DN} "${AL}"
+    setup-ssl ${DN} "${AL}"
 
     bcg-ok "  . done."
 

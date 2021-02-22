@@ -1,10 +1,11 @@
 #!/usr/bin/with-contenv bash
 
 set -euo pipefail
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Attempt to load Proxy URI using wget
+# Test Proxy URI.
 #======================================================================================================================
 
-wget --no-verbose --tries=1 --spider "http://${PROXY_URI}" || exit 1
+bcg-test-url "http://${PROXY_URI}"

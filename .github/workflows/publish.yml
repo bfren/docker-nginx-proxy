@@ -1,4 +1,4 @@
-name: build-main
+name: publish
 
 on:
   push:
@@ -7,12 +7,13 @@ on:
     tags-ignore:
       - '**'
     paths:
-      - '.github/workflows/build-main.yml'
+      - '.github/workflows/publish.yml'
       - 'overlay/**'
+      - 'Dockerfile'
       - 'VERSION'
 
 jobs:
-  main:
+  publish:
     runs-on: ubuntu-latest
     steps:
       -

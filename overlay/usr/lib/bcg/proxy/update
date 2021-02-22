@@ -1,30 +1,35 @@
 #!/usr/bin/with-contenv bash
 
-#======================================================================================================================
-# Run checks and include ssl functions
-#======================================================================================================================
-
-source ${INC}/check.sh
-source ${INC}/setup-ssl.sh
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run update
+# Run checks and include ssl functions.
+#======================================================================================================================
+
+source ${BCG_INC}/proxy-check.sh
+source ${BCG_INC}/proxy-setup-ssl.sh
+
+
+#======================================================================================================================
+# Run update.
+#
+# getssl flags
 #   -U  stop upgrade checks
 #   -w  set working directory
 #   -a  check all certificates
 #======================================================================================================================
 
 bcg-echo "Updating all SSL certificates..."
-/etc/ssl/getssl -U -w "${SSL_CERTS}" -a
+${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -a
 bcg-done
 
 
 #======================================================================================================================
-# Update all pem files (easier than working out which have been changed)
+# Update all pem files (easier than working out which have been changed).
 #======================================================================================================================
 
 bcg-echo "Updating pem files..."
-create_pem "${PROXY_URI}"
-for DN in "${!DOMAINS[@]}" ; do create_pem "${DN}" ; done
+create-pem ${PROXY_URI}
+for DN in "${!DOMAINS[@]}" ; do create-pem "${DN}" ; done
 bcg-done

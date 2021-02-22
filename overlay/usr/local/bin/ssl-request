@@ -1,11 +1,12 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 set -euo pipefail
+export BCG_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run /etc/ssl/request executable
+# Run request executable.
 #======================================================================================================================
 
-s6-setuidgid www /etc/ssl/request
+s6-setuidgid www ${PROXY_LIB}/request
 nginx-reload

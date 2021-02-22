@@ -1,2 +1,0 @@
-/ssl true www:www 0640 0750
-/etc/ssl/certs false www:www 0640 0750

@@ -1,19 +1,36 @@
-name: build-dev
+name: dev
 
 on:
   push:
-    branches:
-      - '**'
+    branches-ignore:
+      - 'main'
     tags-ignore:
       - '**'
+    paths:
+      - '.github/workflows/dev.yml'
+      - 'overlay/**'
+      - 'Dockerfile'
+      - 'VERSION'
 
 jobs:
-  main:
+  test:
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout code
         uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout code
+        uses: actions/checkout@v2
+      -
+        name: Read image version
+        uses: bencgreen/read-file-action@v1
+        with:
+          path: ./VERSION
+        id: version
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -35,6 +52,7 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
             bcgdesign/nginx-proxy:dev
+            bcgdesign/nginx-proxy:${{ steps.version.outputs.content }}-beta
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
