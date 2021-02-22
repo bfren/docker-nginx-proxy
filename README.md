@@ -34,9 +34,9 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 | Variable                             | Values                | Description                                                                                                                                  | Default               |
 | ------------------------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `PROXY_LETS_ENCRYPT_EMAIL`           | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                | *None* - **required** |
 | `PROXY_URI`                          | URI                   | The base URI of the proxy server - will be used to handle unbound requests.                                                                  | *None* - **required** |
 | `PROXY_CLEAN_INSTALL`                | 0 or 1                | If 1, all Nginx and SSL configuration and certificates will be deleted and regenerated.                                                      | 0                     |
+| `PROXY_LETS_ENCRYPT_EMAIL`           | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                | *None* - **required** |
 | `PROXY_LETS_ENCRYPT_LIVE`            | 0 or 1                | Only set to 1 (to request live certificates) when your config is correct - Lets Encrypt rate limit certificate requests.                     | 0                     |
 | `PROXY_SSL_DHPARAM_BITS`             | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                              | 4096                  |
 | `PROXY_SSL_REDIRECT_TO_CANONICAL`    | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.sh`).                                                          | 0                     |
