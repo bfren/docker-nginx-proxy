@@ -35,4 +35,3 @@ mkdir /sites
 ln -s /sites /etc/nginx/sites
 
 mkdir -p /ssl/certs
-ln -s /ssl/certs /etc/ssl/certs
