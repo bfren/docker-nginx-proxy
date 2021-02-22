@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 #======================================================================================================================
-# Generate a temporary SSL certificate and key
+# Generate a temporary SSL certificate and key.
 #
 # Arguments
 #   1   Base path
@@ -24,7 +24,7 @@ generate-temp-cert () {
 
 
 #======================================================================================================================
-# Create PEM file out of the private key, server certificate, and intermediate certificate
+# Create PEM file out of the private key, server certificate, and intermediate certificate.
 #
 # Arguments
 #   1   Domain name
