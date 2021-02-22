@@ -21,7 +21,7 @@ bcg-done
 #======================================================================================================================
 
 bcg-debug "Cleaning up Nginx sites definitions."
-rm -rf /etc/nginx/sites /etc/ssl/certs
+rm -rf /etc/nginx/sites
 bcg-done
 
 
