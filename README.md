@@ -1,6 +1,6 @@
 # Docker Nginx Proxy
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bencgreen/docker-nginx-proxy) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bencgreen/docker-nginx-proxy/build?label=github) ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bcgdesign/nginx-proxy?label=docker) ![Docker Pulls](https://img.shields.io/docker/pulls/bcgdesign/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bcgdesign/nginx-proxy/latest?label=size)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bencgreen/docker-nginx-proxy) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bencgreen/docker-nginx-proxy/dev?label=github) ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/bcgdesign/nginx-proxy?label=docker) ![Docker Pulls](https://img.shields.io/docker/pulls/bcgdesign/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bcgdesign/nginx-proxy/latest?label=size)
 
 [Docker Repository](https://hub.docker.com/r/bcgdesign/nginx-proxy) - [bcg|design ecosystem](https://github.com/bencgreen/docker)
 
