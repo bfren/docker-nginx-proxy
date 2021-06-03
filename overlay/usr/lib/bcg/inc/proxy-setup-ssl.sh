@@ -47,7 +47,7 @@ create-pem () {
 #
 # Arguments
 #   1   Domain name
-#   2   Name of Domain Aliases array
+#   2   String containing Domain Aliases (separated by spaces)
 #======================================================================================================================
 
 setup-ssl () {
