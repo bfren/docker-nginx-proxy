@@ -1,69 +1,69 @@
 #!/usr/bin/with-contenv bash
 
-export BCG_E=`basename ${0}`
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
 # Run checks.
 #======================================================================================================================
 
-source ${BCG_INC}/proxy-check.sh
+source ${BF_INC}/proxy-check.sh
 
 
 #======================================================================================================================
 # Require source files.
 #======================================================================================================================
 
-source ${BCG_INC}/proxy-replace.sh
-source ${BCG_INC}/proxy-setup-global.sh
-source ${BCG_INC}/proxy-setup-nginx.sh
-source ${BCG_INC}/proxy-setup-ssl.sh
+source ${BF_INC}/proxy-replace.sh
+source ${BF_INC}/proxy-setup-global.sh
+source ${BF_INC}/proxy-setup-nginx.sh
+source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
 # Set up global SSL configuration.
 #======================================================================================================================
 
-bcg-echo "Setting up getssl..."
+bf-echo "Setting up getssl..."
 setup-global
-bcg-done
+bf-done
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for proxy server.
 #======================================================================================================================
 
-bcg-echo "Setting up default server ${PROXY_URI}..."
+bf-echo "Setting up default server ${PROXY_URI}..."
 
-bcg-echo "  . Nginx..."
+bf-echo "  . Nginx..."
 setup-nginx 1 ${PROXY_URI} "http://localhost" ""
 
-bcg-echo "  . SSL..."
+bf-echo "  . SSL..."
 setup-ssl ${PROXY_URI} ""
 
-bcg-ok "  . done."
+bf-ok "  . done."
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each domain.
 #======================================================================================================================
 
-bcg-echo "Setting up domains..."
+bf-echo "Setting up domains..."
 for DN in "${!DOMAINS[@]}" ; do
 
     UP=${DOMAINS[${DN}]}  # upstream server
     AL=${ALIASES[${DN}]}  # aliases
     CF=${NGXCONF[${DN}]}  # use default / custom Nginx config
 
-    bcg-echo " .. ${DN}"
+    bf-echo " .. ${DN}"
 
-    bcg-echo "  . Nginx..."
+    bf-echo "  . Nginx..."
     setup-nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
 
-    bcg-echo "  . SSL..."
+    bf-echo "  . SSL..."
     setup-ssl ${DN} "${AL}"
 
-    bcg-ok "  . done."
+    bf-ok "  . done."
 
 done
-bcg-ok "Domains set up."
+bf-ok "Domains set up."

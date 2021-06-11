@@ -32,19 +32,19 @@ setup-nginx () {
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            bcg-debug "    removing and regnerating Nginx configuration"
+            bf-debug "    removing and regnerating Nginx configuration"
             rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
-            bcg-debug "    keeping existing configuration."
+            bf-debug "    keeping existing configuration."
             return 0
         fi
 
     else
 
         # no need to do anything, be a good log citizen
-        bcg-debug "    generating default Nginx configuration"
+        bf-debug "    generating default Nginx configuration"
 
     fi
 
@@ -60,6 +60,6 @@ setup-nginx () {
 
     # generate config
     esh -o ${CONF} \
-        ${BCG_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
+        ${BF_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }

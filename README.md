@@ -1,9 +1,9 @@
 # Docker Nginx Proxy
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bencgreen/docker-nginx-proxy) ![Docker Pulls](https://img.shields.io/docker/pulls/bcgdesign/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bcgdesign/nginx-proxy/latest?label=size)<br/>
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bencgreen/docker-nginx-proxy/dev?label=build)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-nginx-proxy) ![Docker Pulls](https://img.shields.io/docker/pulls/bfren/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bfren/nginx-proxy/latest?label=size)<br/>
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-nginx-proxy/dev?label=build)
 
-[Docker Repository](https://hub.docker.com/r/bcgdesign/nginx-proxy) - [bcg|design ecosystem](https://github.com/bencgreen/docker)
+[Docker Repository](https://hub.docker.com/r/bfren/nginx-proxy) - [bfren ecosystem](https://github.com/bfren/docker)
 
 Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.
 
@@ -14,7 +14,7 @@ Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate re
 * [Environment Variables](#environment-variables)
 * [Helper Functions](#helper-functions)
 * [Nginx Configuration Helpers](#nginx-configuration-helpers)
-* [Authors / Licence / Copyright](#authors)
+* [Licence / Copyright](#licence)
 
 ## Ports
 
@@ -66,15 +66,11 @@ The image contains a handful of useful Nginx configuration 'helper' files, which
 | `-secure-headers.conf`    | Standard secure headers - see [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/).            |
 | `-tls1_3-only.conf`       | If you want to be ultra-secure (and not support older browsers), this will disable all TLS protocols except 1.3. |
 
-## Authors
+## Licence
 
-* [Ben Green](https://github.com/bencgreen)
-
-## License
-
-> [MIT](https://mit.bcgdesign.com/2020)
+> [MIT](https://mit.bfren.uk/2020)
 
 ## Copyright
 
-> Copyright (c) 2021 Ben Green <https://bcgdesign.com>
+> Copyright (c) 2021 bfren.uk
 > Unless otherwise stated
