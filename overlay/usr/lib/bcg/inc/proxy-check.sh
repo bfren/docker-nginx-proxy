@@ -5,7 +5,7 @@
 #======================================================================================================================
 
 if [ -z "${PROXY_URI}" ] ; then
-    bcg-error "PROXY_URI must be set before requesting SSL certificates."
+    bf-error "PROXY_URI must be set before requesting SSL certificates."
     exit 1
 fi
 
@@ -15,7 +15,7 @@ fi
 #======================================================================================================================
 
 if [ -z "${PROXY_LETS_ENCRYPT_EMAIL}" ] ; then
-    bcg-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
+    bf-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
     exit 1
 fi
 
@@ -26,7 +26,7 @@ fi
 
 SSL_CONF=${PROXY_SSL}/conf.sh
 if [ ! -f ${SSL_CONF} ] ; then
-    bcg-error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
+    bf-error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
     exit 1
 fi
 
@@ -42,7 +42,7 @@ source ${SSL_CONF}
 #======================================================================================================================
 
 if [ "${#DOMAINS[@]}" = "0" ] ; then
-    bcg-error "No domains have been registered for SSL - please add them to /ssl/conf.sh."
+    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.sh."
     exit 1
 fi
 

@@ -9,23 +9,23 @@ export BCG_E=`basename ${0}`
 #======================================================================================================================
 
 PROXY_LIB=${BCG_LIB}/proxy
-bcg-env "PROXY_LIB" "${PROXY_LIB}"
-bcg-env "PROXY_GETSSL" "${PROXY_LIB}/getssl"
+bf-env "PROXY_LIB" "${PROXY_LIB}"
+bf-env "PROXY_GETSSL" "${PROXY_LIB}/getssl"
 
 PROXY_SSL=/ssl
-bcg-env "PROXY_SSL" ${PROXY_SSL}
-bcg-env "PROXY_SSL_DHPARAM" "${PROXY_SSL}/dhparam.pem"
+bf-env "PROXY_SSL" ${PROXY_SSL}
+bf-env "PROXY_SSL_DHPARAM" "${PROXY_SSL}/dhparam.pem"
 
 PROXY_SSL_CERTS=${PROXY_SSL}/certs
-bcg-env "PROXY_SSL_CERTS" "${PROXY_SSL_CERTS}"
+bf-env "PROXY_SSL_CERTS" "${PROXY_SSL_CERTS}"
 
 PROXY_GETSSL_CFG=getssl.cfg
-bcg-env "PROXY_GETSSL_CFG" "${PROXY_GETSSL_CFG}"
-bcg-env "PROXY_GETSSL_GLOBAL_CFG" "${PROXY_SSL_CERTS}/${PROXY_GETSSL_CFG}"
-bcg-env "PROXY_GETSSL_ACCOUNT_KEY" "${PROXY_SSL_CERTS}/account.key"
+bf-env "PROXY_GETSSL_CFG" "${PROXY_GETSSL_CFG}"
+bf-env "PROXY_GETSSL_GLOBAL_CFG" "${PROXY_SSL_CERTS}/${PROXY_GETSSL_CFG}"
+bf-env "PROXY_GETSSL_ACCOUNT_KEY" "${PROXY_SSL_CERTS}/account.key"
 
-bcg-env "PROXY_SITES" "/sites"
+bf-env "PROXY_SITES" "/sites"
 
 PROXY_ACME_CHALLENGE=.well-known/acme-challenge
-bcg-env "PROXY_ACME_CHALLENGE" "${PROXY_ACME_CHALLENGE}"
-bcg-env "PROXY_WWW_ACME_CHALLENGE" "${NGINX_WWW}/${PROXY_ACME_CHALLENGE}"
+bf-env "PROXY_ACME_CHALLENGE" "${PROXY_ACME_CHALLENGE}"
+bf-env "PROXY_WWW_ACME_CHALLENGE" "${NGINX_WWW}/${PROXY_ACME_CHALLENGE}"

@@ -8,9 +8,9 @@ export BCG_E=`basename ${0}`
 # Delete SSL files and reinitialise.
 #======================================================================================================================
 
-bcg-echo "Removing SSL certificates and configuration..."
-bcg-rmrf "${PROXY_SSL_CERTS}/*"
-bcg-done
+bf-echo "Removing SSL certificates and configuration..."
+bf-rmrf "${PROXY_SSL_CERTS}/*"
+bf-done
 
 cd ${PROXY_LIB}
 s6-setuidgid www ./init && ./request

@@ -29,18 +29,18 @@ request() {
 # Get certificate for the proxy server base domain.
 #======================================================================================================================
 
-bcg-echo "Requesting proxy server certificate..."
+bf-echo "Requesting proxy server certificate..."
 request "${PROXY_URI}"
-bcg-done
+bf-done
 
 
 #======================================================================================================================
 # Get certificates for all registered domains.
 #======================================================================================================================
 
-bcg-echo "Requesting domain certificates..."
+bf-echo "Requesting domain certificates..."
 for DN in "${!DOMAINS[@]}" ; do
-    bcg-debug " .. ${DN}"
+    bf-debug " .. ${DN}"
     request "${DN}"
 done
-bcg-done
+bf-done

@@ -29,6 +29,6 @@ ENV \
 
 COPY ./overlay /
 
-RUN bcg-install
+RUN bf-install
 
 VOLUME [ "/ssl", "/sites" ]
