@@ -1,14 +1,14 @@
 #!/usr/bin/with-contenv bash
 
-export BCG_E=`basename ${0}`
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
 # Run checks and include ssl functions.
 #======================================================================================================================
 
-source ${BCG_INC}/proxy-check.sh
-source ${BCG_INC}/proxy-setup-ssl.sh
+source ${BF_INC}/proxy-check.sh
+source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================

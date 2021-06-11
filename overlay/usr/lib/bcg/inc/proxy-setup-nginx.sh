@@ -60,6 +60,6 @@ setup-nginx () {
 
     # generate config
     esh -o ${CONF} \
-        ${BCG_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
+        ${BF_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh
 
 }

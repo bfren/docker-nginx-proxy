@@ -1,14 +1,14 @@
 #!/usr/bin/with-contenv bash
 
 set -euo pipefail
-export BCG_E=`basename ${0}`
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
 # Define environment variables.
 #======================================================================================================================
 
-PROXY_LIB=${BCG_LIB}/proxy
+PROXY_LIB=${BF_LIB}/proxy
 bf-env "PROXY_LIB" "${PROXY_LIB}"
 bf-env "PROXY_GETSSL" "${PROXY_LIB}/getssl"
 

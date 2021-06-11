@@ -1,23 +1,23 @@
 #!/usr/bin/with-contenv bash
 
-export BCG_E=`basename ${0}`
+export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
 # Run checks.
 #======================================================================================================================
 
-source ${BCG_INC}/proxy-check.sh
+source ${BF_INC}/proxy-check.sh
 
 
 #======================================================================================================================
 # Require source files.
 #======================================================================================================================
 
-source ${BCG_INC}/proxy-replace.sh
-source ${BCG_INC}/proxy-setup-global.sh
-source ${BCG_INC}/proxy-setup-nginx.sh
-source ${BCG_INC}/proxy-setup-ssl.sh
+source ${BF_INC}/proxy-replace.sh
+source ${BF_INC}/proxy-setup-global.sh
+source ${BF_INC}/proxy-setup-nginx.sh
+source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
