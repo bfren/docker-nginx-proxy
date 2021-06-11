@@ -1,11 +1,5 @@
 FROM bcgdesign/nginx:alpine3.13-2.1.4
 
-LABEL maintainer="Ben Green <ben@bcgdesign.com>" \
-    org.label-schema.name="Nginx Proxy" \
-    org.label-schema.version="latest" \
-    org.label-schema.vendor="Ben Green" \
-    org.label-schema.schema-version="1.0"
-
 # port 80 is already exposed by the base image
 EXPOSE 443
 
