@@ -30,6 +30,7 @@ request() {
 #======================================================================================================================
 
 bf-echo "Requesting proxy server certificate..."
+bf-debug " .. ${PROXY_URI}"
 request "${PROXY_URI}"
 bf-done
 
