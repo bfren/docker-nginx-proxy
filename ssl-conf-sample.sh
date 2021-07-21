@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #======================================================================================================================
-# This file should be modified to define domain arrays
-# and then stored in /ssl/conf.sh
+# This file should be modified to define domain arrays and then stored in /ssl/conf.sh
 #
 # DOMAINS is an associative array
 #   key:    (string) primary domain name
