@@ -270,6 +270,12 @@
 # 2021-07-30 Run tests with -d to catch intermittent failures, Use fork's repo for upgrade tests. (tlhackque) (#692) (2.41)
 # 2021-08-26 Improve upgrade check & make upgrade do a full install when possible (tlhackque) (#694) (2.42)
 # 2021-09-02 Fix version compare - cURL v8 may have single digit minor numbers. (tlhackque) (2.43)
+# 2021-09-26 Delete key file when key algorithm has changed (makuhama)
+# 2021-09-30 better error if curl returns 60 (#709)
+# 2021-10-01 Fix -preferred-chain argument (#712)
+# 2021-10-01 Show help if no domain specified (#705)(2.44)
+# 2021-10-08 Extract release tag from release api using awk (fix BSD issues)
+# 2021-10-11 Fix broken upgrade url (#718)(2.45)
 # ----------------------------------------------------------------------------------------
 
 case :$SHELLOPTS: in
@@ -278,7 +284,7 @@ esac
 
 PROGNAME=${0##*/}
 PROGDIR="$(cd "$(dirname "$0")" || exit; pwd -P;)"
-VERSION="2.43"
+VERSION="2.45"
 
 # defaults
 ACCOUNT_KEY_LENGTH=4096
@@ -289,7 +295,7 @@ CHALLENGE_CHECK_TYPE="http"
 CHECK_REMOTE_WAIT=0
 CHECK_REMOTE="true"
 if [[ -n "${GITHUB_REPOSITORY}" ]] ; then
-  CODE_LOCATION="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/getssl/master/getssl"
+  CODE_LOCATION="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/master/getssl"
   RELEASE_API="https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest"
 else
   CODE_LOCATION="https://raw.githubusercontent.com/srvrco/getssl/master/getssl"
@@ -770,10 +776,8 @@ check_getssl_upgrade() { # check if a more recent release is available
   fi
   local release_data release_tag release_ver local_ver release_desc NEWCMD
   debug "Checking for releases at $RELEASE_API"
-  # Sometimes the json is pretty-printed, sometimes not.  Loosely tied to --user-agent, but not
-  # always.  Normalize it enough to get the 3 elements necessary. Oh, for jq...
   # shellcheck disable=SC2086
-  release_data="$(curl ${_NOMETER:---silent} --user-agent "$CURL_USERAGENT" -H 'Accept: application/vnd.github.v3+json' "$RELEASE_API" | sed -e's/\("[^:]*": *\("[^""]*",\|[^,]*[,}]\)\)/\r\n\1/g')"
+  release_data="$(curl ${_NOMETER:---silent} --user-agent "$CURL_USERAGENT" -H 'Accept: application/vnd.github.v3+json' "$RELEASE_API")"
   errcode=$?
   if [[ $errcode -eq 60 ]]; then
     error_exit "curl needs updating, your version does not support SNI (multiple SSL domains on a single IP)"
@@ -782,8 +786,8 @@ check_getssl_upgrade() { # check if a more recent release is available
   fi
   # Replace error in release description with _error (which is ignored by check_output_for_errors() in the tests)
   debug "${release_data//error/_error}"
-  release_data="$(sed -e's/^ *//g' <<<"${release_data}")"
-  release_tag="$(sed -e'/^"tag_name": *"/!d;s/^"tag_name": *"\([^""]*\).*$/\1/' <<<"${release_data}")"
+  # awk from https://stackoverflow.com/questions/1761341/awk-print-next-record-following-matched-record
+  release_tag=$(awk -F'"' '/tag_name/ {f=NR} f&&NR-1==f' RS=":|," <<<"${release_data}" | sed -e's/"//g')
   if [[ "${release_tag:0:1}" != 'v' ]] ; then
     if [[ ${_MUTE} -eq 0 ]]; then
       info "The current repository has no releases or is improperly tagged; can't check for upgrades: '$release_tag'"
@@ -821,13 +825,20 @@ check_getssl_upgrade() { # check if a more recent release is available
   fi
   CODE_LOCATION=$(sed -e"s/master/${release_tag}/" <<<"$CODE_LOCATION")
   # shellcheck disable=SC2086
-  curl ${_NOMETER:---silent} --user-agent "$CURL_USERAGENT" "$CODE_LOCATION" --output "$TEMP_UPGRADE_FILE"
-
+  debug curl ${_NOMETER:---silent} --user-agent "$CURL_USERAGENT" "$CODE_LOCATION" --output "$TEMP_UPGRADE_FILE"
+  # shellcheck disable=SC2086
+  status=$(curl ${_NOMETER:---silent} -w "%{http_code}" --user-agent "$CURL_USERAGENT" "$CODE_LOCATION" --output "$TEMP_UPGRADE_FILE")
   errcode=$?
+debug errcode=$errcode
+
   if [[ $errcode -eq 60 ]]; then
     error_exit "curl needs updating, your version does not support SNI (multiple SSL domains on a single IP)"
   elif [[ $errcode -gt 0 ]]; then
     error_exit "curl error downloading release: $errcode"
+  fi
+
+  if [[ $status -ne 200 ]]; then
+    error_exit "curl didn't find the updated version of getssl at $CODE_LOCATION"
   fi
 
   if ! install "$0" "${0}.v${VERSION}"; then
@@ -837,12 +848,23 @@ check_getssl_upgrade() { # check if a more recent release is available
     error_exit "problem installing new version while updating, check permissions"
   fi
 
+  check=$(bash "$0" -U -v)
+  release_tag_upper=$(echo "$release_tag" | tr "[:lower:]" "[:upper:]")
+  if [[ "$check" != "getssl ${release_tag_upper}" ]]; then
+    info "problem running new version, rolling back to old version"
+    if ! install "${0}.v${VERSION}" "$0"; then
+      error_exit "problem rolling back, you'll need to manually check $0 and $0.${VERSION}"
+    fi
+    error_exit "problem calling new version; output of $TEMP_UPGRADE_FILE -v was \"$check\", expected \"getssl ${release_tag_upper}\""
+  fi
+
+
   if [[ ${_MUTE} -eq 0 ]]; then
-    echo "Updated getssl from v${VERSION} to v${release_tag}"
+    echo "Updated getssl from v${VERSION} to ${release_tag}"
     echo "The old version remains as ${0}.v${VERSION} and should be removed"
     echo "These update notifications can be turned off using the -Q option"
     echo ""
-    echo "Updates are;"
+    echo "Updates are:"
     awk "/\(${VERSION}\)$/ {s=1} s; /\(${release_tag}\)$/ || /^# ----/ {s=0}" "$TEMP_UPGRADE_FILE" | awk '{if(NR>1)print}'
     echo ""
   fi
@@ -2117,11 +2139,22 @@ json_get() { # get values from json
 
 obtain_ca_resource_locations()
 {
+  CURL_RESPONSE_FILE="$(mktemp 2>/dev/null || mktemp -t getssl.XXXXXX)"
+
   for suffix in "" "/directory" "/dir";
   do
     # Obtain CA resource locations
     # shellcheck disable=SC2086
-    ca_all_loc=$(curl ${_NOMETER} --user-agent "$CURL_USERAGENT" "${CA}${suffix}" 2>/dev/null)
+    ca_all_loc=$(curl ${_NOMETER} --user-agent "$CURL_USERAGENT" "${CA}${suffix}" 2> $CURL_RESPONSE_FILE)
+    errcode=$?
+    if [[ $errcode -ne 0 ]]; then
+      response=$(cat "$CURL_RESPONSE_FILE")
+      rm "$CURL_RESPONSE_FILE"
+      error_exit "ERROR curl \"$CA$suffix\" failed with $errcode and returned:\n$response"
+    else
+      rm "$CURL_RESPONSE_FILE"
+    fi
+
     debug "ca_all_loc from ${CA}${suffix} gives $ca_all_loc"
     # APIv1
     URL_new_reg=$(echo "$ca_all_loc" | grep "new-reg" | awk -F'"' '{print $4}')
@@ -2413,7 +2446,7 @@ send_signed_request() { # Sends a request to the ACME server, signed with your p
       fi
       debug "response status = $response_status"
       if [[ "$code" -eq 500 ]]; then
-        info "error on acme server - trying again ...."
+        info "_error on acme server - trying again ...."
         debug "loop_limit = $loop_limit"
         sleep 5
         loop_limit=$((loop_limit - 1))
@@ -2741,7 +2774,7 @@ while [[ -n ${1+defined} ]]; do
       _ONLY_CHECK_CONFIG=1 ;;
     -w)
       shift; WORKING_DIR="$1" ;;
-    -preferred-chain)
+    -preferred-chain | --preferred-chain)
       shift; PREFERRED_CHAIN="$1" ;;
     --source)
       return ;;
@@ -2816,6 +2849,10 @@ if [[ $_UPGRADE_CHECK -eq 1 ]]; then
   # if nothing in command line and no revocation and not only config check,
   # then exit after upgrade
   if [[ -z "$DOMAIN" ]] && [[ ${_CHECK_ALL} -ne 1 ]] && [[ ${_REVOKE} -ne 1 ]] && [ "${_ONLY_CHECK_CONFIG}" -ne 1 ]; then
+    # if nothing in command line, print help before exit.
+    if [[ -z "$DOMAIN" ]] && [[ ${_CHECK_ALL} -ne 1 ]]; then
+      help_message
+    fi
     graceful_exit
   fi
 fi
@@ -3146,6 +3183,22 @@ else
 fi
 debug "created SAN list = $SANLIST"
 
+# check if private key alg has changed from RSA to EC (or vice versa)
+if [[ "$DUAL_RSA_ECDSA" == "false" ]] && [[ -s "$DOMAIN_DIR/${DOMAIN}.key" ]]; then
+  case "${PRIVATE_KEY_ALG}" in
+    rsa)
+      if grep -q -- "-----BEGIN EC PRIVATE KEY-----" "$DOMAIN_DIR/${DOMAIN}.key"; then
+        rm -f "$DOMAIN_DIR/${DOMAIN}.key"
+        _FORCE_RENEW=1
+      fi ;;
+    prime256v1|secp384r1|secp521r1)
+      if grep -q -- "-----BEGIN RSA PRIVATE KEY-----" "$DOMAIN_DIR/${DOMAIN}.key"; then
+        rm -f "$DOMAIN_DIR/${DOMAIN}.key"
+        _FORCE_RENEW=1
+      fi ;;
+  esac
+fi
+
 # if there is an existing certificate file, check details.
 if [[ -s "$CERT_FILE" ]]; then
   debug "certificate $CERT_FILE exists"
@@ -3198,6 +3251,7 @@ if [[ "$REUSE_PRIVATE_KEY" != "true" ]]; then
     rm -f "$DOMAIN_DIR/${DOMAIN}.ec.key"
   fi
 fi
+
 # create new domain keys if they don't already exist
 if [[ "$DUAL_RSA_ECDSA" == "false" ]]; then
   create_key "${PRIVATE_KEY_ALG}" "$DOMAIN_DIR/${DOMAIN}.key" "$DOMAIN_KEY_LENGTH"
