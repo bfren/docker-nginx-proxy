@@ -1,4 +1,4 @@
-FROM bfren/nginx:alpine3.14-2.2.16
+FROM bfren/nginx:alpine3.14-2.2.17
 
 # port 80 is already exposed by the base image
 EXPOSE 443
