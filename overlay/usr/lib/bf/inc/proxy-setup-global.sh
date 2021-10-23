@@ -8,8 +8,7 @@ setup-global () {
 
     if [ ! -f ${PROXY_GETSSL_GLOBAL_CFG} ] ; then
         bf-debug " .. creating global configuration file..."
-        esh -o ${PROXY_GETSSL_GLOBAL_CFG} \
-            ${BF_TEMPLATES}/getssl-global.conf.esh
+        bf-esh ${BF_TEMPLATES}/getssl-global.conf.esh ${PROXY_GETSSL_GLOBAL_CFG}
     fi
 
     if [ ! -f ${PROXY_SSL_DHPARAM} ] ; then
