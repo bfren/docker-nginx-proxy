@@ -1,0 +1,25 @@
+#======================================================================================================================
+# DNS OVER TLS
+#======================================================================================================================
+
+stream {
+
+    # upstream DNS server
+    upstream dns {
+        zone                        dns 64k;
+        server                      <%= "${PROXY_UPSTREAM_DNS}" %>
+    }
+
+    # listen to port 853 using proxy server SSL
+    server {
+        listen                      853 ssl;
+        proxy_pass                  dns;
+
+        # paths to SSL certificates and configuration
+        ssl_certificate             <%= "${PROXY_SSL_CERTS}/${PROXY_URI}/fullchain.crt" %>;
+        ssl_certificate_key         <%= "${PROXY_SSL_CERTS}/${PROXY_URI}.key" %>;
+        ssl_trusted_certificate     <%= "${PROXY_SSL_CERTS}/${PROXY_URI}/chain.crt" %>;
+        ssl_dhparam                 <%= "${PROXY_SSL_DHPARAM}" %>;
+    }
+
+}

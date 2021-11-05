@@ -1,0 +1,20 @@
+#!/usr/bin/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Install Nginx stream module, required for DNS over TLS.
+#======================================================================================================================
+
+if [ "${PROXY_ENABLE_DOT}" = "1" ] ; then
+
+    # add Nginx stream module
+    apk add --no-cache \
+        nginx-mod-stream
+
+    # generate DOT config
+    bf-esh ${BF_TEMPLATES}/nginx-dot.conf.esh ${NGINX_MODULES}/dot.conf
+
+fi
