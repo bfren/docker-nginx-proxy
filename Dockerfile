@@ -3,9 +3,6 @@ FROM bfren/nginx:nginx1.20-2.2.22
 # port 80 is already exposed by the base image
 EXPOSE 443
 
-# port 853 is used by DNS over TLS
-EXPOSE 853
-
 ENV \
     PROXY_URI= \
     # clean all config and certificates before doing anything else
@@ -22,13 +19,7 @@ ENV \
     # canonical domain name redirection
     PROXY_SSL_REDIRECT_TO_CANONICAL=0 \
     # set to true to skip local HTTP token check
-    PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false" \
-    # enables DNS over TLS support
-    # set to 1 to enable
-    PROXY_ENABLE_DOT=0 \
-    # required for DNS over TLS - include port number
-    # upstream DNS server, e.g. 1.1.1.1:53 (Cloudflare)
-    PROXY_UPSTREAM_DNS=
+    PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false"
 
 COPY ./overlay /
 
