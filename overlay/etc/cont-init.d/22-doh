@@ -26,4 +26,6 @@ if [ "${PROXY_ENABLE_DOT}" = "1" ] ; then
 
     bf-done
 
+    nginx-reload
+
 fi
