@@ -7,7 +7,7 @@ stream {
     # upstream DNS server
     upstream dns {
         zone                        dns 64k;
-        server                      <%= "${PROXY_UPSTREAM_DNS}" %>
+        server                      <%= "${PROXY_UPSTREAM_DNS}" %>;
     }
 
     # listen to port 853 using proxy server SSL
