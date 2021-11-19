@@ -59,6 +59,6 @@ setup-nginx () {
     fi
 
     # generate config
-    bf-esh ${BF_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh ${CONF}
+    bf-esh ${BF_TEMPLATES}/nginx-${NGINX_CONF}.conf.esh ${CONF} > /dev/null 2>&1
 
 }
