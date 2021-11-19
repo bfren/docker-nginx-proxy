@@ -5,6 +5,53 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
+# Executable usage.
+#======================================================================================================================
+
+usage () {
+    echo "Cleanup unused SSL and Nginx configuration files."
+    echo "Usage: `basename ${0}` [-d] [-h]" 2>&1
+    echo "    -m    Mode: 0 = dry run (default), 1 = perform deletions."
+    echo "    -h    Show this usage message."
+    exit 2
+}
+
+MODE=0
+while getopts ":hm:" C ; do
+    case ${C} in
+        h) usage ;;
+        m) MODE="${OPTARG}" ;;
+        ?) bf-notok "Invalid option: -${OPTARG}" "ssl-cleanup" && usage ;;
+    esac
+done
+
+case ${MODE} in
+    0) bf-echo "Dry Run mode enabled." ;;
+    1) bf-echo "Deletion mode enabled." ;;
+    ?) bf-error "Unknown mode '${MODE}'." ;;
+esac
+
+
+#======================================================================================================================
+# Output message or remove based on mode.
+#
+# Arguments
+#   1   Path to remove using * glob
+#======================================================================================================================
+
+remove () {
+
+    if [ "${MODE}" = "0" ] ; then
+        bf-echo " .. will remove ${1}/*"
+    elif [ "${MODE}" = "1" ] ; then
+        bf-echo " .. removing ${1}/*"
+        bf-rmrf ${1}* > /dev/null 2>&1
+    fi
+
+}
+
+
+#======================================================================================================================
 # Load SSL configuration.
 #======================================================================================================================
 
@@ -36,10 +83,9 @@ for CFG in "${SSL_CONFIGS[@]}" ; do
     bf-debug " .. ${NAME}"
 
     # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
-    if [[ "${PROXY_URI}" != "${NAME}" ]] && [[ ! " ${!DOMAINS[*]} " =~ " ${NAME} " ]]; then
-        bf-echo " .. removing ${PROXY_SSL_CERTS}/${NAME}*"
-        bf-rmrf ${PROXY_SSL_CERTS}/${NAME}*
-    fi
+    [[ "${PROXY_URI}" != "${NAME}" ]] \
+        && [[ ! " ${!DOMAINS[*]} " =~ " ${NAME} " ]] \
+        && remove "${PROXY_SSL_CERTS}/${NAME}"
 
 done
 
@@ -63,10 +109,9 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
     bf-debug " .. ${STRIPPED}"
 
     # if STRIPPED is not the main PROXY_URI nor in the DOMAINS array, delete everything
-    if [[ "${PROXY_URI}" != "${STRIPPED}" ]] && [[ ! " ${!DOMAINS[*]} " =~ " ${STRIPPED} " ]]; then
-        bf-echo " .. removing ${PROXY_SITES}/${STRIPPED}*"
-        bf-rmrf ${PROXY_SITES}/${STRIPPED}*
-    fi
+    [[ "${PROXY_URI}" != "${STRIPPED}" ]] \
+        && [[ ! " ${!DOMAINS[*]} " =~ " ${STRIPPED} " ]] \
+        && remove "${PROXY_SITES}/${STRIPPED}"
 
 done
 
