@@ -1,0 +1,73 @@
+#!/usr/bin/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Load SSL configuration.
+#======================================================================================================================
+
+bf-echo "Loading SSL configuration."
+
+declare -A DOMAINS
+declare -A ALIASES
+declare -A NGXCONF
+
+source ${PROXY_SSL}/conf.sh
+bf-debug "Loaded: ${!DOMAINS[*]}."
+
+
+#======================================================================================================================
+# Check SSL certifications and config.
+#======================================================================================================================
+
+bf-echo "Getting SSL certificate configuration."
+SSL_CONFIGS=(${PROXY_SSL_CERTS}/*)
+
+bf-echo "Checking against configured domains..."
+for CFG in "${SSL_CONFIGS[@]}" ; do
+
+    # do nothing if this is a file
+    [[ -f "${CFG}" ]] && continue
+
+    # get name
+    NAME=$(basename -- "${CFG}")
+    bf-debug " .. ${NAME}"
+
+    # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
+    if [[ "${PROXY_URI}" != "${NAME}" ]] && [[ ! " ${!DOMAINS[*]} " =~ " ${NAME} " ]]; then
+        bf-echo " .. removing ${PROXY_SSL_CERTS}/${NAME}*"
+        bf-rmrf ${PROXY_SSL_CERTS}/${NAME}*
+    fi
+
+done
+
+
+#======================================================================================================================
+# Check Nginx config.
+#======================================================================================================================
+
+bf-echo "Getting Nginx sites configuration."
+NGINX_CONFIGS=(${PROXY_SITES}/*)
+
+bf-echo "Checking against configured domains..."
+for CFG in "${NGINX_CONFIGS[@]}" ; do
+
+    # do nothing if this is a file
+    [[ -f "${CFG}" ]] && continue
+
+    # get name and strip .d from end of directory
+    NAME=$(basename -- "${CFG}")
+    STRIPPED=${NAME::-2}
+    bf-debug " .. ${STRIPPED}"
+
+    # if STRIPPED is not the main PROXY_URI nor in the DOMAINS array, delete everything
+    if [[ "${PROXY_URI}" != "${STRIPPED}" ]] && [[ ! " ${!DOMAINS[*]} " =~ " ${STRIPPED} " ]]; then
+        bf-echo " .. removing ${PROXY_SITES}/${STRIPPED}*"
+        bf-rmrf ${PROXY_SITES}/${STRIPPED}*
+    fi
+
+done
+
+bf-done

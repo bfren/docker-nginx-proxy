@@ -48,6 +48,7 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | Function              | Arguments | Description                                                                                                      |
 | --------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
 | `nginx-regenerate`    | *None*    | Removes Nginx configuration files (in `/sites`) and regenerates based on `conf.sh`.                              |
+| `ssl-cleanup`         | *None*    | Removes SSL and Nginx configuration files and directories not defined in `conf.sh`.                              |
 | `ssl-init`            | *None*    | Initialises SSL configuration based on `conf.sh`.                                                                |
 | `ssl-regenerate`      | *None*    | Removes SSL configuration files (in `/ssl/certs`) and regenerates based on `conf.sh`.                            |
 | `ssl-regenerate-full` | *None*    | Removes SSL configuration files (in `/ssl/certs`), as well as DH parameters, and regenerates based on `conf.sh`. |
