@@ -10,7 +10,7 @@ export BF_E=`basename ${0}`
 
 usage () {
     echo "Cleanup unused SSL and Nginx configuration files."
-    echo "Usage: `basename ${0}` [-d] [-h]" 2>&1
+    echo "Usage: `basename ${0}` [-m] [-h]" 2>&1
     echo "    -m    Mode: 0 = dry run (default), 1 = perform deletions."
     echo "    -h    Show this usage message."
     exit 2
@@ -56,12 +56,7 @@ remove () {
 #======================================================================================================================
 
 bf-echo "Loading SSL configuration."
-
-declare -A DOMAINS
-declare -A ALIASES
-declare -A NGXCONF
-
-source ${PROXY_SSL}/conf.sh
+source ${BF_INC}/proxy-load.conf.sh
 bf-debug "Loaded: ${!DOMAINS[*]}."
 
 
