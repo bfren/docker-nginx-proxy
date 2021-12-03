@@ -56,7 +56,7 @@ remove () {
 #======================================================================================================================
 
 bf-echo "Loading SSL configuration."
-source ${BF_INC}/proxy-load.conf.sh
+source ${BF_INC}/proxy-load-conf.sh
 bf-debug "Loaded: ${!DOMAINS[*]}."
 
 
