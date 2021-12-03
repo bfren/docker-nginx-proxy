@@ -5,11 +5,69 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Delete Nginx configuration files and reinitialise.
+# Executable usage.
 #======================================================================================================================
 
-bf-echo "Removing Nginx configuration files..."
-bf-rmrf "${PROXY_SITES}/*.conf"
+usage () {
+    echo "Regenerate Nginx configuration files."
+    echo "Usage: `basename ${0}` [-f] [-h]" 2>&1
+    echo "    -f    Force all configuration files to be deleted (even custom ones)."
+    echo "    -h    Show this usage message."
+    exit 2
+}
+
+MODE=0
+while getopts ":hf" C ; do
+    case ${C} in
+        h) usage ;;
+        f) FORCE=1 ;;
+        ?) bf-notok "Invalid option: -${OPTARG}" "nginx-regenerate" && usage ;;
+    esac
+done
+
+
+#======================================================================================================================
+# Load SSL configuration.
+#======================================================================================================================
+
+bf-echo "Loading SSL configuration."
+source ${BF_INC}/proxy-load-conf.sh
+bf-debug "Loaded: ${!DOMAINS[*]}."
+
+
+#======================================================================================================================
+# Delete Nginx configuration files.
+#======================================================================================================================
+
+bf-echo "Getting Nginx sites configuration."
+NGINX_CONFIGS=(${PROXY_SITES}/*)
+
+bf-echo "Checking against configured domains..."
+for CFG in "${NGINX_CONFIGS[@]}" ; do
+
+    # do nothing if this is a file
+    [[ -f "${CFG}" ]] && continue
+
+    # get name and strip .d from end of directory
+    NAME=$(basename -- "${CFG}")
+    STRIPPED=${NAME::-2}
+    bf-debug " .. ${STRIPPED}"
+
+    # unless the force switch is enabled, if the domain has custom config, don't delete
+    if [[ "${FORCE-}" = "1" ]] || [[ -z "${NGXCONF[${STRIPPED}]-}" ]] ; then
+        bf-debug " .. standard config or force enabled: remove"
+        rm -rf ${PROXY_SITES}/${STRIPPED}*
+    else
+        bf-debug " .. custom config and force not enabled: leave"
+    fi
+
+done
+
 bf-done
+
+
+#======================================================================================================================
+# Reinitialise.
+#======================================================================================================================
 
 ssl-init

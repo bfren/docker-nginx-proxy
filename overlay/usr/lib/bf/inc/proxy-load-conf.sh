@@ -2,22 +2,17 @@
 
 
 #======================================================================================================================
-# Replace a key/value pair in a file.
-#
-# Arguments
-#   1   Key
-#   2   Value
-#   3   File path
+# Create arrays and include configuration.
 #======================================================================================================================
 
-replace () { replace-d "${1}" "\"${2}\"" ${3}; }
+SSL_CONF=${PROXY_SSL}/conf.sh
+if [ ! -f ${SSL_CONF} ] ; then
+    bf-error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
+    exit 1
+fi
 
-replace-d () {
+declare -A DOMAINS
+declare -A ALIASES
+declare -A NGXCONF
 
-    K=${1}
-    V=${2}
-    FILE=${3}
-
-    [[ ! -z "${V}" ]] && sed -i "s|^#\?${K}.*$|${K}=${V}|i" ${FILE}
-
-}
+source ${SSL_CONF}

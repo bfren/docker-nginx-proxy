@@ -1,4 +1,7 @@
-FROM bfren/nginx:nginx1.20-2.3.0
+FROM bfren/nginx:nginx1.20-2.4.0
+
+ARG BF_IMAGE
+ARG BF_VERSION
 
 # port 80 is already exposed by the base image
 EXPOSE 443

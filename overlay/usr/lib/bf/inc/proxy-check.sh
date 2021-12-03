@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bash
 
+
 #======================================================================================================================
 # Ensure PROXY_URI is set.
 #======================================================================================================================
@@ -24,17 +25,7 @@ fi
 # Create arrays and include configuration.
 #======================================================================================================================
 
-SSL_CONF=${PROXY_SSL}/conf.sh
-if [ ! -f ${SSL_CONF} ] ; then
-    bf-error "You must create ${SSL_CONF} - see ssl-conf-sample.sh."
-    exit 1
-fi
-
-declare -A DOMAINS
-declare -A ALIASES
-declare -A NGXCONF
-
-source ${SSL_CONF}
+source ${BF_INC}/proxy-load-conf.sh
 
 
 #======================================================================================================================
