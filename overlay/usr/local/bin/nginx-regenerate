@@ -56,7 +56,7 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
     # unless the force switch is enabled, if the domain has custom config, don't delete
     if [[ "${FORCE-}" = "1" ]] || [[ -z "${NGXCONF[${STRIPPED}]-}" ]] ; then
         bf-debug " .. standard config or force enabled: remove"
-        rm -rf "${PROXY_SITES}/${STRIPPED}*"
+        rm -rf ${PROXY_SITES}/${STRIPPED}*
     else
         bf-debug " .. custom config and force not enabled: leave"
     fi
