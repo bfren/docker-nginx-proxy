@@ -20,7 +20,7 @@ bf-done
 # Cleanup.
 #======================================================================================================================
 
-bf-debug "Cleaning up Nginx sites definitions."
+bf-echo "Cleaning up Nginx sites definitions."
 rm -rf /etc/nginx/sites
 bf-done
 
@@ -29,7 +29,7 @@ bf-done
 # Create and link Nginx directories.
 #======================================================================================================================
 
-bf-debug "Creating and linking Nginx directories."
+bf-echo "Creating and linking Nginx directories."
 
 mkdir /sites
 ln -s /sites /etc/nginx/sites
