@@ -1,11 +1,12 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 set -euo pipefail
 export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Test Proxy URI.
+# Run init executable.
 #======================================================================================================================
 
-bf-test-url "http://${PROXY_URI}"
+s6-setuidgid www ${PROXY_LIB}/init
+nginx-reload

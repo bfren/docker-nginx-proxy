@@ -1,12 +1,17 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 set -euo pipefail
 export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run request executable.
+# Delete SSL files and reinitialise.
 #======================================================================================================================
 
-s6-setuidgid www ${PROXY_LIB}/request
+bf-echo "Removing SSL certificates and configuration..."
+bf-rmrf "${PROXY_SSL_CERTS}/*"
+bf-done
+
+cd ${PROXY_LIB}
+s6-setuidgid www ./init && ./request
 nginx-reload

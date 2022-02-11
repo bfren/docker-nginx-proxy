@@ -1,23 +1,11 @@
 #!/command/with-contenv bash
 
+set -euo pipefail
+export BF_E=`basename ${0}`
+
 
 #======================================================================================================================
-# Replace a key/value pair in a file.
-#
-# Arguments
-#   1   Key
-#   2   Value
-#   3   File path
+# Test Proxy URI.
 #======================================================================================================================
 
-replace () { replace-d "${1}" "\"${2}\"" ${3}; }
-
-replace-d () {
-
-    K=${1}
-    V=${2}
-    FILE=${3}
-
-    [[ ! -z "${V}" ]] && sed -i "s|^#\?${K}.*$|${K}=${V}|i" ${FILE}
-
-}
+bf-test-url "http://${PROXY_URI}"
