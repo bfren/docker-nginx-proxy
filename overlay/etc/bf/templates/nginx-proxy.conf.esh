@@ -45,6 +45,9 @@ server {
     # include secure headers
     include                         helpers/proxy-secure-headers.conf;
 
+    # include custom configuration
+    include                         <%= "${CUSTOM_CONF}/*.conf" %>;
+
     # include standard helpers
     include                         helpers/nginx-ignore-favicon.conf;
     include                         helpers/nginx-static-files.conf;

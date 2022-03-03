@@ -5,12 +5,33 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Delete SSL files and reinitialise.
+# Remove specified domain (or all domains).
 #======================================================================================================================
 
-bf-echo "Removing SSL certificates and configuration..."
-bf-rmrf "${PROXY_SSL_CERTS}/*"
-bf-done
+if [ -n "${1-}" ] ; then
+
+    DOMAIN=${1}
+    [[ ! -d "${PROXY_SSL_CERTS}/${DOMAIN}" ]] && bf-error "Domain ${DOMAIN} has not been setup for SSL."
+
+    bf-echo "Removing SSL certificates and configuration for ${DOMAIN}..."
+    rm -r \
+        "${PROXY_SSL_CERTS}/${DOMAIN}" \
+        "${PROXY_SSL_CERTS}/${DOMAIN}.crt" \
+        "${PROXY_SSL_CERTS}/${DOMAIN}.key"
+    bf-done
+
+else
+
+    bf-echo "Removing SSL certificates and configuration..."
+    bf-rmrf "${PROXY_SSL_CERTS}/*"
+    bf-done
+
+fi
+
+
+#======================================================================================================================
+# Reinitialise SSL.
+#======================================================================================================================
 
 cd ${PROXY_LIB}
 s6-setuidgid www ./init && ./request
