@@ -21,9 +21,12 @@ bf-done
 #======================================================================================================================
 
 VERSION=`cat /tmp/GETSSL_VERSION`
+bf-echo "Downloading getssl ${VERSION}."
+
 GETSSL=/usr/lib/bf/proxy/getssl
 wget -O ${GETSSL} "https://raw.githubusercontent.com/srvrco/getssl/v${VERSION}/getssl"
 chmod +x ${GETSSL}
+bf-done
 
 
 #======================================================================================================================
