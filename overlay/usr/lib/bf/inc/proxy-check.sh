@@ -1,4 +1,4 @@
-#!/command/with-contenv bash
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -6,7 +6,7 @@
 #======================================================================================================================
 
 if [ -z "${PROXY_URI}" ] ; then
-    bf-error "PROXY_URI must be set before requesting SSL certificates."
+    bf-error "PROXY_URI must be set before requesting SSL certificates." "inc/proxy-check.sh"
     exit 1
 fi
 
@@ -16,7 +16,7 @@ fi
 #======================================================================================================================
 
 if [ -z "${PROXY_LETS_ENCRYPT_EMAIL}" ] ; then
-    bf-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates."
+    bf-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates." "inc/proxy-check.sh"
     exit 1
 fi
 
@@ -33,7 +33,7 @@ source ${BF_INC}/proxy-load-conf.sh
 #======================================================================================================================
 
 if [ "${#DOMAINS[@]}" = "0" ] ; then
-    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.sh."
+    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.sh." "inc/proxy-check.sh"
     exit 1
 fi
 

@@ -1,6 +1,4 @@
-#!/command/with-contenv bash
-
-export BF_E=`basename ${0}`
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -29,19 +27,19 @@ request() {
 # Get certificate for the proxy server base domain.
 #======================================================================================================================
 
-bf-echo "Requesting proxy server certificate..."
+bf-echo "Requesting proxy server certificate..." "proxy/request"
 bf-debug " .. ${PROXY_URI}"
 request "${PROXY_URI}"
-bf-done
+bf-done "proxy/request"
 
 
 #======================================================================================================================
 # Get certificates for all registered domains.
 #======================================================================================================================
 
-bf-echo "Requesting domain certificates..."
+bf-echo "Requesting domain certificates..." "proxy/request"
 for DN in "${!DOMAINS[@]}" ; do
-    bf-debug " .. ${DN}"
+    bf-debug " .. ${DN}" "proxy/request"
     request "${DN}"
 done
-bf-done
+bf-done "proxy/request"
