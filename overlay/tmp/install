@@ -20,8 +20,10 @@ bf-done
 # Download getssl script.
 #======================================================================================================================
 
-VERSION=`cat /tmp/VERSION`
-wget -O /usr/lib/proxy/getssl "https://raw.githubusercontent.com/srvrco/getssl/v${VERSION}/getssl"
+VERSION=`cat /tmp/GETSSL_VERSION`
+GETSSL=/usr/lib/bf/proxy/getssl
+wget -O ${GETSSL} "https://raw.githubusercontent.com/srvrco/getssl/v${VERSION}/getssl"
+chmod +x ${GETSSL}
 
 
 #======================================================================================================================
