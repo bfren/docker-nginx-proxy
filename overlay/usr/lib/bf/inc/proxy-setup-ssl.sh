@@ -1,4 +1,4 @@
-#!/command/with-contenv bash
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -58,7 +58,7 @@ setup-ssl () {
     local FILE=${PROXY_SSL_CERTS}/${DOMAIN_NAME}/${PROXY_GETSSL_CFG}
 
     # check for existing configuration
-    [[ -f ${FILE} ]] && bf-debug "    already set up." && return 0
+    [[ -f ${FILE} ]] && bf-debug "    already set up." "inc/proxy-setup-ssl.sh" && return 0
 
     # getssl flags
     #   -U  stop upgrade checks
@@ -74,14 +74,14 @@ setup-ssl () {
     local ACL=$(yes ${ACL_DIR} | head -n ${ACL_RPT} | sed -n 'H;${x;s/\n/ /gp}')
 
     # replace config values with defaults
-    bf-debug "    replacing configuration value"
+    bf-debug "    replacing configuration value" "inc/proxy-setup-ssl.sh"
     replace "SANS" "${SANS:1}" ${FILE}
     replace "DOMAIN_CERT_LOCATION" "${CERT}.crt" ${FILE}
     replace "DOMAIN_KEY_LOCATION" "${CERT}.key" ${FILE}
     replace-d "ACL" "(${ACL})" ${FILE}
 
     # create self-signed certificate so nginx will start before we request proper certificates
-    bf-debug "    generating temporary SSL certificates"
+    bf-debug "    generating temporary SSL certificates" "inc/proxy-setup-ssl.sh"
     generate-temp-cert ${CERT}/fullchain.crt ${CERT}.key ${DOMAIN_NAME}
     generate-temp-cert ${CERT}/chain.crt ${CERT}/chain.key ${DOMAIN_NAME}
     rm ${CERT}/chain.key

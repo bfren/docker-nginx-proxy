@@ -1,4 +1,4 @@
-#!/command/with-contenv bash
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -33,19 +33,19 @@ setup-nginx () {
 
         # if empty, remove config so it can be regenerated
         if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            bf-debug "    removing and regnerating Nginx configuration"
+            bf-debug "    removing and regnerating Nginx configuration" "inc/proxy-setup-nginx.sh"
             rm ${CONF}
 
         # otherwise, leave file (allows custom config)
         else
-            bf-debug "    keeping existing configuration."
+            bf-debug "    keeping existing configuration." "inc/proxy-setup-nginx.sh"
             return 0
         fi
 
     else
 
         # no need to do anything, be a good log citizen
-        bf-debug "    generating default Nginx configuration"
+        bf-debug "    generating default Nginx configuration" "inc/proxy-setup-nginx.sh"
 
     fi
 

@@ -1,6 +1,4 @@
-#!/command/with-contenv bash
-
-export BF_E=`basename ${0}`
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -24,46 +22,46 @@ source ${BF_INC}/proxy-setup-ssl.sh
 # Set up global SSL configuration.
 #======================================================================================================================
 
-bf-echo "Setting up getssl..."
+bf-echo "Setting up getssl..." "proxy/init"
 setup-global
-bf-done
+bf-done "proxy/init"
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for proxy server.
 #======================================================================================================================
 
-bf-echo "Setting up default server ${PROXY_URI}..."
+bf-echo "Setting up default server ${PROXY_URI}..." "proxy/init"
 
-bf-echo "  . Nginx..."
+bf-echo "  . Nginx..." "proxy/init"
 setup-nginx 1 ${PROXY_URI} "http://localhost" ""
 
-bf-echo "  . SSL..."
+bf-echo "  . SSL..." "proxy/init"
 setup-ssl ${PROXY_URI} ""
 
-bf-ok "  . done."
+bf-ok "  . done." "proxy/init"
 
 
 #======================================================================================================================
 # Set up Nginx and SSL for each domain.
 #======================================================================================================================
 
-bf-echo "Setting up domains..."
+bf-echo "Setting up domains..." "proxy/init"
 for DN in "${!DOMAINS[@]}" ; do
 
     UP=${DOMAINS[${DN}]}  # upstream server
     AL=${ALIASES[${DN}]}  # aliases
     CF=${NGXCONF[${DN}]}  # use default / custom Nginx config
 
-    bf-echo " .. ${DN}"
+    bf-echo " .. ${DN}" "proxy/init"
 
-    bf-echo "  . Nginx..."
+    bf-echo "  . Nginx..." "proxy/init"
     setup-nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
 
-    bf-echo "  . SSL..."
+    bf-echo "  . SSL..." "proxy/init"
     setup-ssl ${DN} "${AL}"
 
-    bf-ok "  . done."
+    bf-ok "  . done." "proxy/init"
 
 done
-bf-ok "Domains set up."
+bf-ok "Domains set up." "proxy/init"

@@ -1,6 +1,4 @@
-#!/command/with-contenv bash
-
-export BF_E=`basename ${0}`
+#!/bin/bash
 
 
 #======================================================================================================================
@@ -20,16 +18,16 @@ source ${BF_INC}/proxy-setup-ssl.sh
 #   -a  check all certificates
 #======================================================================================================================
 
-bf-echo "Updating all SSL certificates..."
+bf-echo "Updating all SSL certificates..." "proxy/update"
 ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -a
-bf-done
+bf-done "proxy/update"
 
 
 #======================================================================================================================
 # Update all pem files (easier than working out which have been changed).
 #======================================================================================================================
 
-bf-echo "Updating pem files..."
+bf-echo "Updating pem files..." "proxy/update"
 create-pem ${PROXY_URI}
 for DN in "${!DOMAINS[@]}" ; do create-pem "${DN}" ; done
-bf-done
+bf-done "proxy/update"
