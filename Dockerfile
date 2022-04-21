@@ -17,6 +17,8 @@ ENV \
     # the base URI of the proxy server (will be used when SSL bindings fail)
     # set to 1 to use live instead of staging server
     PROXY_LETS_ENCRYPT_LIVE=0 \
+    # enable automatic certificate updating
+    PROXY_ENABLE_AUTO_UPDATE=1 \
     # set to the number of bits to use for generating private key
     PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
