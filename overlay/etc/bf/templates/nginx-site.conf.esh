@@ -75,9 +75,6 @@ server {
     listen                          443 ssl http2;
     listen                          [::]:443 ssl http2;
 
-    # because he was a legend
-    include                         helpers/nginx-discworld.conf;
-
 <% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
     # redirect to primary domain name
     if ($host != <%= "${DOMAIN_NAME}" %>) {
@@ -92,6 +89,9 @@ server {
         include                     helpers/proxy-secure-headers.conf;
         error_page                  502 503 504 /maintenance.html;
         include                     <%= "${CUSTOM_CONF}/*.conf" %>;
+
+        # because he was a legend
+        include                     helpers/nginx-discworld.conf;
     }
 
     # returns a friendly auto-refreshing 'maintenance' page if upstream servers are not available
