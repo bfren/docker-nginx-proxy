@@ -31,7 +31,7 @@ bf-env "PROXY_ACME_CHALLENGE" "${PROXY_ACME_CHALLENGE}"
 bf-env "PROXY_WWW_ACME_CHALLENGE" "${NGINX_WWW}/${PROXY_ACME_CHALLENGE}"
 
 if [ "${PROXY_GETSSL_DEBUG-}" = "1" ] ; then
-    bf-env "PROXY_GETSSL_FLAGS" "-dU"
+    bf-env "PROXY_GETSSL_FLAGS" "-d -U"
 else
     bf-env "PROXY_GETSSL_FLAGS" "-U"
 fi
