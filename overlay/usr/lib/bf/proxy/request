@@ -13,12 +13,13 @@ source ${BF_INC}/proxy-setup-ssl.sh
 # Request certificates for all domains.
 #
 # getssl flags
+#   -d  enable debug output
 #   -U  stop upgrade checks
 #   -w  set working directory
 #======================================================================================================================
 
 request() {
-    ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} "${1}"
+    ${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} "${1}"
     create-pem "${1}"
 }
 
