@@ -13,13 +13,14 @@ source ${BF_INC}/proxy-setup-ssl.sh
 # Run update.
 #
 # getssl flags
+#   -d  enable debug output
 #   -U  stop upgrade checks
 #   -w  set working directory
 #   -a  check all certificates
 #======================================================================================================================
 
 bf-echo "Updating all SSL certificates..." "proxy/update"
-${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -a
+${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} -a
 bf-done "proxy/update"
 
 

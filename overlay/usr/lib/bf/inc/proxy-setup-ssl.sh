@@ -61,10 +61,11 @@ setup-ssl () {
     [[ -f ${FILE} ]] && bf-debug "    already set up." "inc/proxy-setup-ssl.sh" && return 0
 
     # getssl flags
+    #   -d  enable debug output
     #   -U  stop upgrade checks
     #   -w  set working directory
     #   -c  create default configuration files
-    ${PROXY_GETSSL} -U -w ${PROXY_SSL_CERTS} -c ${DOMAIN_NAME}
+    ${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} -c ${DOMAIN_NAME}
 
     # set default values
     local SANS=$(printf ",%s" ${DOMAIN_ALIASES[@]})
