@@ -57,7 +57,7 @@ function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary ==
 #======================================================================================================================
 
 bf-echo "Setting up domains..." "proxy/init"
-for DN in "${!DOMAINS[@]}" ; do
+for DN in "${DOMAINS}" ; do
 
     UP=`get-domain "${DN}" | jq -r '.upstream'`         # upstream server
     AL=`get-domain "${DN}" | jq -r '.aliases[]'`        # aliases
