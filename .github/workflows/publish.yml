@@ -64,11 +64,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
-            bfren/nginx-proxy:latest
             bfren/nginx-proxy:${{ steps.version_major.outputs.contents }}
             bfren/nginx-proxy:${{ steps.version_minor.outputs.contents }}
             bfren/nginx-proxy:${{ steps.version.outputs.contents }}
-            ghcr.io/bfren/nginx-proxy:latest
             ghcr.io/bfren/nginx-proxy:${{ steps.version_major.outputs.contents }}
             ghcr.io/bfren/nginx-proxy:${{ steps.version_minor.outputs.contents }}
             ghcr.io/bfren/nginx-proxy:${{ steps.version.outputs.contents }}
