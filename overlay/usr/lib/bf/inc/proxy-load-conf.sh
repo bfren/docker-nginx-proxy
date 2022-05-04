@@ -16,9 +16,9 @@ fi
 # Load JSON and create DOMAINS array by selecting primary keys.
 #======================================================================================================================
 
-JSON=`cat "${SSL_CONF}" | gojq '.'`
+JSON=`cat "${SSL_CONF}" | jq '.'`
 
-declare -a DOMAINS=(`gojq -r '.domains[].primary' <<< "${JSON}"`)
+declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${JSON}"`)
 
 
 #======================================================================================================================
@@ -28,8 +28,8 @@ declare -a DOMAINS=(`gojq -r '.domains[].primary' <<< "${JSON}"`)
 #   1   Primary domain name to select
 #======================================================================================================================
 
-function get-domain() { gojq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON}" ; }
+function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON}" ; }
 
-function get-upstream() { get-domain "${1}" | gojq -r '.upstream' ; }
-function get-aliases() { get-domain "${1}" | gojq -r '.aliases[]?' ; }
-function get-custom() { get-domain "${1}" | gojq -r '.custom == true' ; }
+function get-upstream() { get-domain "${1}" | jq -r '.upstream' ; }
+function get-aliases() { get-domain "${1}" | jq -r '.aliases[]?' ; }
+function get-custom() { get-domain "${1}" | jq -r '.custom == true' ; }

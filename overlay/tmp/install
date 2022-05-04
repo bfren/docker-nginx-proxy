@@ -12,7 +12,7 @@ bf-echo "Installing packages..."
 apk add --no-cache \
     bash \
     curl \
-    gojq \
+    jq \
     openssl
 bf-done
 
