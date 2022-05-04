@@ -54,7 +54,7 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
     bf-debug " .. ${STRIPPED}"
 
     # the domain has standard config - delete conf file
-    CUSTOM_CONF=`get-domain "${STRIPPED}" | jq -r '.custom == true'`
+    CUSTOM_CONF=`get-custom "${STRIPPED}"`
     if [[ "${CUSTOM_CONF}" = "false" ]] ; then
 
         bf-debug " .. standard config: remove configuration file"

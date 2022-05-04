@@ -49,9 +49,9 @@ bf-ok "  . done." "proxy/init"
 bf-echo "Setting up domains..." "proxy/init"
 for DN in "${DOMAINS[@]}" ; do
 
-    UP=`get-domain "${DN}" | jq -r '.upstream'`         # upstream server
-    AL=`get-domain "${DN}" | jq -r '.aliases[]'`        # aliases
-    CF=`get-domain "${DN}" | jq -r '.custom == true'`   # whether or not to use custom Nginx config
+    UP=`get-upstream` # upstream server
+    AL=`get-aliases`  # aliases
+    CF=`get-custom`   # whether or not to use custom Nginx config
 
     bf-echo " .. ${DN}" "proxy/init"
 
