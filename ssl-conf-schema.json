@@ -1,0 +1,37 @@
+{
+    "$id": "https://raw.githubusercontent.com/bfren/docker-nginx-proxy/main/ssl-conf-schema.json",
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "required": [ "domains" ],
+    "additionalProperties": false,
+    "properties": {
+        "domains": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/domain" }
+        }
+    },
+    "$defs": {
+        "domain": {
+            "type": "object",
+            "required": [ "primary", "upstream" ],
+            "additionalProperties": false,
+            "properties" : {
+                "primary": {
+                    "type": "string",
+                },
+                "upstream": {
+                    "type": "string",
+                },
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "custom": {
+                    "type": "boolean",
+                }
+            }
+        }
+    }
+}
