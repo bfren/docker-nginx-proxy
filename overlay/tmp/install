@@ -19,7 +19,7 @@ apk add --no-cache --virtual .install \
 
 bf-echo "Cloning jq source..."
 cd /tmp && \
-    git clone https://github.com/stedolan/jq.git && \
+    git clone https://github.com/bfren/jq.git && \
     cd jq
 
 bf-echo "Configuring jq..."
