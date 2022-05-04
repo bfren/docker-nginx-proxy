@@ -1,6 +1,6 @@
 # Docker Nginx Proxy
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-nginx-proxy) ![Docker Pulls](https://img.shields.io/docker/pulls/bfren/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bfren/nginx-proxy/latest?label=size)<br/>
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/bfren/docker-nginx-proxy) ![Docker Pulls](https://img.shields.io/docker/pulls/bfren/nginx-proxy?label=pulls) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/bfren/nginx-proxy/4?label=size)<br/>
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bfren/docker-nginx-proxy/dev?label=build)
 
 [Docker Repository](https://hub.docker.com/r/bfren/nginx-proxy) - [bfren ecosystem](https://github.com/bfren/docker)
