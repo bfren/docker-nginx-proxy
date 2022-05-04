@@ -42,9 +42,9 @@ esac
 remove () {
 
     if [ "${MODE}" = "0" ] ; then
-        bf-echo " .. will remove ${1}/*"
+        bf-echo " .. will remove ${1}*"
     elif [ "${MODE}" = "1" ] ; then
-        bf-echo " .. removing ${1}/*"
+        bf-echo " .. removing ${1}*"
         bf-rmrf ${1}* > /dev/null 2>&1
     fi
 
