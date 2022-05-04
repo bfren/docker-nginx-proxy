@@ -19,3 +19,13 @@ fi
 CONF_JSON=`cat "${SSL_CONF}" | jq '.'`
 
 declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${CONF_JSON}"`)
+
+
+#======================================================================================================================
+# Gets a domain object from the JSON configuration.
+#
+# Arguments
+#   1   Primary domain name to select
+#======================================================================================================================
+
+function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON_CONF}" ; }
