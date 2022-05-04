@@ -10,8 +10,9 @@
 #   d) custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
 #      these are loaded as part of the HTTPS server block below
 #
-# If you would like to return to using generated configuration then remove the following from /ssl/conf.sh:
-#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]=""
+# If you would like to return to using generated configuration then remove the following from /ssl/conf.json in the
+# "<%= "${DOMAIN_NAME}" %>"" domain object:
+#   "custom": true
 # This will cause this file to be regenerated next time the container is started.
 #
 # Copyright (c) 2021-2022 bfren
@@ -23,8 +24,9 @@
 #
 # To add server names or aliases please use /ssl/conf.sh (see ssl-conf-sample.sh).
 #
-# If you need a fully custom configuration then add the following to /ssl/conf.sh:
-#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]="custom"
+# If you need a fully custom configuration then add the following to /ssl/conf.shin the
+# "<%= "${DOMAIN_NAME}" %>"" domain object:
+#   "custom": true
 # This will stop this file being generated next time the container is started.
 #
 # Copyright (c) 2021-2022 bfren
