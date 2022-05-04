@@ -16,9 +16,9 @@ fi
 # Load JSON and create DOMAINS array by selecting primary keys.
 #======================================================================================================================
 
-CONF_JSON=`cat "${SSL_CONF}" | jq '.'`
+JSON=`cat "${SSL_CONF}" | jq '.'`
 
-declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${CONF_JSON}"`)
+declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${JSON}"`)
 
 
 #======================================================================================================================
@@ -28,4 +28,4 @@ declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${CONF_JSON}"`)
 #   1   Primary domain name to select
 #======================================================================================================================
 
-function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON_CONF}" ; }
+function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON}" ; }
