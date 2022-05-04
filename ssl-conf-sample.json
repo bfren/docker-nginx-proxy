@@ -10,8 +10,7 @@
         {
             "primary": "test.com",
             "upstream": "http://test",
-            "aliases": [ "www.test.com", "fred.co.uk" ],
-            "custom": false
+            "aliases": [ "www.test.com", "fred.co.uk" ]
         }
     ]
 }

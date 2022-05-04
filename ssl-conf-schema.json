@@ -4,7 +4,6 @@
     "description": "Docker Nginx Proxy Configuration Settings",
     "type": "object",
     "required": [ "domains" ],
-    "additionalProperties": false,
     "properties": {
         "domains": {
             "type": "array",
@@ -15,7 +14,6 @@
         "domain": {
             "type": "object",
             "required": [ "primary", "upstream" ],
-            "additionalProperties": false,
             "properties" : {
                 "primary": {
                     "type": "string",
