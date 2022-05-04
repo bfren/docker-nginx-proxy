@@ -43,15 +43,25 @@ bf-ok "  . done." "proxy/init"
 
 
 #======================================================================================================================
+# Gets a domain object from the JSON configuration.
+#
+# Arguments
+#   1   Primary domain name to select
+#======================================================================================================================
+
+function get-domain() { jq --arg PRIMARY "${1}" '.domains[] | select(.primary == $PRIMARY)' <<< "${JSON_CONF}" ; }
+
+
+#======================================================================================================================
 # Set up Nginx and SSL for each domain.
 #======================================================================================================================
 
 bf-echo "Setting up domains..." "proxy/init"
 for DN in "${!DOMAINS[@]}" ; do
 
-    UP=${DOMAINS[${DN}]}  # upstream server
-    AL=${ALIASES[${DN}]}  # aliases
-    CF=${NGXCONF[${DN}]}  # use default / custom Nginx config
+    UP=`get-domain "${DN}" | jq -r '.upstream'`         # upstream server
+    AL=`get-domain "${DN}" | jq -r '.aliases[]'`        # aliases
+    CF=`get-domain "${DN}" | jq -r '.custom == true'`   # whether or not to use custom Nginx config
 
     bf-echo " .. ${DN}" "proxy/init"
 
