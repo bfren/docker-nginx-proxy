@@ -57,7 +57,7 @@ remove () {
 
 bf-echo "Loading SSL configuration."
 source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${!DOMAINS[*]}."
+bf-debug "Loaded: ${DOMAINS[@]}."
 
 
 #======================================================================================================================
@@ -105,7 +105,7 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
 
     # if STRIPPED is not the main PROXY_URI nor in the DOMAINS array, delete everything
     [[ "${PROXY_URI}" != "${STRIPPED}" ]] \
-        && [[ ! " ${!DOMAINS[*]} " =~ " ${STRIPPED} " ]] \
+        && [[ -z "`get-domain ${STRIPPED}`" ]] \
         && remove "${PROXY_SITES}/${STRIPPED}"
 
 done
