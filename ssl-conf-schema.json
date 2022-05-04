@@ -17,10 +17,10 @@
             "additionalProperties": false,
             "properties" : {
                 "primary": {
-                    "type": "string",
+                    "type": "string"
                 },
                 "upstream": {
-                    "type": "string",
+                    "type": "string"
                 },
                 "aliases": {
                     "type": "array",
@@ -29,7 +29,7 @@
                     }
                 },
                 "custom": {
-                    "type": "boolean",
+                    "type": "boolean"
                 }
             }
         }
