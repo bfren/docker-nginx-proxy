@@ -5,6 +5,43 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
+# Build jq from source.
+#======================================================================================================================
+
+bf-echo "Installing build dependencies..."
+apk add --no-cache --virtual .install \
+    alpine-sdk \
+    autoconf \
+    automake \
+    git \
+    libtool \
+    oniguruma-dev
+
+bf-echo "Cloning jq source..."
+cd /tmp && \
+    git clone https://github.com/stedolan/jq.git && \
+    cd jq
+
+bf-echo "Configuring jq..."
+autoreconf -fi
+./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --localstatedir=/var \
+    --disable-docs
+
+bf-echo "Installing jq..."
+make
+make install
+
+bf-echo "Removing jq installation..."
+apk del .install
+
+bf-done
+
+
+#======================================================================================================================
 # Install packages.
 #======================================================================================================================
 
@@ -12,7 +49,7 @@ bf-echo "Installing packages..."
 apk add --no-cache \
     bash \
     curl \
-    jq \
+    oniguruma \
     openssl
 bf-done
 
