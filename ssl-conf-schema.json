@@ -34,7 +34,7 @@
                 },
                 "custom": {
                     "type": "boolean",
-                    "description": "Whether or not to use custom Nginx configuration."
+                    "description": "Whether or not to use custom Nginx configuration - if true, once generated the file will be ignored so changes here will have no effect."
                 }
             }
         }
