@@ -79,7 +79,7 @@ for CFG in "${SSL_CONFIGS[@]}" ; do
 
     # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
     [[ "${PROXY_URI}" != "${NAME}" ]] \
-        && [[ -z "`get-domain ${STRIPPED}`" ]] \
+        && [[ -z "`get-domain ${NAME}`" ]] \
         && remove "${PROXY_SSL_CERTS}/${NAME}"
 
 done
