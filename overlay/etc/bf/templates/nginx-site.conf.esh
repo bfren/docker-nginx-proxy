@@ -1,17 +1,4 @@
-<% if [ -z "${DOMAIN_NGXCONF}" ] ; then -%>
-#======================================================================================================================
-# WARNING: This file is generated. Do not make changes to this file.
-# Changes will be overwritten the next time the container is started.
-#
-# To add server names or aliases please use /ssl/conf.sh (see ssl-conf-sample.sh).
-#
-# If you need a fully custom configuration then add the following to /ssl/conf.sh:
-#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]="custom"
-# This will stop this file being generated next time the container is started.
-#
-# Copyright (c) 2021 bfren
-#======================================================================================================================
-<% else -%>
+<% if [ "${DOMAIN_NGXCONF}" = "true" ] ; then -%>
 #======================================================================================================================
 # You can make changes to this file.
 #
@@ -23,11 +10,26 @@
 #   d) custom configuration can be added to the /sites/<%= "${DOMAIN_NAME}" %>.d directory -
 #      these are loaded as part of the HTTPS server block below
 #
-# If you would like to return to using generated configuration then remove the following from /ssl/conf.sh:
-#   NGXCONF["<%= "${DOMAIN_NAME}" %>"]=""
+# If you would like to return to using generated configuration then remove the following from /ssl/conf.json in the
+# object where the primary domain is "<%= "${DOMAIN_NAME}" %>":
+#   "custom": true
 # This will cause this file to be regenerated next time the container is started.
 #
-# Copyright (c) 2021 bfren
+# Copyright (c) 2021-2022 bfren
+#======================================================================================================================
+<% else -%>
+#======================================================================================================================
+# WARNING: This file is generated. Do not make changes to this file.
+# Changes will be overwritten the next time the container is started.
+#
+# To add server names or aliases please use /ssl/conf.sh (see ssl-conf-sample.sh).
+#
+# If you need a fully custom configuration then add the following to /ssl/conf.json in the object where the primary
+# domain is "<%= "${DOMAIN_NAME}" %>":
+#   "custom": true
+# This will stop this file being generated next time the container is started.
+#
+# Copyright (c) 2021-2022 bfren
 #======================================================================================================================
 <% fi %>
 #======================================================================================================================

@@ -42,9 +42,9 @@ esac
 remove () {
 
     if [ "${MODE}" = "0" ] ; then
-        bf-echo " .. will remove ${1}/*"
+        bf-echo " .. will remove ${1}*"
     elif [ "${MODE}" = "1" ] ; then
-        bf-echo " .. removing ${1}/*"
+        bf-echo " .. removing ${1}*"
         bf-rmrf ${1}* > /dev/null 2>&1
     fi
 
@@ -57,7 +57,7 @@ remove () {
 
 bf-echo "Loading SSL configuration."
 source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${!DOMAINS[*]}."
+bf-debug "Loaded: ${DOMAINS[*]}."
 
 
 #======================================================================================================================
@@ -79,7 +79,7 @@ for CFG in "${SSL_CONFIGS[@]}" ; do
 
     # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
     [[ "${PROXY_URI}" != "${NAME}" ]] \
-        && [[ ! " ${!DOMAINS[*]} " =~ " ${NAME} " ]] \
+        && [[ -z "`get-domain ${NAME}`" ]] \
         && remove "${PROXY_SSL_CERTS}/${NAME}"
 
 done
@@ -105,7 +105,7 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
 
     # if STRIPPED is not the main PROXY_URI nor in the DOMAINS array, delete everything
     [[ "${PROXY_URI}" != "${STRIPPED}" ]] \
-        && [[ ! " ${!DOMAINS[*]} " =~ " ${STRIPPED} " ]] \
+        && [[ -z "`get-domain ${STRIPPED}`" ]] \
         && remove "${PROXY_SITES}/${STRIPPED}"
 
 done

@@ -1,0 +1,17 @@
+{
+    "$schema": "https://raw.githubusercontent.com/bfren/docker-nginx-proxy/main/ssl-conf-schema.json",
+    "domains": [
+        {
+            "primary": "example.com",
+            "upstream": "http://example:5000",
+            "aliases": [ "www.example.com", "ex.com", "www.ex.com" ],
+            "custom": true
+        },
+        {
+            "primary": "test.com",
+            "upstream": "http://test",
+            "aliases": [ "www.test.com", "fred.co.uk" ],
+            "custom": false
+        }
+    ]
+}

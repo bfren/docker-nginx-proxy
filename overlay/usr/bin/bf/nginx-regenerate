@@ -32,7 +32,7 @@ done
 
 bf-echo "Loading SSL configuration."
 source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${!DOMAINS[*]}."
+bf-debug "Loaded: ${DOMAINS[*]}."
 
 
 #======================================================================================================================
@@ -54,7 +54,8 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
     bf-debug " .. ${STRIPPED}"
 
     # the domain has standard config - delete conf file
-    if [[ -z "${NGXCONF[${STRIPPED}]-}" ]] ; then
+    CUSTOM_CONF=`get-custom "${STRIPPED}"`
+    if [[ "${CUSTOM_CONF}" = "false" ]] ; then
 
         bf-debug " .. standard config: remove configuration file"
         rm -f ${PROXY_SITES}/${STRIPPED}.conf

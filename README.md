@@ -7,6 +7,8 @@
 
 Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.
 
+As of v4, configuration is handled via a JSON file - see ssl-conf-sample.json for an example and ssl-conf-schema.json for the full file definition.
+
 ## Contents
 
 * [Ports](#ports)
@@ -25,11 +27,11 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 ## Volumes
 
-| Volume   | Purpose                                                                                                                                                                                                                                                |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/www`   | *From base image.*                                                                                                                                                                                                                                     |
-| `/sites` | Nginx site configuration, auto-generated on first run based on `conf.sh`.  After they are generated, you can alter them to suit their needs.  Running `nginx-regenerate` will wipe them all and start again.                                           |
-| `/ssl`   | Contains auto-generated SSL configuration and certificates (for backup purposes).  Your `conf.sh` file should be stored in here for auto-configuration (see `ssl-conf-sample.sh`).  Certificate update log (`update.log`) will be created here weekly. |
+| Volume   | Purpose                                                                                                                                                                                                                                                   |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/www`   | *From base image.*                                                                                                                                                                                                                                        |
+| `/sites` | Nginx site configuration, auto-generated on first run based on `conf.json`.  After they are generated, you can alter them to suit their needs.  Running `nginx-regenerate` will wipe them all and start again.                                            |
+| `/ssl`   | Contains auto-generated SSL configuration and certificates (for backup purposes).  Your `conf.json` file should be stored in here for auto-configuration (see `ssl-conf-sample.json`).  Certificate update log (`update.log`) will be created here daily. |
 
 ## Environment Variables
 
@@ -40,20 +42,20 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | `PROXY_LETS_ENCRYPT_EMAIL`           | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                | *None* - **required** |
 | `PROXY_LETS_ENCRYPT_LIVE`            | 0 or 1                | Only set to 1 (to request live certificates) when your config is correct - Lets Encrypt rate limit certificate requests.                     | 0                     |
 | `PROXY_SSL_DHPARAM_BITS`             | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                              | 4096                  |
-| `PROXY_SSL_REDIRECT_TO_CANONICAL`    | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.sh`).                                                          | 0                     |
+| `PROXY_SSL_REDIRECT_TO_CANONICAL`    | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.json`).                                                        | 0                     |
 | `PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK` | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse). | false                 |
 
 ## Helper Functions
 
-| Function              | Arguments | Description                                                                                                      |
-| --------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
-| `nginx-regenerate`    | *None*    | Removes Nginx configuration files (in `/sites`) and regenerates based on `conf.sh`.                              |
-| `ssl-cleanup`         | *None*    | Removes SSL and Nginx configuration files and directories not defined in `conf.sh`.                              |
-| `ssl-init`            | *None*    | Initialises SSL configuration based on `conf.sh`.                                                                |
-| `ssl-regenerate`      | *None*    | Removes SSL configuration files (in `/ssl/certs`) and regenerates based on `conf.sh`.                            |
-| `ssl-regenerate-full` | *None*    | Removes SSL configuration files (in `/ssl/certs`), as well as DH parameters, and regenerates based on `conf.sh`. |
-| `ssl-request`         | *None*    | Requests SSL certificates from Lets Encrypt.                                                                     |
-| `ssl-update`          | *None*    | Attempts to update SSL certificates manually.                                                                    |
+| Function              | Arguments | Description                                                                                                                |
+| --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `nginx-regenerate`    | -f: force | Removes non-custom Nginx configuration files (in `/sites`) and regenerates based on `conf.json` (with force, removes all). |
+| `ssl-cleanup`         | -m: mode  | Removes SSL and Nginx configuration files and directories not defined in `conf.json` (mode 0 = dry run, 1 = live).         |
+| `ssl-init`            | *None*    | Initialises SSL configuration based on `conf.json`.                                                                        |
+| `ssl-regenerate`      | *None*    | Removes SSL configuration files (in `/ssl/certs`) and regenerates based on `conf.json`.                                    |
+| `ssl-regenerate-full` | *None*    | Removes SSL configuration files (in `/ssl/certs`), as well as DH parameters, and regenerates based on `conf.json`.         |
+| `ssl-request`         | *None*    | Requests SSL certificates from Lets Encrypt.                                                                               |
+| `ssl-update`          | *None*    | Attempts to update SSL certificates manually.                                                                              |
 
 ## Nginx Configuration Helpers
 

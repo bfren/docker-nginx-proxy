@@ -22,7 +22,7 @@ fi
 
 
 #======================================================================================================================
-# Create arrays and include configuration.
+# Load configuration (creates DOMAINS array).
 #======================================================================================================================
 
 source ${BF_INC}/proxy-load-conf.sh
@@ -32,7 +32,7 @@ source ${BF_INC}/proxy-load-conf.sh
 # Check whether or not domains have been registered.
 #======================================================================================================================
 
-if [ "${#DOMAINS[@]}" = "0" ] ; then
+if [ "${#DOMAINS[*]}" = "0" ] ; then
     bf-error "No domains have been registered for SSL - please add them to /ssl/conf.sh." "inc/proxy-check.sh"
     exit 1
 fi

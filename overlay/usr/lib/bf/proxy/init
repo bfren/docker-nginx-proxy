@@ -47,16 +47,16 @@ bf-ok "  . done." "proxy/init"
 #======================================================================================================================
 
 bf-echo "Setting up domains..." "proxy/init"
-for DN in "${!DOMAINS[@]}" ; do
+for DN in "${DOMAINS[@]}" ; do
 
-    UP=${DOMAINS[${DN}]}  # upstream server
-    AL=${ALIASES[${DN}]}  # aliases
-    CF=${NGXCONF[${DN}]}  # use default / custom Nginx config
+    UP=`get-upstream ${DN}` # upstream server
+    AL=`get-aliases ${DN}`  # aliases
+    CF=`get-custom ${DN}`   # whether or not to use custom Nginx config
 
     bf-echo " .. ${DN}" "proxy/init"
 
     bf-echo "  . Nginx..." "proxy/init"
-    setup-nginx 0 ${DN} "${UP}" "${AL}" "${CF}"
+    setup-nginx 0 ${DN} ${UP} "${AL}" ${CF}
 
     bf-echo "  . SSL..." "proxy/init"
     setup-ssl ${DN} "${AL}"

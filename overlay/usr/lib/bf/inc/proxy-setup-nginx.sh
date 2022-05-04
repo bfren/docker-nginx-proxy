@@ -5,10 +5,11 @@
 # Set up Nginx.
 #
 # Arguments
-#   1   Domain name
-#   2   Upstream URL
-#   3   Name of Domain Aliases array
-#   4   Blank (regenerate) or 'custom' (keep) Nginx configuration file
+#   1   0 for proxied domain, 1 for domain of the proxy server itself
+#   2   Domain name
+#   3   Upstream URL
+#   4   Name of Domain Aliases array
+#   5   Blank (regenerate) or 'custom' (keep) Nginx configuration file
 #======================================================================================================================
 
 setup-nginx () {
@@ -31,20 +32,20 @@ setup-nginx () {
     # check for existing configuration file
     if [ -f ${CONF} ] ; then
 
-        # if empty, remove config so it can be regenerated
-        if [ -z "${DOMAIN_NGXCONF}" ] ; then
-            bf-debug "    removing and regnerating Nginx configuration" "inc/proxy-setup-nginx.sh"
-            rm ${CONF}
-
-        # otherwise, leave file (allows custom config)
-        else
+        # if true, leave file (allows custom config)
+        if [ "${DOMAIN_NGXCONF}" = "true" ] ; then
             bf-debug "    keeping existing configuration." "inc/proxy-setup-nginx.sh"
             return 0
+
+        # otherwise, remove config so it can be regenerated
+        else
+            bf-debug "    removing and regnerating Nginx configuration" "inc/proxy-setup-nginx.sh"
+            rm ${CONF}
         fi
 
     else
 
-        # no need to do anything, be a good log citizen
+        # no need to remove anything, be a good log citizen
         bf-debug "    generating default Nginx configuration" "inc/proxy-setup-nginx.sh"
 
     fi
