@@ -39,7 +39,7 @@ bf-done "proxy/request"
 #======================================================================================================================
 
 bf-echo "Requesting domain certificates..." "proxy/request"
-for DN in "${!DOMAINS[@]}" ; do
+for DN in "${DOMAINS[*]}" ; do
     bf-debug " .. ${DN}" "proxy/request"
     request "${DN}"
 done

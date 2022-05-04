@@ -57,7 +57,7 @@ remove () {
 
 bf-echo "Loading SSL configuration."
 source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${DOMAINS[@]}."
+bf-debug "Loaded: ${DOMAINS[*]}."
 
 
 #======================================================================================================================
@@ -79,7 +79,7 @@ for CFG in "${SSL_CONFIGS[@]}" ; do
 
     # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
     [[ "${PROXY_URI}" != "${NAME}" ]] \
-        && [[ ! " ${!DOMAINS[*]} " =~ " ${NAME} " ]] \
+        && [[ -z "`get-domain ${STRIPPED}`" ]] \
         && remove "${PROXY_SSL_CERTS}/${NAME}"
 
 done

@@ -32,7 +32,7 @@ done
 
 bf-echo "Loading SSL configuration."
 source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${DOMAINS[@]}."
+bf-debug "Loaded: ${DOMAINS[*]}."
 
 
 #======================================================================================================================

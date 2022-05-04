@@ -47,7 +47,7 @@ bf-ok "  . done." "proxy/init"
 #======================================================================================================================
 
 bf-echo "Setting up domains..." "proxy/init"
-for DN in "${DOMAINS[@]}" ; do
+for DN in "${DOMAINS[*]}" ; do
 
     UP=`get-upstream ${DN}` # upstream server
     AL=`get-aliases ${DN}`  # aliases
