@@ -96,6 +96,9 @@ server {
         include                     helpers/nginx-discworld.conf;
     }
 
+    # add optional custom location blocks
+    include                         <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]location" %>;
+
     # returns a friendly auto-refreshing 'maintenance' page if upstream servers are not available
     include                         helpers/proxy-maintenance.conf;
 
