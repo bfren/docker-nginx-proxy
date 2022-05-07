@@ -33,7 +33,7 @@ source ${BF_INC}/proxy-load-conf.sh
 #======================================================================================================================
 
 if [ "${#DOMAINS[*]}" = "0" ] ; then
-    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.sh." "inc/proxy-check.sh"
+    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.json." "inc/proxy-check.sh"
     exit 1
 fi
 
