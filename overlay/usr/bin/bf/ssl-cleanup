@@ -42,10 +42,32 @@ esac
 remove () {
 
     if [ "${MODE}" = "0" ] ; then
+
         bf-echo " .. will remove ${1}*"
+
     elif [ "${MODE}" = "1" ] ; then
-        bf-echo " .. removing ${1}*"
-        bf-rmrf ${1}* > /dev/null 2>&1
+
+        bf-echo " .. removing ${1}"
+
+        if [ -d "${1}" ] ; then
+            bf-debug "    ${1}/"
+            rm -r ${1}
+        fi
+
+        CRT=${1}.crt
+        if [ -f "${CRT}" ] ; then
+            bf-debug "    ${CRT}"
+            rm ${CRT}
+        fi
+
+        KEY=${1}.key
+        if [ -f "${KEY}" ] ; then
+            bf-debug "    ${KEY}"
+            rm ${KEY}
+        fi
+
+        bf-debug "    done"
+
     fi
 
 }
@@ -70,7 +92,10 @@ SSL_CONFIGS=(${PROXY_SSL_CERTS}/*)
 bf-echo "Checking against configured domains..."
 for CFG in "${SSL_CONFIGS[@]}" ; do
 
-    # do nothing if this is a file
+    # do nothing if CFG doesn't exist any more - which means it's been deleted by the script
+    [[ ! -d "${CFG}" ]] && [[ ! -f "${CFG}" ]] && continue
+
+    # do nothing if CFG is a file
     [[ -f "${CFG}" ]] && continue
 
     # get name
@@ -95,7 +120,10 @@ NGINX_CONFIGS=(${PROXY_SITES}/*)
 bf-echo "Checking against configured domains..."
 for CFG in "${NGINX_CONFIGS[@]}" ; do
 
-    # do nothing if this is a file
+    # do nothing if CFG doesn't exist any more - which means it's been deleted by the script
+    [[ ! -d "${CFG}" ]] && [[ ! -f "${CFG}" ]] && continue
+
+    # do nothing if CFG is a file
     [[ -f "${CFG}" ]] && continue
 
     # get name and strip .d from end of directory
