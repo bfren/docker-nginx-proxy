@@ -19,4 +19,6 @@ PASS="${2}"
 # Add a user for basic HTTP auth.
 #======================================================================================================================
 
+bf-echo "Adding user ${USER} with encrypted password..." "nginx-adduser"
 printf "${USER}:$(openssl passwd -apr1 ${PASS})\n" >> /etc/nginx/htpasswd
+bf-done
