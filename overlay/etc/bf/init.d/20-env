@@ -14,6 +14,7 @@ bf-env "PROXY_GETSSL" "${PROXY_LIB}/getssl"
 
 PROXY_SSL=/ssl
 bf-env "PROXY_SSL" ${PROXY_SSL}
+bf-env "PROXY_SSL_CONF" "${PROXY_SSL}/conf.json"
 bf-env "PROXY_SSL_DHPARAM" "${PROXY_SSL}/dhparam.pem"
 
 PROXY_SSL_CERTS=${PROXY_SSL}/certs
