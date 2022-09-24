@@ -5,9 +5,8 @@
 # Check JSON configuration file exists.
 #======================================================================================================================
 
-SSL_CONF=${PROXY_SSL}/conf.json
-if [ ! -f ${SSL_CONF} ] ; then
-    bf-error "You must create ${SSL_CONF} - see ssl-conf-sample.json." "inc/proxy-load-conf.sh"
+if [ ! -f "${PROXY_SSL_CONF}" ] ; then
+    bf-error "You must create ${PROXY_SSL_CONF} - see ssl-conf-sample.json." "inc/proxy-load-conf.sh"
     exit 1
 fi
 
@@ -16,7 +15,7 @@ fi
 # Load JSON and create DOMAINS array by selecting primary keys.
 #======================================================================================================================
 
-JSON=`cat "${SSL_CONF}" | jq '.'`
+JSON=`cat "${PROXY_SSL_CONF}" | jq '.'`
 
 declare -a DOMAINS=(`jq -r '.domains[].primary' <<< "${JSON}"`)
 

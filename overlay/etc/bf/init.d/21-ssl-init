@@ -21,6 +21,17 @@ fi
 
 
 #======================================================================================================================
+# If there is no SSL configuration file, and auto environment variables are set, generate config.
+#======================================================================================================================
+
+if [ ! -f "${PROXY_SSL_CONF}" ] && [ -n "${PROXY_AUTO_PRIMARY-}" ] && [ -n "${PROXY_AUTO_UPSTREAM-}" ] ; then
+    bf-echo "Generating conf.json using auto environment variables."
+    bf-esh ${BF_TEMPLATES}/conf.json.esh ${PROXY_SSL_CONF}
+    bf-env "PROXY_AUTO" "1"
+fi
+
+
+#======================================================================================================================
 # Run initialisation script.
 #======================================================================================================================
 
