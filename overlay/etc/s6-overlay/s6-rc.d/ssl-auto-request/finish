@@ -1,14 +1,11 @@
 #!/command/with-contenv bash
 
 set -euo pipefail
-export BF_E=`basename ${0}`
+export BF_E="${PWD##*/}/$(basename ${0})"
 
 
 #======================================================================================================================
-# Request SSL certificates if AUTO is set.
+# Show helpful log message.
 #======================================================================================================================
 
-if [ "${PROXY_AUTO-}" = "1" ] ; then
-    bf-echo "Requesting SSL certificates using auto-generated conf.json."
-    ssl-request
-fi
+bf-svc-finish

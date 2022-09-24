@@ -1,0 +1,38 @@
+#!/command/with-contenv bash
+
+set -euo pipefail
+export BF_E="${PWD##*/}/$(basename ${0})"
+
+
+#======================================================================================================================
+# Run upgrade executable and then disable the service.
+# First, wait until the database service is running.
+#======================================================================================================================
+
+if [ "${PROXY_AUTO-}" = "1" ] ; then
+
+    if [ -n "$(pidof nginx)" ]; then
+
+        # run upgrade executable
+        bf-echo "Requesting SSL certificates using auto-generated conf.json."
+        ssl-request
+
+        # disable the auto request service
+        ssl-auto-request-disable
+
+    else
+
+        # wait 2s before exiting the service - S6 will keep restarting it until Nginx comes online
+        # on first run, it will disable this upgrade service itself
+        SLEEP=2
+        bf-debug "Waiting ${SLEEP}s for Nginx to come online..."
+        sleep ${SLEEP}
+
+    fi
+
+else
+
+    # disable the auto request service
+    ssl-auto-request-disable
+
+fi
