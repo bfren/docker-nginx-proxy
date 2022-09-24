@@ -5,8 +5,8 @@ export BF_E="${PWD##*/}/$(basename ${0})"
 
 
 #======================================================================================================================
-# Run upgrade executable and then disable the service.
-# First, wait until the database service is running.
+# Run request executable and then disable the service.
+# First, wait until the Nginx service is running.
 #======================================================================================================================
 
 if [ "${PROXY_AUTO-}" = "1" ] ; then
