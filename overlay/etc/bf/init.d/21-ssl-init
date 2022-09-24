@@ -32,7 +32,7 @@ if [ ! -f "${PROXY_SSL_CONF}" ] && [ -n "${PROXY_AUTO_PRIMARY-}" ] && [ -n "${PR
     bf-env "PROXY_AUTO" "1"
 
     # if there are aliases enable canonical redirection
-    [[ -n "${PROXY_AUTO_ALIASES}" ]] && bf-env "PROXY_SSL_REDIRECT_TO_CANONICAL" "1"
+    [[ -n "${PROXY_AUTO_ALIASES-}" ]] && bf-env "PROXY_SSL_REDIRECT_TO_CANONICAL" "1"
 
 fi
 
