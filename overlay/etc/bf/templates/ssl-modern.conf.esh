@@ -1,0 +1,12 @@
+#======================================================================================================================
+# SSL
+# Using Mozilla's SSL Configuration Generator with 'Modern' settings - https://ssl-config.mozilla.org/
+#======================================================================================================================
+
+ssl_protocols                   TLSv1.3;
+ssl_prefer_server_ciphers       off;
+ssl_session_timeout             1d;
+ssl_session_cache               shared:MozSSL:10m;
+ssl_session_tickets             off;
+ssl_stapling                    on;
+ssl_stapling_verify             on;

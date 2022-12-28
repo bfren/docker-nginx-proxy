@@ -1,0 +1,19 @@
+#!/command/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Generate SSL configuration file.
+#======================================================================================================================
+
+if [ "${PROXY_HARDEN}" = "1" ] ; then
+    TEMPLATE="modern"
+else
+    TEMPLATE="intermediate"
+fi
+
+bf-echo "Using ${TEMPLATE} SSL configuration."
+bf-esh ${BF_TEMPLATES}/ssl-${TEMPLATE}.conf.esh /etc/nginx/http.d/ssl.conf
+bf-done
