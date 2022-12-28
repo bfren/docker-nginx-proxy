@@ -1,4 +1,4 @@
-FROM bfren/nginx:nginx1.22-4.0.21
+FROM bfren/nginx:nginx1.22-4.0.22
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
@@ -13,12 +13,14 @@ ENV \
     PROXY_URI= \
     # clean all config and certificates before doing anything else
     PROXY_CLEAN_INSTALL=0 \
+    # enable automatic certificate updating
+    PROXY_ENABLE_AUTO_UPDATE=1 \
+    # use hardened mode (remove old / insecure ciphers and protocols)
+    PROXY_HARDEN=0 \
     # used for renewal notification emails
     PROXY_LETS_ENCRYPT_EMAIL= \
     # set to 1 to use live instead of staging server
     PROXY_LETS_ENCRYPT_LIVE=0 \
-    # enable automatic certificate updating
-    PROXY_ENABLE_AUTO_UPDATE=1 \
     # set to the number of bits to use for generating private key
     PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
