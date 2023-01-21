@@ -67,9 +67,6 @@ jobs:
             bfren/nginx-proxy:${{ steps.version_major.outputs.contents }}
             bfren/nginx-proxy:${{ steps.version_minor.outputs.contents }}
             bfren/nginx-proxy:${{ steps.version.outputs.contents }}
-            ghcr.io/bfren/nginx-proxy:${{ steps.version_major.outputs.contents }}
-            ghcr.io/bfren/nginx-proxy:${{ steps.version_minor.outputs.contents }}
-            ghcr.io/bfren/nginx-proxy:${{ steps.version.outputs.contents }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
