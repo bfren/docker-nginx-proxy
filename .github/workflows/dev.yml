@@ -61,8 +61,6 @@ jobs:
           tags: |
             bfren/nginx-proxy:dev
             bfren/nginx-proxy:${{ steps.version.outputs.contents }}-beta
-            ghcr.io/bfren/nginx-proxy:dev
-            ghcr.io/bfren/nginx-proxy:${{ steps.version.outputs.contents }}-beta
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
