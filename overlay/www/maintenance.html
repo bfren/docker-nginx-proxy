@@ -11,9 +11,26 @@
 <body>
 <h1>Maintenance</h1>
 <p>The site you requested is temporarily down for maintenance.  Please try again later.</p>
-<p class="muted">This page will auto-refresh every ten seconds.</p>
+<p class="muted">This page will auto-refresh in <span id="remaining">10</span>s.</p>
 <script type="text/javascript">
-    setTimeout("location.reload(true);", 10000);
+    let remaining = 10;
+    let countdown = function () {
+        // reload the page
+        if (remaining == 0) {
+            location.reload(true);
+            return;
+        }
+
+        // update the message and reduce time remaining
+        document.getElementById("remaining").innerText = remaining.toString();
+        remaining--;
+
+        // fire function again in one second
+        setTimeout(countdown, 1000);
+    }
+
+    // fire first time manually
+    countdown();
 </script>
 </body>
 </html>
