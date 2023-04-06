@@ -47,26 +47,33 @@ remove () {
 
     elif [ "${MODE}" = "1" ] ; then
 
-        bf-echo " .. removing ${1}"
+        bf-echo " .. removing ${1}*"
 
-        if [ -d "${1}" ] ; then
-            bf-debug "    ${1}/"
-            rm -r ${1}
+        D=${1}/
+        if [ -d "${D}" ] ; then
+            bf-echo "    ${D}"
+            rm -r ${D}
+        fi
+
+        DOT_D=${1}.d
+        if [ -d "${DOT_D}" ] ; then
+            bf-echo "    ${DOT_D}"
+            rm -r ${DOT_D}
         fi
 
         CRT=${1}.crt
         if [ -f "${CRT}" ] ; then
-            bf-debug "    ${CRT}"
+            bf-echo "    ${CRT}"
             rm ${CRT}
         fi
 
         KEY=${1}.key
         if [ -f "${KEY}" ] ; then
-            bf-debug "    ${KEY}"
+            bf-echo "    ${KEY}"
             rm ${KEY}
         fi
 
-        bf-debug "    done"
+        bf-echo "    done"
 
     fi
 
