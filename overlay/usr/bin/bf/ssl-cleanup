@@ -61,6 +61,12 @@ remove () {
             rm -r ${DOT_D}
         fi
 
+        CONF=${1}.conf
+        if [ -f "${CONF}" ] ; then
+            bf-echo "    ${CONF}"
+            rm ${CONF}
+        fi
+
         CRT=${1}.crt
         if [ -f "${CRT}" ] ; then
             bf-echo "    ${CRT}"
