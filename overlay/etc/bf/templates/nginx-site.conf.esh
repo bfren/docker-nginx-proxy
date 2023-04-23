@@ -22,7 +22,7 @@
 # WARNING: This file is generated. Do not make changes to this file.
 # Changes will be overwritten the next time the container is started.
 #
-# To add server names or aliases please use /ssl/conf.sh (see ssl-conf-sample.sh).
+# To add server names or aliases please use /ssl/conf.json (see ssl-conf-sample.json).
 #
 # If you need a fully custom configuration then add the following to /ssl/conf.json in the object where the primary
 # domain is "<%= "${DOMAIN_NAME}" %>":
@@ -87,7 +87,7 @@ server {
     # main site configuration block
     location / {
         # set resolver to Docker's internal DNS resolver and use an upstream variable so Nginx will always start -
-        # even if UPSTREAM is not available
+        # even if $upstream is not available - h/t https://stackoverflow.com/a/54719226/8199362
         resolver                    127.0.0.11 valid=30s;
         set $upstream               <%= "${UPSTREAM}" %>;
 
