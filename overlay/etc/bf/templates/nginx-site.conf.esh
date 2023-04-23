@@ -89,7 +89,7 @@ server {
     # use an upstream variable so Nginx will always start even if upstream is not available
     location / {
         resolver                    127.0.0.11 valid=30s;
-        set $upstream               <%= "${UPSTREAM}" %>
+        set $upstream               <%= "${UPSTREAM}" %>;
         proxy_pass                  $upstream;
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
