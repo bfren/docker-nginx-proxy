@@ -1,0 +1,14 @@
+#!/command/with-contenv bash
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Generate maintenance configuration helper and page.
+#======================================================================================================================
+
+bf-echo "Generating maintenance files."
+bf-esh ${BF_TEMPLATES}/proxy-maintenance.conf.esh /etc/nginx/helpers/proxy-maintenance.conf
+bf-esh ${BF_TEMPLATES}/maintenance.html.esh ${NGINX_ROOT}/maintenance.html
+bf-done
