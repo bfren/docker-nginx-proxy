@@ -36,6 +36,8 @@ ENV \
     PROXY_AUTO_ALIASES= \
     # optional - mark the Nginx config as custom so it isn't regenerated on future startups
     PROXY_AUTO_CUSTOM=0 \
+    # upstream DNS resolver, set to Docker's internal resolver by default
+    PROXY_UPSTREAM_DNS_RESOLVER=127.0.0.11 \
     # the number of seconds before the maintenance page will auto-refresh
     PROXY_MAINTENANCE_REFRESH_SECONDS=6
 
