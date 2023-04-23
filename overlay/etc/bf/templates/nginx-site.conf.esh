@@ -78,7 +78,7 @@ server {
     listen                          [::]:443 ssl http2;
 
 <% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
-    # redirect to primary domain name
+    # redirect to primary (canonical) domain name
     if ($host != <%= "${DOMAIN_NAME}" %>) {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
@@ -86,17 +86,17 @@ server {
 
     # main site configuration block
     location / {
-        # set resolver to Docker's internal DNS resolver and use an upstream variable so Nginx will always start -
+        # set resolver to Docker's internal DNS resolver and use an upstream variable so Nginx will always start,
         # even if $upstream is not available - h/t https://stackoverflow.com/a/54719226/8199362
         resolver                    <%= "${PROXY_UPSTREAM_DNS_RESOLVER}" %> valid=30s;
         set $upstream               <%= "${UPSTREAM}" %>;
 
-        # proxy to the upstream server
+        # proxy to the upstream server, enabling best-practice proxy and security headers
         proxy_pass                  $upstream;
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
 
-        # use maintenance page (defined in helpers/proxy-maintenance.conf) when there's an upstream server error
+        # use maintenance page (defined in helpers/proxy-maintenance.conf - see below) when there's an upstream error
         error_page                  502 503 504 /maintenance.html;
 
         # include custom configuration files
