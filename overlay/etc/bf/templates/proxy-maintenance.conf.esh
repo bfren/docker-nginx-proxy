@@ -1,0 +1,3 @@
+location = /maintenance.html {
+    root                                <%= "${NGINX_ROOT}" %>;
+}
