@@ -85,15 +85,21 @@ server {
 <% fi -%>
 
     # main site configuration block
-    # set resolver to Docker's internal DNS resolver
-    # use an upstream variable so Nginx will always start even if upstream is not available
     location / {
+        # set resolver to Docker's internal DNS resolver and use an upstream variable so Nginx will always start -
+        # even if UPSTREAM is not available
         resolver                    127.0.0.11 valid=30s;
         set $upstream               <%= "${UPSTREAM}" %>;
+
+        # proxy to the upstream server
         proxy_pass                  $upstream;
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
+
+        # use maintenance page (defined in helpers/proxy-maintenance.conf) when there's an upstream server error
         error_page                  502 503 504 /maintenance.html;
+
+        # include custom configuration files
         include                     <%= "${CUSTOM_CONF}/*.conf" %>;
 
         # because he was a legend
