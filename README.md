@@ -53,15 +53,16 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 ## Helper Functions
 
-| Function              | Arguments | Description                                                                                                                |
-| --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `nginx-regenerate`    | -f: force | Removes non-custom Nginx configuration files (in `/sites`) and regenerates based on `conf.json` (with force, removes all). |
-| `ssl-cleanup`         | -m: mode  | Removes SSL and Nginx configuration files and directories not defined in `conf.json` (mode 0 = dry run, 1 = live).         |
-| `ssl-init`            | *None*    | Initialises SSL configuration based on `conf.json`.                                                                        |
-| `ssl-regenerate`      | *None*    | Removes SSL configuration files (in `/ssl/certs`) and regenerates based on `conf.json`.                                    |
-| `ssl-regenerate-full` | *None*    | Removes SSL configuration files (in `/ssl/certs`), as well as DH parameters, and regenerates based on `conf.json`.         |
-| `ssl-request`         | *None*    | Requests SSL certificates from Lets Encrypt.                                                                               |
-| `ssl-update`          | *None*    | Attempts to update SSL certificates manually.                                                                              |
+| Function              | Arguments                 | Description                                                                                                                   |
+| --------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `nginx-adduser`       | 0: username, 1: password  | Add a user to enable basic HTTP auth.                                                                                         |
+| `nginx-regenerate`    | -f: force                 | Removes non-custom Nginx configuration files (in `/sites`) and regenerates based on `conf.json` (with force, removes all).    |
+| `ssl-cleanup`         | -m: mode                  | Removes SSL and Nginx configuration files and directories not defined in `conf.json` (mode 0 = dry run, 1 = live).            |
+| `ssl-init`            | *None*                    | Initialises SSL configuration based on `conf.json`.                                                                           |
+| `ssl-regenerate`      | *None*                    | Removes SSL configuration files (in `/ssl/certs`) and regenerates based on `conf.json`.                                       |
+| `ssl-regenerate-full` | *None*                    | Removes SSL configuration files (in `/ssl/certs`), as well as DH parameters, and regenerates based on `conf.json`.            |
+| `ssl-request`         | *None*                    | Requests SSL certificates from Lets Encrypt.                                                                                  |
+| `ssl-update`          | *None*                    | Attempts to update SSL certificates manually.                                                                                 |
 
 ## Nginx Configuration Helpers
 
