@@ -10,5 +10,5 @@ export BF_E=`basename ${0}`
 
 bf-echo "Generating maintenance files."
 bf-esh ${BF_TEMPLATES}/proxy-maintenance.conf.esh /etc/nginx/helpers/proxy-maintenance.conf
-bf-esh ${BF_TEMPLATES}/maintenance.html.esh ${NGINX_ROOT}/maintenance.html
+bf-esh ${BF_TEMPLATES}/maintenance.html.esh ${NGINX_PUBLIC}/maintenance.html
 bf-done
