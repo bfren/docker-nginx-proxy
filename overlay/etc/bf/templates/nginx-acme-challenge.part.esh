@@ -2,5 +2,5 @@
     # but all other requests can be blocked from outside the local network, for example)
     location ^~ /<%= "${PROXY_ACME_CHALLENGE}" %> {
         allow                       all;
-        root                        <%= "${NGINX_ROOT}" %>;
+        root                        <%= "${NGINX_WWW}" %>;
     }
