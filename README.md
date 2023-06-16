@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bfren/nginx-proxy) - [bfren ecosystem](https://github.com/bfren/docker)
 
-Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.
+Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.  Also includes [NAXSI](https://github.com/nbs-system/naxsi), a web application firewall.
 
 As of v4, configuration is handled via a JSON file - see ssl-conf-sample.json for an example and ssl-conf-schema.json for the full file definition.
 

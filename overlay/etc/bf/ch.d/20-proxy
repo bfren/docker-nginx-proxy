@@ -1,3 +1,4 @@
+/etc/nasxi www:www 0640 0750
 /etc/nginx/sites www:www 0640 0750
 /etc/ssl/certs www:www 0640 0750
 /sites www:www 0640 0750
