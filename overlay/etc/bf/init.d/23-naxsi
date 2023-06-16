@@ -5,9 +5,9 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Generate NASXI configuration.
+# Generate NAXSI configuration.
 #======================================================================================================================
 
-bf-echo "Generating NASXI files."
-bf-esh ${BF_TEMPLATES}/nasxi.conf.esh /etc/nginx/helpers/nasxi.conf
+bf-echo "Generating NAXSI files."
+bf-esh ${BF_TEMPLATES}/naxsi.conf.esh /etc/nginx/helpers/naxsi.conf
 bf-done

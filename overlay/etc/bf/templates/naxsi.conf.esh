@@ -1,4 +1,4 @@
-# enable naxsi
+# enable NAXSI
 SecRulesEnabled;
 # enable learning mode
 LearningMode;

@@ -96,8 +96,8 @@ server {
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
 
-        # enable NASXI web application firewall with custom rules
-        include                     helpers/nasxi.conf;
+        # enable NAXSI web application firewall with custom rules
+        include                     helpers/naxsi.conf;
         include                     <%= "${CUSTOM_CONF}/*.rules" %>;
 
         # use maintenance page (defined in helpers/proxy-maintenance.conf - see below) when there's an upstream error

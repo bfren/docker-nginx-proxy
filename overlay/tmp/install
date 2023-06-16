@@ -15,7 +15,7 @@ bf-echo "Nginx version ${VERSION}."
 
 
 #======================================================================================================================
-# Install Nginx NASXI extension.
+# Install Nginx NAXSI extension.
 #======================================================================================================================
 
 bf-echo "Installing Nginx v${VERSION} NAXSI extension..."
