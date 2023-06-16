@@ -1,3 +1,4 @@
+<% if [ "${PROXY_ENABLE_NAXSI}" = "1" ] ; then -%>
 # enable NAXSI
 SecRulesEnabled;
 # enable learning mode
@@ -10,3 +11,4 @@ CheckRule "$RFI >= 8" BLOCK;
 CheckRule "$TRAVERSAL >= 4" BLOCK;
 CheckRule "$EVADE >= 4" BLOCK;
 CheckRule "$XSS >= 8" BLOCK;
+<% fi %>
