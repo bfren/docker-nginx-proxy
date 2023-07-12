@@ -32,6 +32,7 @@ bf-done
 bf-echo "Installing additional packages..."
 apk add --no-cache \
     bash \
+    curl \
     jq \
     openssl
 bf-done
