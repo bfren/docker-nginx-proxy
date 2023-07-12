@@ -14,6 +14,7 @@ usage () {
     echo "Set action (-a takes precedence):"
     echo "    -a        Request SSL certificates for all domains."
     echo "    -d XXXXX  Request SSL certificate for domain XXXXX."
+    echo "              To request proxy domain set to 'proxy'."
     echo
     echo "Usage:"
     echo "    -h        Show this usage message."
@@ -30,6 +31,15 @@ while getopts ":had:" C ; do
 done
 
 shift $(($OPTIND -1))
+
+
+#======================================================================================================================
+# Support requesting certificate for main proxy.
+#======================================================================================================================
+
+if [ "${DOMAIN-}" = "proxy" ] ; then
+    DOMAIN="${PROXY_URI}"
+fi
 
 
 #======================================================================================================================
