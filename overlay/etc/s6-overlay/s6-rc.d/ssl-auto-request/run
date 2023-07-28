@@ -15,7 +15,7 @@ if [ "${PROXY_AUTO-}" = "1" ] ; then
 
         # run upgrade executable
         bf-echo "Requesting SSL certificates using auto-generated conf.json."
-        ssl-request
+        ssl-request -a
 
         # disable the auto request service
         ssl-auto-request-disable
