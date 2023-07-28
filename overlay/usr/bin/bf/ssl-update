@@ -5,8 +5,53 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run update executable.
+# Executable usage.
 #======================================================================================================================
 
-s6-setuidgid www ${PROXY_LIB}/update
-nginx-reload
+usage () {
+    echo "Usage: `basename ${0}` [-a] [-d DOMAIN_NAME]" 2>&1
+    echo
+    echo "Set action (-a takes precedence):"
+    echo "    -a        Update SSL certificates for all domains."
+    echo "    -d XXXXX  Update SSL certificate for domain XXXXX."
+    echo "              To update proxy domain set to 'proxy'."
+    echo
+    echo "Usage:"
+    echo "    -h        Show this usage message."
+    exit 2
+}
+
+while getopts ":had:" C ; do
+    case ${C} in
+        h) usage ;;
+        a) ALL=1 ;;
+        d) DOMAIN="${OPTARG}" ;;
+        ?) bf-notok "Invalid option: -${OPTARG}" "bf-ch" && usage ;;
+    esac
+done
+
+shift $(($OPTIND -1))
+
+
+#======================================================================================================================
+# Support requesting certificate for main proxy.
+#======================================================================================================================
+
+if [ "${DOMAIN-}" = "proxy" ] ; then
+    DOMAIN="${PROXY_URI}"
+fi
+
+
+#======================================================================================================================
+# Update SSL certificates for requested domain / all domains.
+#======================================================================================================================
+
+if [ "${ALL-}" = "1" ] ; then
+    s6-setuidgid www ${PROXY_LIB}/update-all
+    nginx-reload
+elif [ -n "${DOMAIN-}" ] ; then
+    s6-setuidgid www ${PROXY_LIB}/update "${DOMAIN}"
+    nginx-reload
+else
+    usage
+fi
