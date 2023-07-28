@@ -12,6 +12,7 @@ source ${BF_INC}/proxy-check.sh
 # Require source files.
 #======================================================================================================================
 
+source ${BF_INC}/proxy-init-domain.sh
 source ${BF_INC}/proxy-replace.sh
 source ${BF_INC}/proxy-setup-global.sh
 source ${BF_INC}/proxy-setup-nginx.sh
