@@ -9,5 +9,5 @@ export BF_E=`basename ${0}`
 #======================================================================================================================
 
 if [ "${PROXY_ENABLE_AUTO_UPDATE}" = "1" ] ; then
-    ssl-update > ${PROXY_SSL}/update.log
+    ssl-update-all > ${PROXY_SSL}/update.log
 fi
