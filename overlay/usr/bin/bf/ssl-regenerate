@@ -30,6 +30,7 @@ while getopts ":had:" C ; do
     esac
 done
 
+ARGS="${ARGS}"
 shift $(($OPTIND -1))
 
 
@@ -74,8 +75,8 @@ fi
 # Reinitialise and request SSL certificate(s).
 #======================================================================================================================
 
-bf-debug "Calling ssl-init with '$@'"
-ssl-init "$@"
+bf-debug "Calling ssl-init with '${ARGS}'"
+ssl-init "${ARGS}"
 
-bf-debug "Calling ssl-request with '$@'"
-ssl-request "$@"
+bf-debug "Calling ssl-request with '${ARGS}'"
+ssl-request "${ARGS}"

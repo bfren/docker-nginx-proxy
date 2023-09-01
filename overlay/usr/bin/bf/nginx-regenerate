@@ -33,6 +33,7 @@ while getopts ":had:f" C ; do
     esac
 done
 
+ARGS="$@"
 shift $(($OPTIND -1))
 
 
@@ -141,5 +142,5 @@ fi
 # Reinitialise.
 #======================================================================================================================
 
-bf-debug "Calling ssl-init with '$@'"
-ssl-init "$@"
+bf-debug "Calling ssl-init with '${ARGS}'"
+ssl-init "${ARGS}"
