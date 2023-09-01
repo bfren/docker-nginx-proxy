@@ -141,5 +141,5 @@ fi
 # Reinitialise.
 #======================================================================================================================
 
-bf-debug "Calling ssl-init with '$@'
+bf-debug "Calling ssl-init with '$@'"
 ssl-init "$@"

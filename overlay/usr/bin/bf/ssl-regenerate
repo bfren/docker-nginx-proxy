@@ -74,5 +74,8 @@ fi
 # Reinitialise and request SSL certificate(s).
 #======================================================================================================================
 
+bf-debug "Calling ssl-init with '$@'"
 ssl-init "$@"
+
+bf-debug "Calling ssl-request with '$@'"
 ssl-request "$@"
