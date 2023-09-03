@@ -29,10 +29,10 @@ bf-done "proxy/init-all"
 
 
 #======================================================================================================================
-# Set up Nginx and SSL for proxy server.
+# Set up Nginx and SSL for proxy domain.
 #======================================================================================================================
 
-bf-echo "Initialising Nginx and SSL for proxy server ${PROXY_DOMAIN}..." "proxy/init-all"
+bf-echo "Initialising Nginx and SSL for proxy domain ${PROXY_DOMAIN}..." "proxy/init-all"
 init-proxy
 bf-done "proxy/init-all"
 

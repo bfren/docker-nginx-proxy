@@ -10,10 +10,10 @@ source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
-# Get certificate for the proxy server base domain.
+# Get certificate for the proxy domain.
 #======================================================================================================================
 
-bf-echo "Requesting proxy server certificate..." "proxy/request-all"
+bf-echo "Requesting proxy domain certificate..." "proxy/request-all"
 bf-debug " .. ${PROXY_DOMAIN}"
 request "${PROXY_DOMAIN}"
 bf-done "proxy/request-all"
