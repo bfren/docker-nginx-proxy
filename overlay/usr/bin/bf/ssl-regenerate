@@ -30,7 +30,7 @@ while getopts ":had:" C ; do
     esac
 done
 
-ARGS="${ARGS}"
+ARGS="$@"
 shift $(($OPTIND -1))
 
 
