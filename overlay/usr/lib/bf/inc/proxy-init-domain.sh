@@ -8,10 +8,10 @@
 init-proxy () {
 
     bf-echo "  . Nginx..." "inc/proxy-init-domain.sh"
-    setup-nginx 1 ${PROXY_URI} "http://localhost" ""
+    setup-nginx 1 ${PROXY_DOMAIN} "http://localhost" ""
 
     bf-echo "  . SSL..." "inc/proxy-init-domain.sh"
-    setup-ssl ${PROXY_URI} ""
+    setup-ssl ${PROXY_DOMAIN} ""
 
 }
 

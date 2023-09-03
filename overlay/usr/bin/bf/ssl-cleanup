@@ -115,8 +115,8 @@ for CFG in "${SSL_CONFIGS[@]}" ; do
     NAME=$(basename -- "${CFG}")
     bf-debug " .. ${NAME}"
 
-    # if NAME is not the main PROXY_URI nor in the DOMAINS array, delete everything
-    [[ "${PROXY_URI}" != "${NAME}" ]] \
+    # if NAME is not the main PROXY_DOMAIN nor in the DOMAINS array, delete everything
+    [[ "${PROXY_DOMAIN}" != "${NAME}" ]] \
         && [[ -z "`get-domain ${NAME}`" ]] \
         && remove "${PROXY_SSL_CERTS}/${NAME}"
 
@@ -144,8 +144,8 @@ for CFG in "${NGINX_CONFIGS[@]}" ; do
     STRIPPED=${NAME::-2}
     bf-debug " .. ${STRIPPED}"
 
-    # if STRIPPED is not the main PROXY_URI nor in the DOMAINS array, delete everything
-    [[ "${PROXY_URI}" != "${STRIPPED}" ]] \
+    # if STRIPPED is not the main PROXY_DOMAIN nor in the DOMAINS array, delete everything
+    [[ "${PROXY_DOMAIN}" != "${STRIPPED}" ]] \
         && [[ -z "`get-domain ${STRIPPED}`" ]] \
         && remove "${PROXY_SITES}/${STRIPPED}"
 

@@ -29,6 +29,6 @@ bf-done "proxy/update-all"
 #======================================================================================================================
 
 bf-echo "Updating pem files..." "proxy/update-all"
-create-pem ${PROXY_URI}
+create-pem ${PROXY_DOMAIN}
 for DN in "${DOMAINS[@]}" ; do create-pem "${DN}" ; done
 bf-done "proxy/update-all"

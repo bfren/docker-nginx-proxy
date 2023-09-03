@@ -22,9 +22,9 @@ source ${BF_INC}/proxy-setup-ssl.sh
 # Initialise Nginx and SSL for requested domain.
 #======================================================================================================================
 
-if [ "${1}" = "${PROXY_URI}" ] ; then
+if [ "${1}" = "proxy" ] || [ "${1}" = "${PROXY_DOMAIN}" ] ; then
 
-    bf-echo "Initialising Nginx and SSL for proxy server ${PROXY_URI}..." "proxy/init"
+    bf-echo "Initialising Nginx and SSL for proxy domain ${PROXY_DOMAIN}..." "proxy/init"
     init-proxy
 
 else

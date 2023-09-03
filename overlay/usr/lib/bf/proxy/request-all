@@ -14,8 +14,8 @@ source ${BF_INC}/proxy-setup-ssl.sh
 #======================================================================================================================
 
 bf-echo "Requesting proxy server certificate..." "proxy/request-all"
-bf-debug " .. ${PROXY_URI}"
-request "${PROXY_URI}"
+bf-debug " .. ${PROXY_DOMAIN}"
+request "${PROXY_DOMAIN}"
 bf-done "proxy/request-all"
 
 

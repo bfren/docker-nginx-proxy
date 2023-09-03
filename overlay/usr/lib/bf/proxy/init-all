@@ -32,7 +32,7 @@ bf-done "proxy/init-all"
 # Set up Nginx and SSL for proxy server.
 #======================================================================================================================
 
-bf-echo "Initialising Nginx and SSL for proxy server ${PROXY_URI}..." "proxy/init-all"
+bf-echo "Initialising Nginx and SSL for proxy server ${PROXY_DOMAIN}..." "proxy/init-all"
 init-proxy
 bf-done "proxy/init-all"
 

@@ -2,11 +2,11 @@
 
 
 #======================================================================================================================
-# Ensure PROXY_URI is set.
+# Ensure PROXY_DOMAIN is set.
 #======================================================================================================================
 
-if [ -z "${PROXY_URI}" ] ; then
-    bf-error "PROXY_URI must be set before requesting SSL certificates." "inc/proxy-check.sh"
+if [ -z "${PROXY_DOMAIN}" ] ; then
+    bf-error "PROXY_DOMAIN must be set before requesting SSL certificates." "inc/proxy-check.sh"
     exit 1
 fi
 
