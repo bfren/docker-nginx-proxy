@@ -38,7 +38,7 @@ shift $(($OPTIND -1))
 
 
 #======================================================================================================================
-# Support regenerating certificate for main proxy.
+# Support regenerating Nginx configuration for proxy domain.
 #======================================================================================================================
 
 if [ "${DOMAIN-}" = "proxy" ] ; then
