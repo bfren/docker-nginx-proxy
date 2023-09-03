@@ -58,7 +58,7 @@ elif [ -n "${DOMAIN-}" ] ; then
     [[ ! -d "${PROXY_SSL_CERTS}/${DOMAIN}" ]] && bf-error "Domain ${DOMAIN} has not been setup for SSL."
 
     bf-echo "Removing SSL certificates and configuration for ${DOMAIN}..."
-    rm -r \
+    rm -rf \
         "${PROXY_SSL_CERTS}/${DOMAIN}" \
         "${PROXY_SSL_CERTS}/${DOMAIN}.crt" \
         "${PROXY_SSL_CERTS}/${DOMAIN}.key"
