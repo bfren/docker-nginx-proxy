@@ -2,44 +2,51 @@
 
 
 #======================================================================================================================
-# Ensure PROXY_DOMAIN is set.
+# Run checks.
 #======================================================================================================================
 
-if [ -z "${PROXY_DOMAIN}" ] ; then
-    bf-error "PROXY_DOMAIN must be set before requesting SSL certificates." "inc/proxy-check.sh"
-    exit 1
-fi
+source ${BF_INC}/proxy-check.sh
 
 
 #======================================================================================================================
-# Ensure email is set.
+# Require source files.
 #======================================================================================================================
 
-if [ -z "${PROXY_LETS_ENCRYPT_EMAIL}" ] ; then
-    bf-error "PROXY_LETS_ENCRYPT_EMAIL must be set before requesting SSL certificates." "inc/proxy-check.sh"
-    exit 1
-fi
-
-
-#======================================================================================================================
-# Load configuration (creates DOMAINS array).
-#======================================================================================================================
-
-source ${BF_INC}/proxy-load-conf.sh
+source ${BF_INC}/proxy-init-domain.sh
+source ${BF_INC}/proxy-replace.sh
+source ${BF_INC}/proxy-setup-global.sh
+source ${BF_INC}/proxy-setup-nginx.sh
+source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
-# Check whether or not domains have been registered.
+# Set up global SSL configuration.
 #======================================================================================================================
 
-if [ "${#DOMAINS[*]}" = "0" ] ; then
-    bf-error "No domains have been registered for SSL - please add them to /ssl/conf.json." "inc/proxy-check.sh"
-    exit 1
-fi
+bf-echo "Setting up getssl..." "proxy/init-all"
+setup-global
+bf-done "proxy/init-all"
 
 
 #======================================================================================================================
-# Ensure certs directory exists.
+# Set up Nginx and SSL for proxy domain.
 #======================================================================================================================
 
-[[ ! -d ${PROXY_SSL_CERTS} ]] && mkdir ${PROXY_SSL_CERTS}
+bf-echo "Initialising Nginx and SSL for proxy domain ${PROXY_DOMAIN}..." "proxy/init-all"
+init-proxy
+bf-done "proxy/init-all"
+
+
+#======================================================================================================================
+# Set up Nginx and SSL for each domain.
+#======================================================================================================================
+
+bf-echo "Initialising Nginx and SSL for all domains..." "proxy/init-all"
+for DN in "${DOMAINS[@]}" ; do
+
+    bf-echo " .. ${DN}" "proxy/init-all"
+    init-domain "${DN}"
+    bf-ok "  . done." "proxy/init-all"
+
+done
+bf-done "proxy/init-all"

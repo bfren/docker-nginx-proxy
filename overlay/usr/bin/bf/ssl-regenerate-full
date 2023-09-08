@@ -17,5 +17,5 @@ bf-rmrf "${PROXY_SSL_DHPARAM}"
 bf-done
 
 cd ${PROXY_LIB}
-s6-setuidgid www ./init && ./request
+s6-setuidgid www ./init-all && ./request-all
 nginx-reload

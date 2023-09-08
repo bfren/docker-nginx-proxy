@@ -36,3 +36,8 @@ if [ "${PROXY_GETSSL_DEBUG-}" = "1" ] ; then
 else
     bf-env "PROXY_GETSSL_FLAGS" "-U"
 fi
+
+if [ -n "${PROXY_URI-}" ] ; then
+    bf-notok "Please rename your PROXY_URI environment variable to PROXY_DOMAIN."
+    bf-env "PROXY_DOMAIN" "${PROXY_URI}"
+fi

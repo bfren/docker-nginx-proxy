@@ -5,9 +5,9 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
-# Run SSL update executable and log output to /ssl directory.
+# Generate NAXSI configuration.
 #======================================================================================================================
 
-if [ "${PROXY_ENABLE_AUTO_UPDATE}" = "1" ] ; then
-    ssl-update -a > ${PROXY_SSL}/update.log
-fi
+bf-echo "Generating NAXSI files."
+bf-esh ${BF_TEMPLATES}/naxsi.conf.esh /etc/nginx/helpers/naxsi.conf
+bf-done

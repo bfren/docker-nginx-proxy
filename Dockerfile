@@ -9,12 +9,14 @@ ARG BF_VERSION
 EXPOSE 443
 
 ENV \
-    # the base URI of the proxy server (will be used when SSL bindings fail)
-    PROXY_URI= \
+    # the base domain of the proxy server (will be used when SSL bindings fail)
+    PROXY_DOMAIN= \
     # clean all config and certificates before doing anything else
     PROXY_CLEAN_INSTALL=0 \
     # enable automatic certificate updating
     PROXY_ENABLE_AUTO_UPDATE=1 \
+    # enable NAXSI web application firewall
+    PROXY_ENABLE_NAXSI=0 \
     # use hardened mode (remove old / insecure ciphers and protocols)
     PROXY_HARDEN=0 \
     # used for renewal notification emails

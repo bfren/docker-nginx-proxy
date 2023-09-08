@@ -8,4 +8,4 @@ export BF_E=`basename ${0}`
 # Test Proxy URI.
 #======================================================================================================================
 
-bf-test-url "http://${PROXY_URI}"
+bf-test-url "http://${PROXY_DOMAIN}"

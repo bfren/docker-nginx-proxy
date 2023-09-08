@@ -5,16 +5,60 @@ export BF_E=`basename ${0}`
 
 
 #======================================================================================================================
+# Executable usage.
+#======================================================================================================================
+
+usage () {
+    echo "Usage: `basename ${0}` [-a] [-d DOMAIN_NAME]" 2>&1
+    echo
+    echo "Set action (-a takes precedence):"
+    echo "    -a        Regenerate SSL certificates for all domains."
+    echo "    -d XXXXX  Regenerate SSL certificate for domain XXXXX."
+    echo "              To regenerate proxy domain set to 'proxy'."
+    echo
+    echo "Usage:"
+    echo "    -h        Show this usage message."
+    exit 2
+}
+
+while getopts ":had:" C ; do
+    case ${C} in
+        h) usage ;;
+        a) ALL=1 ;;
+        d) DOMAIN="${OPTARG}" ;;
+        ?) bf-notok "Invalid option: -${OPTARG}" "bf-ch" && usage ;;
+    esac
+done
+
+ARGS="$@"
+shift $(($OPTIND -1))
+
+
+#======================================================================================================================
+# Support regenerating certificate for proxy domain.
+#======================================================================================================================
+
+if [ "${DOMAIN-}" = "proxy" ] ; then
+    DOMAIN="${PROXY_DOMAIN}"
+fi
+
+
+#======================================================================================================================
 # Remove specified domain (or all domains).
 #======================================================================================================================
 
-if [ -n "${1-}" ] ; then
+if [ "${ALL-}" = "1" ] ; then
 
-    DOMAIN=${1}
+    bf-echo "Removing all SSL certificates and configuration..."
+    bf-rmrf "${PROXY_SSL_CERTS}/*"
+    bf-done
+
+elif [ -n "${DOMAIN-}" ] ; then
+
     [[ ! -d "${PROXY_SSL_CERTS}/${DOMAIN}" ]] && bf-error "Domain ${DOMAIN} has not been setup for SSL."
 
     bf-echo "Removing SSL certificates and configuration for ${DOMAIN}..."
-    rm -r \
+    rm -rf \
         "${PROXY_SSL_CERTS}/${DOMAIN}" \
         "${PROXY_SSL_CERTS}/${DOMAIN}.crt" \
         "${PROXY_SSL_CERTS}/${DOMAIN}.key"
@@ -22,17 +66,17 @@ if [ -n "${1-}" ] ; then
 
 else
 
-    bf-echo "Removing SSL certificates and configuration..."
-    bf-rmrf "${PROXY_SSL_CERTS}/*"
-    bf-done
+    usage
 
 fi
 
 
 #======================================================================================================================
-# Reinitialise SSL.
+# Reinitialise and request SSL certificate(s).
 #======================================================================================================================
 
-cd ${PROXY_LIB}
-s6-setuidgid www ./init && ./request
-nginx-reload
+bf-debug "Calling ssl-init with '${ARGS}'"
+ssl-init ${ARGS}
+
+bf-debug "Calling ssl-request with '${ARGS}'"
+ssl-request ${ARGS}

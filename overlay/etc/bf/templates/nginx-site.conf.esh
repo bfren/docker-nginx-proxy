@@ -96,6 +96,10 @@ server {
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
 
+        # enable NAXSI web application firewall with custom rules
+        include                     helpers/naxsi.conf;
+        include                     <%= "${CUSTOM_CONF}/*.rules" %>;
+
         # use maintenance page (defined in helpers/proxy-maintenance.conf - see below) when there's an upstream error
         error_page                  502 503 504 /maintenance.html;
 
@@ -108,6 +112,9 @@ server {
 
     # add optional custom location blocks
     include                         <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]location" %>;
+
+    # return 418 (I'm a teapot) to WAF-denied requests
+    include                         helpers/proxy-denied.conf;
 
     # returns a friendly auto-refreshing 'maintenance' page if upstream servers are not available
     include                         helpers/proxy-maintenance.conf;

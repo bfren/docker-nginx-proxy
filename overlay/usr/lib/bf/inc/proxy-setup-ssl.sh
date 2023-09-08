@@ -91,3 +91,21 @@ setup-ssl () {
     create-pem "${DOMAIN_NAME}"
 
 }
+
+
+#======================================================================================================================
+# Request certificate for a domain.
+#
+# getssl flags
+#   -d  enable debug output
+#   -U  stop upgrade checks
+#   -w  set working directory
+#
+# Arguments
+#   1   Domain name
+#======================================================================================================================
+
+request() {
+    ${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} "${1}"
+    create-pem "${1}"
+}

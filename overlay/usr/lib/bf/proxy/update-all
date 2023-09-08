@@ -16,17 +16,19 @@ source ${BF_INC}/proxy-setup-ssl.sh
 #   -d  enable debug output
 #   -U  stop upgrade checks
 #   -w  set working directory
+#   -a  check all certificates
 #======================================================================================================================
 
-bf-echo "Updating SSL certificate for ${1}..." "proxy/update"
-${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} ${1}
-bf-done "proxy/update"
+bf-echo "Updating all SSL certificates..." "proxy/update-all"
+${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} -a
+bf-done "proxy/update-all"
 
 
 #======================================================================================================================
-# Update pem file.
+# Update all pem files (easier than working out which have been changed).
 #======================================================================================================================
 
-bf-echo "Updating pem file for ${1}..." "proxy/update"
-create-pem "${1}"
-bf-done "proxy/update"
+bf-echo "Updating pem files..." "proxy/update-all"
+create-pem ${PROXY_DOMAIN}
+for DN in "${DOMAINS[@]}" ; do create-pem "${DN}" ; done
+bf-done "proxy/update-all"

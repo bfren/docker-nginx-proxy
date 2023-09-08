@@ -10,23 +10,22 @@ source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
-# Run update.
-#
-# getssl flags
-#   -d  enable debug output
-#   -U  stop upgrade checks
-#   -w  set working directory
+# Get certificate for the proxy domain.
 #======================================================================================================================
 
-bf-echo "Updating SSL certificate for ${1}..." "proxy/update"
-${PROXY_GETSSL} ${PROXY_GETSSL_FLAGS} -w ${PROXY_SSL_CERTS} ${1}
-bf-done "proxy/update"
+bf-echo "Requesting proxy domain certificate..." "proxy/request-all"
+bf-debug " .. ${PROXY_DOMAIN}"
+request "${PROXY_DOMAIN}"
+bf-done "proxy/request-all"
 
 
 #======================================================================================================================
-# Update pem file.
+# Get certificates for all registered domains.
 #======================================================================================================================
 
-bf-echo "Updating pem file for ${1}..." "proxy/update"
-create-pem "${1}"
-bf-done "proxy/update"
+bf-echo "Requesting domain certificates..." "proxy/request-all"
+for DN in "${DOMAINS[@]}" ; do
+    bf-debug " .. ${DN}" "proxy/request-all"
+    request "${DN}"
+done
+bf-done "proxy/request-all"

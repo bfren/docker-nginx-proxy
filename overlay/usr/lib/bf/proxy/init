@@ -12,56 +12,26 @@ source ${BF_INC}/proxy-check.sh
 # Require source files.
 #======================================================================================================================
 
+source ${BF_INC}/proxy-init-domain.sh
 source ${BF_INC}/proxy-replace.sh
-source ${BF_INC}/proxy-setup-global.sh
 source ${BF_INC}/proxy-setup-nginx.sh
 source ${BF_INC}/proxy-setup-ssl.sh
 
 
 #======================================================================================================================
-# Set up global SSL configuration.
+# Initialise Nginx and SSL for requested domain.
 #======================================================================================================================
 
-bf-echo "Setting up getssl..." "proxy/init"
-setup-global
+if [ "${1}" = "proxy" ] || [ "${1}" = "${PROXY_DOMAIN}" ] ; then
+
+    bf-echo "Initialising Nginx and SSL for proxy domain ${PROXY_DOMAIN}..." "proxy/init"
+    init-proxy
+
+else
+
+    bf-echo "Initialising Nginx and SSL for ${1}..." "proxy/init"
+    init-domain "${1}"
+
+fi
+
 bf-done "proxy/init"
-
-
-#======================================================================================================================
-# Set up Nginx and SSL for proxy server.
-#======================================================================================================================
-
-bf-echo "Setting up default server ${PROXY_URI}..." "proxy/init"
-
-bf-echo "  . Nginx..." "proxy/init"
-setup-nginx 1 ${PROXY_URI} "http://localhost" ""
-
-bf-echo "  . SSL..." "proxy/init"
-setup-ssl ${PROXY_URI} ""
-
-bf-ok "  . done." "proxy/init"
-
-
-#======================================================================================================================
-# Set up Nginx and SSL for each domain.
-#======================================================================================================================
-
-bf-echo "Setting up domains..." "proxy/init"
-for DN in "${DOMAINS[@]}" ; do
-
-    UP=`get-upstream ${DN}` # upstream server
-    AL=`get-aliases ${DN}`  # aliases
-    CF=`get-custom ${DN}`   # whether or not to use custom Nginx config
-
-    bf-echo " .. ${DN}" "proxy/init"
-
-    bf-echo "  . Nginx..." "proxy/init"
-    setup-nginx 0 ${DN} ${UP} "${AL}" ${CF}
-
-    bf-echo "  . SSL..." "proxy/init"
-    setup-ssl ${DN} "${AL}"
-
-    bf-ok "  . done." "proxy/init"
-
-done
-bf-ok "Domains set up." "proxy/init"
