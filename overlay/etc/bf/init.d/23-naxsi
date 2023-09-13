@@ -8,6 +8,14 @@ export BF_E=`basename ${0}`
 # Generate NAXSI configuration.
 #======================================================================================================================
 
-bf-echo "Generating NAXSI files."
-bf-esh ${BF_TEMPLATES}/naxsi.conf.esh /etc/nginx/helpers/naxsi.conf
-bf-done
+if [ "${PROXY_ENABLE_NAXSI-}" = "1" ] ; then
+
+    bf-echo "Generating NAXSI files."
+    bf-esh ${BF_TEMPLATES}/naxsi.conf.esh /etc/nginx/helpers/naxsi.conf
+    bf-done
+
+else
+
+    bf-echo "NAXSI not enabled."
+
+fi
