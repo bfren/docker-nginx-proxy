@@ -96,9 +96,11 @@ server {
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
 
+    <% if [ "${PROXY_ENABLE_NAXSI-}" = "1" ] ; then -%>
         # enable NAXSI web application firewall with custom rules
         include                     helpers/naxsi.conf;
         include                     <%= "${CUSTOM_CONF}/*.rules" %>;
+    <% fi -%>
 
         # use maintenance page (defined in helpers/proxy-maintenance.conf - see below) when there's an upstream error
         error_page                  502 503 504 /maintenance.html;
