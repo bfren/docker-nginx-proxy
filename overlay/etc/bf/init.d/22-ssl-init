@@ -34,11 +34,16 @@ if [ ! -f "${PROXY_SSL_CONF}" ] && [ -n "${PROXY_AUTO_PRIMARY-}" ] && [ -n "${PR
     # if there are aliases enable canonical redirection
     [[ -n "${PROXY_AUTO_ALIASES-}" ]] && bf-env "PROXY_SSL_REDIRECT_TO_CANONICAL" "1"
 
+    # initialise all domains (proxy plus auto)
+    ssl-init -a
+
+
+#======================================================================================================================
+# Run initialisation script only for the proxy domain.
+#======================================================================================================================
+
+else
+
+    ssl-init -d "proxy"
+
 fi
-
-
-#======================================================================================================================
-# Run initialisation script for the proxy domain.
-#======================================================================================================================
-
-ssl-init -d "proxy"

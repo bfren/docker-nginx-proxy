@@ -14,8 +14,18 @@ source ${BF_INC}/proxy-check.sh
 
 source ${BF_INC}/proxy-init-domain.sh
 source ${BF_INC}/proxy-replace.sh
+source ${BF_INC}/proxy-setup-global.sh
 source ${BF_INC}/proxy-setup-nginx.sh
 source ${BF_INC}/proxy-setup-ssl.sh
+
+
+#======================================================================================================================
+# Set up global SSL configuration.
+#======================================================================================================================
+
+bf-echo "Setting up getssl..." "proxy/init"
+setup-global
+bf-done "proxy/init"
 
 
 #======================================================================================================================
