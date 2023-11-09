@@ -8,6 +8,8 @@ ARG BF_VERSION
 # port 80 is already exposed by the base image
 EXPOSE 443
 
+COPY ./overlay /
+
 ENV \
     # the base domain of the proxy server (will be used when SSL bindings fail)
     PROXY_DOMAIN= \
@@ -42,8 +44,6 @@ ENV \
     PROXY_UPSTREAM_DNS_RESOLVER=127.0.0.11 \
     # the number of seconds before the maintenance page will auto-refresh
     PROXY_MAINTENANCE_REFRESH_SECONDS=6
-
-COPY ./overlay /
 
 RUN bf-install
 
