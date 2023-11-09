@@ -53,7 +53,7 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
             bfren/nginx-proxy:dev
-            bfren/nginx-proxy:${{ steps.version.outputs.contents }}-beta
+            bfren/nginx-proxy:${{ steps.version.outputs.contents }}-dev
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
