@@ -74,8 +74,9 @@ server {
     server_name                     <%= "${SERVER_NAMES}" %>;
 
     # listen on SSL port for both IPv4 and IPv6, and enable HTTP/2
-    listen                          443 ssl http2;
-    listen                          [::]:443 ssl http2;
+    listen                          443 ssl;
+    listen                          [::]:443 ssl;
+    http2                           on;
 
 <% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
     # redirect to primary (canonical) domain name
