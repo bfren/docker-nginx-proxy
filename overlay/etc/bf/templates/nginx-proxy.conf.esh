@@ -44,7 +44,6 @@ server {
 
     # include standard helpers
     include                         helpers/nginx-ignore-favicon.conf;
-    include                         helpers/nginx-block-ai-bots.conf;
     include                         helpers/nginx-static-files.conf;
 
     # include custom configuration
