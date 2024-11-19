@@ -4,7 +4,7 @@
 #
 # Use environment variable PROXY_DOMAIN to change this file.
 #
-# Copyright (c) 2021-2023 bfren
+# Copyright (c) 2021-2024 bfren
 #======================================================================================================================
 
 #======================================================================================================================
@@ -39,18 +39,19 @@ server {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
 
-    # because he was a legend
-    include                         helpers/nginx-discworld.conf;
-
     # include secure headers
     include                         helpers/proxy-secure-headers.conf;
+
+    # include standard helpers
+    include                         helpers/nginx-ignore-favicon.conf;
+    include                         helpers/nginx-block-ai-bots.conf;
+    include                         helpers/nginx-static-files.conf;
 
     # include custom configuration
     include                         <%= "${CUSTOM_CONF}/*.conf" %>;
 
-    # include standard helpers
-    include                         helpers/nginx-ignore-favicon.conf;
-    include                         helpers/nginx-static-files.conf;
+    # because he was a legend
+    include                         helpers/nginx-discworld.conf;
 
     # serve pages in <%= "${NGINX_PUBLIC}" %> (map volume to override default pages)
     root                            <%= "${NGINX_PUBLIC}" %>;
