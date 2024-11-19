@@ -1,0 +1,12 @@
+#!/command/with-contenv sh
+
+set -euo pipefail
+export BF_E=`basename ${0}`
+
+
+#======================================================================================================================
+# Echo an empty string to access and error logs.
+#======================================================================================================================
+
+echo "" > /var/log/nginx/access.log
+echo "" > /var/log/nginx/error.log
