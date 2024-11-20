@@ -97,6 +97,9 @@ server {
         include                     helpers/proxy-params.conf;
         include                     helpers/proxy-secure-headers.conf;
 
+        # block AI bots
+        include                     helpers/nginx-block-ai-bots.conf;
+
     <% if [ "${PROXY_ENABLE_NAXSI-}" = "1" ] ; then -%>
         # enable NAXSI web application firewall with custom rules
         include                     helpers/naxsi.conf;
