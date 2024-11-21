@@ -17,8 +17,6 @@ ENV \
     PROXY_CLEAN_INSTALL=0 \
     # enable automatic certificate updating
     PROXY_ENABLE_AUTO_UPDATE=1 \
-    # enable NAXSI web application firewall
-    PROXY_ENABLE_NAXSI=0 \
     # use hardened mode (remove old / insecure ciphers and protocols)
     PROXY_HARDEN=0 \
     # used for renewal notification emails

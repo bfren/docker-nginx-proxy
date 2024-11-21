@@ -4,7 +4,7 @@
 
 [Docker Repository](https://hub.docker.com/r/bfren/nginx-proxy) - [bfren ecosystem](https://github.com/bfren/docker)
 
-Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.  Also includes [NAXSI](https://github.com/nbs-system/naxsi), a web application firewall.
+Nginx Proxy which uses [getssl](https://github.com/srvrco/getssl) to automate requesting and renewing SSL certificates via Let's Encrypt.  Certificates are checked for renewal every day - the last check can be viewed in the `/ssl` volume.
 
 As of v4, configuration is handled via a JSON file - see ssl-conf-sample.json for an example and ssl-conf-schema.json for the full file definition.
 
@@ -42,7 +42,6 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 | `PROXY_AUTO_CUSTOM`                   | 0 or 1                | Mark the auto-generated SSL config to 'custom' so the Nginx configuration is not regenerated on startup.                                      | 0                     |
 | `PROXY_CLEAN_INSTALL`                 | 0 or 1                | If 1, all Nginx and SSL configuration and certificates will be deleted and regenerated.                                                       | 0                     |
 | `PROXY_DOMAIN`                        | URI                   | The base domain of the proxy server - will be used to handle unbound requests.                                                                | *None* - **required** |
-| `PROXY_ENABLE_NAXSI`                  | 0 or 1                | If 1, NAXSI web application firewall will be enabled for all sites.                                                                           | 0                     |
 | `PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK`  | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse).  | false                 |
 | `PROXY_HARDEN`                        | 0 or 1                | If 1, only modern SSL ciphers and protocols will be enabled (some older devices may not be able to access it).                                | 0                     |
 | `PROXY_LETS_ENCRYPT_EMAIL`            | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                 | *None* - **required** |
