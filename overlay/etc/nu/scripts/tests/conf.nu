@@ -52,10 +52,18 @@ export def generate_conf_json__outputs_aliases [] {
     assert equal $aliases $result
 }
 
+export def generate_conf_json__does_not_output_aliases [] {
+    let e = get_e
+
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get -i domains.0.aliases
+
+    assert equal null $result
+}
+
 export def generate_conf_json__outputs_custom [] {
     let e = get_e --custom
 
-    let result = with-env $e { generate_conf_json } | open $OUTPUT | get -i domains.0.custom
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.0.custom
 
     assert equal true $result
 }
