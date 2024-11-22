@@ -1,4 +1,4 @@
-FROM bfren/nginx:nginx1.26-alpine3.20-6.3.13
+FROM bfren/nginx:nginx1.26-alpine3.20-6.3.14
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
