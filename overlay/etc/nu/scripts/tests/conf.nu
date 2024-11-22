@@ -49,6 +49,5 @@ export def generate_conf_json__outputs_aliases [] {
 
     let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.aliases | first
 
-    open --raw $OUTPUT | bf dump -e -t "conf"
     assert equal $aliases $result
 }
