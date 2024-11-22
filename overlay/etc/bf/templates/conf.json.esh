@@ -4,7 +4,7 @@
         {
             "primary": "<%= ${PRIMARY} %>",
             "upstream": "<%= ${UPSTREAM} %>"<% if [ -n "${ALIASES}" ] ; then %>,
-            "aliases": [ "<%= ${ALIASES} %>" ]<% fi ; if [ "${CUSTOM}" = "1" ] ; then %>,
+            "aliases": [ <%= ${ALIASES} %> ]<% fi ; if [ "${CUSTOM}" = "1" ] ; then %>,
             "custom": true<% fi %>
         }
     ]
