@@ -7,7 +7,7 @@ export def all []: nothing -> nothing {
 
 # Initialise SSL for the specified domain
 export def domain [
-    domain: string  # the domain to initialise
+    domain: string  # The domain to initialise
 ]: nothing -> nothing {
 
 }
