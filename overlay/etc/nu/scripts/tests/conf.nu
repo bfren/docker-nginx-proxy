@@ -12,14 +12,14 @@ def get_e [
     --primary: string   # Optional primary domain name
     --upstream: string  # Optional upstream server
     --aliases: string   # Optional domain aliases
-    --custom: string    # Optional 'custom' conf switch
+    --custom            # Optional 'custom' conf switch
 ]: nothing -> record {
     {
         BF_ETC_TEMPLATES: "/etc/bf/templates"
         BF_PROXY_AUTO_PRIMARY: (match $primary { null => (random chars), _ => $primary })
         BF_PROXY_AUTO_UPSTREAM: (match $upstream { null => (random chars), _ => $upstream })
         BF_PROXY_AUTO_ALIASES: $aliases
-        BF_PROXY_AUTO_CUSTOM: $custom
+        BF_PROXY_AUTO_CUSTOM: (match $custom { true => "1", false => "" })
         BF_PROXY_SSL_CONF: $OUTPUT
     }
 }
@@ -28,7 +28,7 @@ export def generate_conf_json__outputs_primary [] {
     let primary = random chars --length 5
     let e = get_e --primary $primary
 
-    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.primary | first
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.0.primary
 
     assert equal $primary $result
 }
@@ -37,17 +37,33 @@ export def generate_conf_json__outputs_upstream [] {
     let upstream = random chars --length 5
     let e = get_e --upstream $upstream
 
-    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.upstream | first
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.0.upstream
 
     assert equal $upstream $result
 }
 
 export def generate_conf_json__outputs_aliases [] {
-    let aliases = 0..2 | each {|| random chars --length 5 } | bf dump -e -t "aliases"
+    let aliases = 0..2 | each {|| random chars --length 5 }
     let aliases_in = $aliases | str join " "
     let e = get_e --aliases $aliases_in
 
-    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.aliases | first
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get domains.0.aliases
 
     assert equal $aliases $result
+}
+
+export def generate_conf_json__outputs_custom [] {
+    let e = get_e --custom
+
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get -i domains.0.custom
+
+    assert equal true $result
+}
+
+export def generate_conf_json__does_not_output_custom [] {
+    let e = get_e
+
+    let result = with-env $e { generate_conf_json } | open $OUTPUT | get -i domains.0.custom
+
+    assert equal null $result
 }
