@@ -29,7 +29,7 @@ export def generate_conf_json__outputs_primary [] {
     ls /etc/bf/templates | bf dump -e -t "Templ"
     echo $env.PATH | bf dump -e -t "Path"
 
-    let result = with-env $e { generate_conf_json } | open $output | get domains.primary
+    let result = with-env $e { generate_conf_json } | open $output | get domains.primary | first
 
     assert equal $primary $result
 }

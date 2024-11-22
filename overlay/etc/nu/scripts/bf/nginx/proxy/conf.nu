@@ -9,7 +9,7 @@ export def generate_conf_json []: nothing -> nothing {
         "" => ""
         $a => ($a | split words | str join "\", \"" | $"\"($in)\"")
     }
-    let custom = bf env check "PROXY_AUTO_CUSTOM"
+    let custom = bf env -s "PROXY_AUTO_CUSTOM"
 
     # generate file
     bf write "Generating conf.json using auto environment variables."
