@@ -14,7 +14,7 @@ export def generate_nginx_ssl_conf []: nothing -> nothing {
     }
 
     # generate config file
-    bf write $"Using ($template) SSL configuration."
+    bf write $"Using ($template) SSL configuration." conf/generate_nginx_ssl_conf
     bf esh $"(bf env ETC_TEMPLATES)/ssl-($template).conf.esh" "/etc/nginx/http.d/ssl.conf"
 
     # return nothing

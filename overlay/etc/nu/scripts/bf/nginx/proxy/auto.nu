@@ -12,7 +12,7 @@ export def generate_conf_json []: nothing -> nothing {
     let custom = bf env -s "PROXY_AUTO_CUSTOM"
 
     # generate file
-    bf write "Generating conf.json using auto environment variables."
+    bf write "Generating conf.json using auto environment variables." auto/generate_conf_json
     let e = {
         PRIMARY: $primary
         UPSTREAM: $upstream
