@@ -1,8 +1,7 @@
-use bf
 use std assert
-use ../bf/nginx/proxy auto *
-
-const ETC_TEMPLATES = "/etc/bf/templates"
+use bf
+use bf/nginx/proxy auto *
+use vars.nu *
 
 
 #======================================================================================================================
@@ -10,9 +9,9 @@ const ETC_TEMPLATES = "/etc/bf/templates"
 #======================================================================================================================
 
 def is_enabled_e [
-    --ssl_conf_exists
-    --auto_primary_is_empty
-    --auto_upstream_is_empty
+    --ssl-conf-exists
+    --auto-primary-is-empty
+    --auto-upstream-is-empty
 ] {
     let ssl_conf = mktemp -t
     if not $ssl_conf_exists { rm $ssl_conf }
@@ -24,7 +23,7 @@ def is_enabled_e [
 }
 
 export def is_enabled__returns_false_when_ssl_conf_exists [] {
-    let e = is_enabled_e --ssl_conf_exists
+    let e = is_enabled_e --ssl-conf-exists
 
     let result = with-env $e { is_enabled }
 
@@ -32,7 +31,7 @@ export def is_enabled__returns_false_when_ssl_conf_exists [] {
 }
 
 export def is_enabled__returns_false_when_auto_primary_is_empty [] {
-    let e = is_enabled_e --auto_primary_is_empty
+    let e = is_enabled_e --auto-primary-is-empty
 
     let result = with-env $e { is_enabled }
 
@@ -40,7 +39,7 @@ export def is_enabled__returns_false_when_auto_primary_is_empty [] {
 }
 
 export def is_enabled__returns_false_when_auto_upstream_is_empty [] {
-    let e = is_enabled_e --auto_upstream_is_empty
+    let e = is_enabled_e --auto-upstream-is-empty
 
     let result = with-env $e { is_enabled }
 
