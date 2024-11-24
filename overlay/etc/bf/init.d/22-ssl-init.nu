@@ -23,9 +23,9 @@ def main []: nothing -> nothing {
         if (bf env check "PROXY_AUTO_ALIASES") { bf env set "PROXY_SSL_REDIRECT_TO_CANONICAL" "1" }
 
         # initialise all domains (root plus auto)
-        proxy init all
+        proxy init --all
     } else {
         # initialise only the root domain
-        proxy init root
+        proxy init --root
     }
 }
