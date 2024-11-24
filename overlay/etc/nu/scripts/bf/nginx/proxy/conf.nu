@@ -1,5 +1,10 @@
 use bf
 
+# Load ssl configuration
+export def load []: nothing -> record<domains: list<record<primary: string, upstream: string, aliases: list, custom: bool>>> {
+    bf env "PROXY_SSL_CONF" | open --raw $in | from json
+}
+
 # Generate Nginx SSL config
 export def generate_nginx_ssl_conf []: nothing -> nothing {
     # get the template name

@@ -6,6 +6,33 @@ const ETC_TEMPLATES = "/etc/bf/templates"
 
 
 #======================================================================================================================
+# load
+#======================================================================================================================
+
+export def load__returns_ssl_conf_json [] {
+    let conf = {
+        "domains": [
+            {
+                "primary": (random chars)
+                "upstream": (random chars)
+                "aliases": [(random chars) (random chars)]
+                "custom": (random bool)
+            }
+        ]
+    }
+    let file = mktemp -t
+    $conf | to json | save -f $file
+    let e = {
+        BF_PROXY_SSL_CONF: $file
+    }
+
+    let result = with-env $e { load }
+
+    assert equal $conf $result
+}
+
+
+#======================================================================================================================
 # generate_nginx_ssl_conf
 #======================================================================================================================
 
