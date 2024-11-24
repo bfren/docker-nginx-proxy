@@ -1,4 +1,4 @@
-FROM bfren/nginx:nginx1.26-alpine3.20-6.3.14
+FROM bfren/nginx:nginx1.26-alpine3.20-6.3.15
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
@@ -23,8 +23,10 @@ ENV \
     BF_PROXY_GETSSL_EMAIL= \
     # set to 1 to use live instead of staging server
     BF_PROXY_GETSSL_USE_LIVE_SERVER=0 \
-    # set to true to skip local HTTP token check
-    BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false" \
+    # the renew window number of days (certificates with more than this will not renew)
+    BF_PROXY_GETSSL_RENEW_WINDOW_DAYS=14 \
+    # set to 1 to skip local HTTP token check
+    BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK=0 \
     # set to the number of bits to use for generating private key
     BF_PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
