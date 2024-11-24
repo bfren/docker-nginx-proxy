@@ -34,22 +34,22 @@ For SSL certificate requests to work correctly, ports 80 and 443 need mapping fr
 
 ## Environment Variables
 
-| Variable                              | Values                | Description                                                                                                                                   | Default               |
-| ------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `PROXY_AUTO_PRIMARY`                  | URI                   | If set (along with PROXY_AUTO_UPSTREAM) SSL config will be generated on first startup.                                                        | *None*                |
-| `PROXY_AUTO_UPSTREAM`                 | URI                   | If set (along with PROXY_AUTO_PRIMARY) SSL config will be generated on first startup.                                                         | *None*                |
-| `PROXY_AUTO_ALIASES`                  | string of URIs        | Add aliases to the auto-generated conf.json on first startup.                                                                                 | *None*                |
-| `PROXY_AUTO_CUSTOM`                   | 0 or 1                | Mark the auto-generated SSL config to 'custom' so the Nginx configuration is not regenerated on startup.                                      | 0                     |
-| `PROXY_CLEAN_INSTALL`                 | 0 or 1                | If 1, all Nginx and SSL configuration and certificates will be deleted and regenerated.                                                       | 0                     |
-| `PROXY_DOMAIN`                        | URI                   | The base domain of the proxy server - will be used to handle unbound requests.                                                                | *None* - **required** |
-| `PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK`  | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse).  | false                 |
-| `PROXY_HARDEN`                        | 0 or 1                | If 1, only modern SSL ciphers and protocols will be enabled (some older devices may not be able to access it).                                | 0                     |
-| `PROXY_LETS_ENCRYPT_EMAIL`            | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                 | *None* - **required** |
-| `PROXY_LETS_ENCRYPT_LIVE`             | 0 or 1                | Only set to 1 (to request live certificates) when your config is correct - Lets Encrypt rate limit certificate requests.                      | 0                     |
-| `PROXY_MAINTENANCE_REFRESH_SECONDS`   | A valid integer       | The number of seconds to count down before the maintenance page auto-refreshes.                                                               | 6                     |
-| `PROXY_SSL_DHPARAM_BITS`              | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                               | 4096                  |
-| `PROXY_SSL_REDIRECT_TO_CANONICAL`     | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.json`).                                                         | 0                     |
-| `PROXY_UPSTREAM_DNS_RESOLVER`         | IP address            | Upstream DNS resolver - set to Docker's by default.                                                                                           | 127.0.0.11            |
+| Variable                                  | Values                | Description                                                                                                                                   | Default               |
+| ----------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `BF_PROXY_AUTO_ALIASES`                   | string of URIs        | Add aliases to the auto-generated conf.json on first startup.                                                                                 | *None*                |
+| `BF_PROXY_AUTO_CUSTOM`                    | 0 or 1                | Mark the auto-generated SSL config to 'custom' so the Nginx configuration is not regenerated on startup.                                      | 0                     |
+| `BF_PROXY_AUTO_PRIMARY`                   | URI                   | If set (along with PROXY_AUTO_UPSTREAM) SSL config will be generated on first startup.                                                        | *None*                |
+| `BF_PROXY_AUTO_UPSTREAM`                  | URI                   | If set (along with PROXY_AUTO_PRIMARY) SSL config will be generated on first startup.                                                         | *None*                |
+| `BF_PROXY_CLEAN_INSTALL`                  | 0 or 1                | If 1, all Nginx and SSL configuration and certificates will be deleted and regenerated.                                                       | 0                     |
+| `BF_PROXY_DOMAIN`                         | URI                   | The base domain of the proxy server - will be used to handle unbound requests.                                                                | *None* - **required** |
+| `BF_PROXY_GETSSL_EMAIL`                   | A valid email address | Used by Lets Encrypt for notification emails.                                                                                                 | *None* - **required** |
+| `BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK`   | true or false         | Set to true to enable `getssl`'s [skip HTTP token check](https://github.com/srvrco/getssl/wiki/Config-variables#skip_http_token_checkfalse).  | false                 |
+| `BF_PROXY_GETSSL_USE_LIVE_SERVER`         | 0 or 1                | Only set to 1 (to request live certificates) when your config is correct - Lets Encrypt rate limit certificate requests.                      | 0                     |
+| `BF_PROXY_HARDEN`                         | 0 or 1                | If 1, only modern SSL ciphers and protocols will be enabled (some older devices may not be able to access it).                                | 0                     |
+| `BF_PROXY_MAINTENANCE_REFRESH_SECONDS`    | A valid integer       | The number of seconds to count down before the maintenance page auto-refreshes.                                                               | 6                     |
+| `BF_PROXY_SSL_DHPARAM_BITS`               | A valid integer       | The size of your DHPARAM variables - adjust down only if you have limited processing resources.                                               | 4096                  |
+| `BF_PROXY_SSL_REDIRECT_TO_CANONICAL`      | 0 or 1                | If 1, all requests will be redirected to the primary domain (defined in `conf.json`).                                                         | 0                     |
+| `BF_PROXY_UPSTREAM_DNS_RESOLVER`          | IP address            | Upstream DNS resolver - set to Docker's by default.                                                                                           | 127.0.0.11            |
 
 ## Helper Functions
 

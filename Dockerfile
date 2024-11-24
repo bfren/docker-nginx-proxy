@@ -11,26 +11,26 @@ EXPOSE 443
 COPY ./overlay /
 
 ENV \
-    # the base domain of the proxy server (will be used when SSL bindings fail)
+    # the root domain of the proxy server (will be used when SSL bindings fail)
     BF_PROXY_DOMAIN= \
-    # clean all config and certificates before doing anything else
+    # delete all config and certificates before doing anything else
     BF_PROXY_CLEAN_INSTALL=0 \
     # enable automatic certificate updating
     BF_PROXY_ENABLE_AUTO_UPDATE=1 \
     # use hardened mode (e.g. remove old / insecure ciphers and protocols)
     BF_PROXY_HARDEN=0 \
     # used for renewal notification emails
-    BF_PROXY_LETS_ENCRYPT_EMAIL= \
+    BF_PROXY_GETSSL_EMAIL= \
     # set to 1 to use live instead of staging server
-    BF_PROXY_LETS_ENCRYPT_LIVE=0 \
+    BF_PROXY_GETSSL_USE_LIVE_SERVER=0 \
+    # set to true to skip local HTTP token check
+    BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false" \
     # set to the number of bits to use for generating private key
     BF_PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
     BF_PROXY_SSL_DHPARAM_BITS=4096 \
     # canonical domain name redirection
     BF_PROXY_SSL_REDIRECT_TO_CANONICAL=0 \
-    # set to true to skip local HTTP token check
-    BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK="false" \
     # if both are set, on first startup will generate SSL config and request certs
     BF_PROXY_AUTO_PRIMARY= \
     BF_PROXY_AUTO_UPSTREAM= \
@@ -40,7 +40,7 @@ ENV \
     BF_PROXY_AUTO_CUSTOM=0 \
     # upstream DNS resolver, set to Docker's internal resolver by default
     BF_PROXY_UPSTREAM_DNS_RESOLVER=127.0.0.11 \
-    # the number of seconds before the maintenance page will auto-refresh
+    # the number of seconds before the maintenance page will automatically refresh
     BF_PROXY_MAINTENANCE_REFRESH_SECONDS=6
 
 RUN bf-install
