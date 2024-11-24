@@ -6,10 +6,10 @@ const ETC_TEMPLATES = "/etc/bf/templates"
 
 
 #======================================================================================================================
-# load
+# get_domains
 #======================================================================================================================
 
-export def load__returns_ssl_conf_json [] {
+export def get_domains__returns_list_of_domains [] {
     let conf = {
         "domains": [
             {
@@ -26,9 +26,9 @@ export def load__returns_ssl_conf_json [] {
         BF_PROXY_SSL_CONF: $file
     }
 
-    let result = with-env $e { load }
+    let result = with-env $e { get_domains }
 
-    assert equal $conf $result
+    assert equal $conf.domains $result
 }
 
 
