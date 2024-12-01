@@ -20,10 +20,28 @@ export def main [
     # generate DHPARAM file
     ssl generate_dhparam
 
+    # closure to run init procedure
+    let init_domain = {|x|
+        # generate getssl config
+        getssl generate_conf
+
+        # generate dhparam
+        ssl generate_dhparam
+
+        # generate Nginx config
+        conf generate_nginx_site_conf $x
+    }
+
     # initialise domain(s)
-    if $all { all_domains }
-    else if $root { root }
-    else if $domain { domain $domain }
+    if $all {
+        get_all | each $init_domain
+    }
+    else if $root {
+        $init_domain (get_root)
+    }
+    else if $domain {
+        $init_domain (get_single $domain)
+    }
 
     # return nothing
     return
@@ -45,19 +63,13 @@ def remove []: string -> nothing {
     rm --force --recursive $file
 }
 
-# Initialise SSL for all configured domains
-def all_domains []: nothing -> nothing {
-    let domains = conf get_domains
-}
+# Retrieve all configured domain record
+export def get_all []: nothing -> list<record> { conf get_domains }
 
-# Initialise SSL for the specified domain
-def domain [
+# Retrieve a single domain record
+export def get_single [
     domain: string  # The domain to initialise
-]: nothing -> nothing {
+]: nothing -> record { conf get_domains | where primary == $domain | into record }
 
-}
-
-# Initialise SSL for the root domain
-def root []: nothing -> nothing {
-    domain (bf env "PROXY_DOMAIN")
-}
+# Retrieve the root domain record
+export def get_root []: nothing -> record { get_single (bf env "PROXY_DOMAIN") }

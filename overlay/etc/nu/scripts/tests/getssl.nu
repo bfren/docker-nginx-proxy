@@ -23,7 +23,7 @@ def generate_conf_e [
         BF_PROXY_GETSSL_EMAIL: ($email | default (random chars))
         BF_PROXY_GETSSL_ACCOUNT_KEY: ($account_key | default (random chars))
         BF_PROXY_GETSSL_RENEW_WINDOW_DAYS: ($renew_window | default (random int 14..28))
-        BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK: ($skip_check | default (random bool))
+        BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK: (match $skip_check { true => "1" false => "0" })
     }
 }
 
@@ -97,12 +97,20 @@ export def generate_conf__outputs_renew_allow [] {
     assert str contains $result $"(char newline)RENEW_ALLOW=\"($renew)\"(char newline)"
 }
 
-export def generate_conf__outputs_skip_http_check [] {
+export def generate_conf__outputs_skip_http_check_false [] {
     let file = get_tmp_file
-    let skip_check = random bool
-    let e = generate_conf_e --skip-check=($skip_check) $file
+    let e = generate_conf_e --skip-check=false $file
 
     let result = with-env $e { generate_conf } | open --raw $file
 
-    assert str contains $result $"(char newline)SKIP_HTTP_TOKEN_CHECK=\"($skip_check | into string)\"(char newline)"
+    assert str contains $result $"(char newline)SKIP_HTTP_TOKEN_CHECK=\"false\"(char newline)"
+}
+
+export def generate_conf__outputs_skip_http_check_true [] {
+    let file = get_tmp_file
+    let e = generate_conf_e --skip-check=true $file
+
+    let result = with-env $e { generate_conf } | open --raw $file
+
+    assert str contains $result $"(char newline)SKIP_HTTP_TOKEN_CHECK=\"true\"(char newline)"
 }

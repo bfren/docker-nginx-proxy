@@ -9,16 +9,7 @@ use vars.nu *
 #======================================================================================================================
 
 export def get_domains__returns_list_of_domains [] {
-    let conf = {
-        "domains": [
-            {
-                "primary": (random chars)
-                "upstream": (random chars)
-                "aliases": [(random chars) (random chars)]
-                "custom": (random bool)
-            }
-        ]
-    }
+    let conf = { "domains": [ (generate_domain) ] }
     let file = mktemp -t
     $conf | to json | save -f $file
     let e = {
@@ -32,7 +23,7 @@ export def get_domains__returns_list_of_domains [] {
 
 
 #======================================================================================================================
-# generate_nginx_ssl_conf
+# generate_nginx_server_conf
 #======================================================================================================================
 
 def generate_nginx_ssl_conf_e [
@@ -48,8 +39,7 @@ export def generate_nginx_ssl_conf__outputs_intermediate_conf [] {
     let e = generate_nginx_ssl_conf_e
     let expected = "c8864a579b0ec2cb4070f27affb4e05f"
 
-    let result = with-env $e { generate_nginx_ssl_conf } | open --raw $NGINX_SSL_CONF | hash md5
-    open $NGINX_SSL_CONF | bf dump -e -t "ssl"
+    let result = with-env $e { generate_nginx_server_conf } | open --raw $NGINX_SSL_CONF | hash md5
 
     assert equal $expected $result
 }
@@ -58,7 +48,302 @@ export def generate_nginx_ssl_conf__outputs_modern_conf [] {
     let e = generate_nginx_ssl_conf_e --harden
     let expected = "73f99a3458030a8dae265a10355032e3"
 
-    let result = with-env $e { generate_nginx_ssl_conf } | open --raw $NGINX_SSL_CONF | hash md5
+    let result = with-env $e { generate_nginx_server_conf } | open --raw $NGINX_SSL_CONF | hash md5
 
     assert equal $expected $result
+}
+
+
+#======================================================================================================================
+# generate_nginx_site_conf
+#======================================================================================================================
+
+def generate_nginx_site_conf_e [
+    --acme-challenge: string
+    --certs: string
+    --dhparam: string
+    --nginx-public: string
+    --nginx-www: string
+    --redirect-to-canonical
+    --resolver: string
+    --root-domain: string
+    sites_dir
+] {
+    {
+        BF_ETC_TEMPLATES: $ETC_TEMPLATES
+        BF_NGINX_PUBLIC: ($nginx_public | default (random chars))
+        BF_NGINX_WWW: ($nginx_www | default (random chars))
+        BF_PROXY_ACME_CHALLENGE: ($acme_challenge | default (random chars))
+        BF_PROXY_DOMAIN: ($root_domain | default (random chars))
+        BF_PROXY_SSL_CERTS: ($certs | default (random chars))
+        BF_PROXY_SSL_DHPARAM: ($dhparam | default (random chars))
+        BF_PROXY_SSL_REDIRECT_TO_CANONICAL: (match $redirect_to_canonical { true => "1" false => "0" })
+        BF_PROXY_SITES: $sites_dir
+        BF_PROXY_UPSTREAM_DNS_RESOLVER: ($resolver | default (random chars))
+    }
+}
+
+export def generate_nginx_site_conf__creates_site_directory_when_does_not_exist [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = $"/tmp/(random chars)"
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | echo $sites_dir | path exists
+
+    assert equal true $result
+}
+
+export def generate_nginx_site_conf__keeps_config_when_custom_is_true [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let content = random chars
+    $content | save --force $"($sites_dir)/($primary).conf"
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert equal $content $result
+}
+
+export def generate_nginx_site_conf__regenerates_config_when_custom_is_false [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary false
+    let sites_dir = mktemp -d -t
+    let content = random chars
+    $content | save --force $"($sites_dir)/($primary).conf"
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert not equal $content $result
+}
+
+export def generate_nginx_site_conf__outputs_acme_challenge [] {
+    let domain = generate_domain
+    let sites_dir = mktemp -d -t
+    let acme_challenge = random chars
+    let e = generate_nginx_site_conf_e --acme-challenge $acme_challenge $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"location ^~ /($acme_challenge) {"
+}
+
+export def generate_nginx_site_conf__outputs_acme_challenge_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let acme_challenge = random chars
+    let e = generate_nginx_site_conf_e --acme-challenge $acme_challenge --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"location ^~ /($acme_challenge) {"
+}
+
+export def generate_nginx_site_conf__outputs_ssl_certs [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let certs = random chars
+    let e = generate_nginx_site_conf_e --certs $certs $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"ssl_trusted_certificate         ($certs)/($primary)/chain.crt;"
+    assert str contains $result $"ssl_certificate                 ($certs)/($primary)/fullchain.crt;"
+    assert str contains $result $"ssl_certificate_key             ($certs)/($primary).key;"
+}
+
+export def generate_nginx_site_conf__outputs_ssl_certs_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let certs = random chars
+    let e = generate_nginx_site_conf_e --certs $certs --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"ssl_trusted_certificate         ($certs)/($primary)/chain.crt;"
+    assert str contains $result $"ssl_certificate                 ($certs)/($primary)/fullchain.crt;"
+    assert str contains $result $"ssl_certificate_key             ($certs)/($primary).key;"
+}
+
+export def generate_nginx_site_conf__includes_custom_conf [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"include                     ($sites_dir)/($primary).d/*.conf;"
+}
+
+export def generate_nginx_site_conf__includes_custom_conf_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"include                         ($sites_dir)/($primary).d/*.conf;"
+}
+
+export def generate_nginx_site_conf__outputs_dhparam [] {
+    let domain = generate_domain
+    let sites_dir = mktemp -d -t
+    let dhparam = random chars
+    let e = generate_nginx_site_conf_e --dhparam $dhparam $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"ssl_dhparam                     ($dhparam);"
+}
+
+export def generate_nginx_site_conf__outputs_dhparam_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let dhparam = random chars
+    let e = generate_nginx_site_conf_e --dhparam $dhparam --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"ssl_dhparam                     ($dhparam);"
+}
+
+export def generate_nginx_site_conf__outputs_dns_resolver [] {
+    let domain = generate_domain
+    let sites_dir = mktemp -d -t
+    let resolver = random chars
+    let e = generate_nginx_site_conf_e --resolver $resolver $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"resolver                    ($resolver) valid=30s;"
+}
+
+export def generate_nginx_site_conf__outputs_server_names [] {
+    let primary = random chars
+    let aliases = [(random chars) (random chars) (random chars)]
+    let server_names = $primary | append $aliases | str join " "
+    let domain = generate_domain --primary $primary --aliases $aliases
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"# serve HTTP site for these domain names
+    server_name                     ($server_names);"
+    assert str contains $result $"# serve HTTPS site for these domain names
+    server_name                     ($server_names);"
+}
+
+export def generate_nginx_site_conf__allows_changes_when_custom_is_true [] {
+    let domain = generate_domain true
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result "# You can make changes to this file."
+}
+
+export def generate_nginx_site_conf__disallows_changes_when_custom_is_false [] {
+    let domain = generate_domain false
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result "# WARNING: This file is generated. Do not make changes to this file."
+}
+
+export def generate_nginx_site_conf__outputs_nginx_public_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let nginx_public = random chars
+    let e = generate_nginx_site_conf_e --nginx-public $nginx_public --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"root                            ($nginx_public);"
+}
+
+export def generate_nginx_site_conf__outputs_nginx_www [] {
+    let domain = generate_domain
+    let sites_dir = mktemp -d -t
+    let nginx_www = random chars
+    let e = generate_nginx_site_conf_e --nginx-www $nginx_www $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"root                        ($nginx_www);"
+}
+
+export def generate_nginx_site_conf__outputs_nginx_www_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let nginx_www = random chars
+    let e = generate_nginx_site_conf_e --nginx-www $nginx_www --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"root                        ($nginx_www);"
+}
+
+export def generate_nginx_site_conf__redirects_to_canonical [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e --redirect-to-canonical $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"return                      301 https://($primary)$request_uri;"
+    assert str contains $result $"if \($host != ($primary)\) {
+        return                      301 https://($primary)$request_uri;
+    }"
+}
+
+export def generate_nginx_site_conf__redirects_to_canonical_when_root [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e --root-domain $primary $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"return                      301 https://($primary)$request_uri;"
+    assert str contains $result $"if \($host != ($primary)\) {
+        return                      301 https://($primary)$request_uri;
+    }"
+}
+
+export def generate_nginx_site_conf__redirects_to_current_host [] {
+    let domain = generate_domain
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result "return                      301 https://$host$request_uri;"
+}
+
+export def generate_nginx_site_conf__outputs_upstream [] {
+    let upstream = random chars
+    let domain = generate_domain --upstream $upstream
+    let sites_dir = mktemp -d -t
+    let nginx_www = random chars
+    let e = generate_nginx_site_conf_e --nginx-www $nginx_www $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"set $upstream               ($upstream);"
 }

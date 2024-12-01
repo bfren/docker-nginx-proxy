@@ -1,6 +1,7 @@
 use std assert
 use bf
 use bf/nginx/proxy init *
+use vars.nu *
 
 
 #======================================================================================================================
@@ -36,4 +37,67 @@ export def setup_clean_install__removes_files [] {
     assert equal true $result.SSL_CERTS
     assert equal 0 $result.SSL_CERTS_FILES
     assert equal false $result.SSL_DHPARAM
+}
+
+
+#======================================================================================================================
+# get_all
+#======================================================================================================================
+
+export def get_all__returns_all_domains [] {
+    let conf = {
+        "domains": [ (generate_domain), (generate_domain), (generate_domain) ]
+    }
+    let file = mktemp -t
+    $conf | to json | save -f $file
+    let e = {
+        BF_PROXY_SSL_CONF: $file
+    }
+
+    let result = with-env $e { get_all }
+
+    assert equal $conf.domains $result
+}
+
+
+#======================================================================================================================
+# get_root
+#======================================================================================================================
+
+export def get_root__returns_root_domain [] {
+    let conf = {
+        "domains": [ (generate_domain), (generate_domain), (generate_domain) ]
+    }
+    let root = $conf.domains.1
+    let file = mktemp -t
+    $conf | to json | save -f $file
+    let e = {
+        BF_PROXY_DOMAIN: $root.primary
+        BF_PROXY_SSL_CONF: $file
+    }
+
+    let result = with-env $e { get_root }
+
+    assert equal $root $result
+}
+
+
+#======================================================================================================================
+# get_single
+#======================================================================================================================
+
+export def get_single__returns_single_domain [] {
+    let conf = {
+        "domains": [ (generate_domain), (generate_domain), (generate_domain) ]
+    }
+    let single = $conf.domains.1
+    let file = mktemp -t
+    $conf | to json | save -f $file
+    let e = {
+        BF_PROXY_SSL_CONF: $file
+    }
+
+    let result = with-env $e { get_single $single.primary }
+
+    assert equal $single $result
 }
