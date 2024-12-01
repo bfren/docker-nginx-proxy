@@ -15,21 +15,27 @@ export def main [
     --root (-d)             # If set, will initialise root domain
 ]: nothing -> nothing {
     # generate getssl configuration
-    getssl generate_conf
+    getssl generate_global_conf
 
     # generate DHPARAM file
     ssl generate_dhparam
 
     # closure to run init procedure
-    let init_domain = {|x|
-        # generate getssl config
-        getssl generate_conf
+    let init_domain = {|x: record|
+        # generate global getssl config
+        getssl generate_global_conf
 
         # generate dhparam
         ssl generate_dhparam
 
         # generate Nginx config
         conf generate_nginx_site_conf $x
+
+        # generate site getssl conf
+        getssl generate_site_conf $x
+
+        # generate temporary SSL
+        ssl generate_temp_certs $x
     }
 
     # initialise domain(s)

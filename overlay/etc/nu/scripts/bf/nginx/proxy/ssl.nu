@@ -8,3 +8,10 @@ export def generate_dhparam []: nothing -> nothing {
         ^openssl dhparam (bf env PROXY_SSL_DHPARAM_BITS) | save --force $dhparam
     }
 }
+
+# Generate temporary SSL certificates for a domain
+export def generate_temp_certs [
+    domain: record      # the domain record to generate temporary SSL for
+]: nothing -> nothing {
+
+}

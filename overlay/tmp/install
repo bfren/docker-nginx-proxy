@@ -9,6 +9,7 @@ def main [] {
     let nginx_version = bf fs read NGINX_BUILD
     bf write $"Installing dependencies for getssl."
     bf pkg install [
+        "bash"
         "curl"
         $"nginx-mod-http-set-misc=($nginx_version)"
         "openssl"
