@@ -4,7 +4,6 @@ use getssl.nu
 use ssl.nu
 
 # Initialise SSL for the specified domain(s).
-#doc
 # Order of precedence:
 #   1. `init --all`
 #   2. `init --root`
@@ -15,28 +14,30 @@ export def main [
     --root (-d)             # If set, will initialise root domain
 ]: nothing -> nothing {
     # generate getssl configuration
+    bf write "Creating getssl global configuration file." init
     getssl generate_global_conf
 
     # generate DHPARAM file
+    bf write "Generating DHPARAM."
     ssl generate_dhparam
 
     # closure to run init procedure
     let init_domain = {|x: record|
-        # generate global getssl config
-        getssl generate_global_conf
-
-        # generate dhparam
-        ssl generate_dhparam
+        bf write $"Initialising ($x.primary)." init
 
         # generate Nginx config
+        bf write " .. generating Nginx configuration file."
         conf generate_nginx_site_conf $x
 
         # generate site getssl conf
+        bf write " .. generating getssl configuration file."
         getssl generate_site_conf $x.primary
         getssl update_site_conf $x
 
-        # generate temporary SSL
-        ssl generate_temp_certs $x
+        # generate temporary SSL files
+        bf write " .. generating temporary SSL certificates and keys."
+        ssl generate_temp_certs $x.primary
+        ssl create_pem $x.primary
     }
 
     # initialise domain(s)
