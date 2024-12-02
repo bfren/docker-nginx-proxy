@@ -12,7 +12,7 @@ def generate_conf_e [
     --use-live-server
     --email: string
     --account-key: string
-    --renew-window: int
+    --renew-window: duration
     --skip-check
     file: string
 ] {
@@ -22,7 +22,7 @@ def generate_conf_e [
         BF_PROXY_GETSSL_USE_LIVE_SERVER: (match ($use_live_server) { true => "1" false => "0" })
         BF_PROXY_GETSSL_EMAIL: ($email | default (random chars))
         BF_PROXY_GETSSL_ACCOUNT_KEY: ($account_key | default (random chars))
-        BF_PROXY_GETSSL_RENEW_WINDOW_DAYS: ($renew_window | default (random int 14..28))
+        BF_PROXY_GETSSL_RENEW_WINDOW: ($renew_window | default (random int 14..28 | into duration --unit day))
         BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK: (match $skip_check { true => "1" false => "0" })
     }
 }
@@ -89,12 +89,12 @@ export def generate_conf__outputs_account_key [] {
 
 export def generate_conf__outputs_renew_allow [] {
     let file = get_tmp_file
-    let renew = random int 14..28
+    let renew = random int 14..28 | into duration --unit day
     let e = generate_conf_e --renew-window $renew $file
 
     let result = with-env $e { generate_global_conf } | open --raw $file
 
-    assert str contains $result $"(char newline)RENEW_ALLOW=\"($renew)\"(char newline)"
+    assert str contains $result $"(char newline)RENEW_ALLOW=\"($renew / 1day | into string)\"(char newline)"
 }
 
 export def generate_conf__outputs_skip_http_check_false [] {

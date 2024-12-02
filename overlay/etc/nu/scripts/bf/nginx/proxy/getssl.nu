@@ -9,13 +9,14 @@ export def generate_global_conf []: nothing -> nothing {
             USE_LIVE_SERVER: (bf env "PROXY_GETSSL_USE_LIVE_SERVER")
             ACCOUNT_EMAIL: (bf env "PROXY_GETSSL_EMAIL")
             ACCOUNT_KEY: (bf env "PROXY_GETSSL_ACCOUNT_KEY")
-            RENEW_ALLOW: (bf env "PROXY_GETSSL_RENEW_WINDOW_DAYS")
+            RENEW_ALLOW: (bf env "PROXY_GETSSL_RENEW_WINDOW" | into duration | $in / 1day)
             SKIP_HTTP_TOKEN_CHECK: (bf env check "PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK" | into string)
         }
 
         # generate configuration
-        bf write debug "Creating getssl global configuration file" getssl/generate_global_conf
         with-env $e { bf esh template $getssl_cfg }
+    } else {
+        bf write debug " .. getssl global configuration file already exists." getssl/generate_global_conf
     }
 }
 
@@ -27,7 +28,7 @@ export def generate_site_conf [
     let certs = bf env "PROXY_SSL_CERTS"
     let file = $"($certs)/($domain)/(bf env "PROXY_GETSSL_CFG")"
     if ($file | path exists) {
-        bf write debug " .. getssl configuration file already exists."
+        bf write debug " .. getssl configuration file already exists." getssl/generate_site_conf
         return $file
     }
 
@@ -38,9 +39,10 @@ export def generate_site_conf [
         (bf env "PROXY_SSL_CERTS")
         "-c" # create default configuration files
         $domain
-    ] | compact --empty | bf dump -t "args"
+    ] | compact --empty # in case BF_PROXY_GETSSL_FLAGS is not set
 
     # execute getssl
+    bf write debug " .. getssl configuration file already exists." getssl/generate_site_conf
     { ^getssl ...$args } | bf handle
 
     # return cfg file path
