@@ -38,9 +38,6 @@ export def generate_nginx_site_conf [
     let dir = $"($site).d"
     let template = $"(bf env "ETC_TEMPLATES")/nginx-(match ($is_root) { true => "root" false => "site" }).conf.esh"
 
-    # output domain to log
-    bf write $"Generating Nginx configuration for ($primary)." conf/generate_nginx_site_conf
-
     # ensure custom site config directory exists
     if ($dir | bf fs is_not_dir) { mkdir $dir }
 
@@ -48,15 +45,15 @@ export def generate_nginx_site_conf [
     if ($conf | path exists) {
         # if custom config is enabled, don't touch the file
         if $custom {
-            bf write debug " .. keeping custom configuration" conf/generate_nginx_site_conf
+            bf write debug "    keeping custom configuration." conf/generate_nginx_site_conf
             return $conf
         }
 
         # remove file so it can be regenerated
-        bf write debug " .. removing file so it can be regenerated." conf/generate_nginx_site_conf
+        bf write debug "    removing file so it can be regenerated." conf/generate_nginx_site_conf
         rm -f $conf
     } else {
-        bf write debug " .. site is not yet configured." conf/generate_nginx_site_conf
+        bf write debug "    site is not yet configured." conf/generate_nginx_site_conf
     }
 
     # set environment values
@@ -76,6 +73,7 @@ export def generate_nginx_site_conf [
     }
 
     # generate config file
+    bf write debug "    generating file." conf/generate_nginx_site_conf
     with-env $e { bf esh $template $conf }
 
     # return path to config file
