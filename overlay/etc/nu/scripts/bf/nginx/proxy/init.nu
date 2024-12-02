@@ -32,7 +32,8 @@ export def main [
         conf generate_nginx_site_conf $x
 
         # generate site getssl conf
-        getssl generate_site_conf $x
+        getssl generate_site_conf $x.primary
+        getssl update_site_conf $x
 
         # generate temporary SSL
         ssl generate_temp_certs $x
@@ -56,10 +57,10 @@ export def main [
 # Check for clean install and delete
 export def setup_clean_install []: nothing -> nothing {
     bf write debug " .. removing SSL config and certificates:" init/setup_clean_install
-    bf env PROXY_GETSSL_GLOBAL_CFG | remove
-    bf env PROXY_SITES | $"($in)/*" | remove
-    bf env PROXY_SSL_CERTS | $"($in)/*" | remove
-    bf env PROXY_SSL_DHPARAM | remove
+    bf env "PROXY_GETSSL_GLOBAL_CFG" | remove
+    bf env "PROXY_SITES" | $"($in)/*" | remove
+    bf env "PROXY_SSL_CERTS" | $"($in)/*" | remove
+    bf env "PROXY_SSL_DHPARAM" | remove
 }
 
 # Remove file(s) by converting input into a glob before calling `rm`

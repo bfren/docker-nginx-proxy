@@ -165,6 +165,18 @@ export def replace__replaces_line_without_hash [] {
     assert equal $expected $result
 }
 
+export def replace__adds_double_quotes [] {
+    let key = random chars
+    let value = random chars
+    let file = mktemp -t
+    echo $"#($key)=(random chars)" | save --force $file
+    let expected = $"($key)=\"($value)\""
+
+    let result = replace --add-quotes $key $value $file | open --raw $file
+
+    assert equal $expected $result
+}
+
 
 #======================================================================================================================
 # generate_site_conf
@@ -172,7 +184,6 @@ export def replace__replaces_line_without_hash [] {
 
 export def generate_site_conf__does_nothing_when_config_exists [] {
     let primary = random chars
-    let domain = generate_domain --primary $primary
     let certs = mktemp -d -t
     let cfg = random chars
     let e = {
@@ -184,14 +195,13 @@ export def generate_site_conf__does_nothing_when_config_exists [] {
     $cfg | path dirname | mkdir $in
     $content | save --force $cfg
 
-    let result = with-env $e { generate_site_conf $domain } | open --raw
+    let result = with-env $e { generate_site_conf $primary } | open --raw
 
     assert equal $content $result
 }
 
 export def generate_site_conf__creates_default_config [] {
     let primary = "do not use random value or hash will break"
-    let domain = generate_domain --primary $primary
     let certs = mktemp -d -t
     let cfg = "getssl.cfg"
     let e = {
@@ -201,7 +211,7 @@ export def generate_site_conf__creates_default_config [] {
     let cfg = $"($certs)/($primary)/($cfg)"
     let expected = "7146e789a83077202ab129d461959016"
 
-    let result = with-env $e { generate_site_conf $domain } | open --raw | hash md5
+    let result = with-env $e { generate_site_conf $primary } | open --raw | hash md5
 
     assert equal $expected $result
 }
