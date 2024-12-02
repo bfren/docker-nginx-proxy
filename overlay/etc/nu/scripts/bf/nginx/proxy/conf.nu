@@ -15,7 +15,7 @@ export def generate_nginx_server_conf []: nothing -> nothing {
 
     # generate config file
     bf write $"Using ($template) SSL configuration." conf/generate_nginx_server_conf
-    bf esh $"(bf env ETC_TEMPLATES)/ssl-($template).conf.esh" "/etc/nginx/http.d/ssl.conf"
+    bf esh $"(bf env "ETC_TEMPLATES")/ssl-($template).conf.esh" "/etc/nginx/http.d/ssl.conf"
 
     # return nothing
     return
@@ -61,17 +61,17 @@ export def generate_nginx_site_conf [
 
     # set environment values
     let e = {
-        ACME_CHALLENGE: (bf env PROXY_ACME_CHALLENGE)
-        CERTS: (bf env PROXY_SSL_CERTS)
+        ACME_CHALLENGE: (bf env "PROXY_ACME_CHALLENGE")
+        CERTS: (bf env "PROXY_SSL_CERTS")
         CUSTOM_CONF: $dir
-        DHPARAM: (bf env PROXY_SSL_DHPARAM)
-        DNS_RESOLVER: (bf env PROXY_UPSTREAM_DNS_RESOLVER)
+        DHPARAM: (bf env "PROXY_SSL_DHPARAM")
+        DNS_RESOLVER: (bf env "PROXY_UPSTREAM_DNS_RESOLVER")
         DOMAIN_NAME: $primary
         DOMAIN_NAMES: ($primary | append $aliases | str join " ")
         IS_CUSTOM: ($custom | into string)
-        NGINX_PUBLIC: (bf env NGINX_PUBLIC)
-        NGINX_WWW: (bf env NGINX_WWW)
-        REDIRECT_TO_CANONICAL: (bf env check PROXY_SSL_REDIRECT_TO_CANONICAL | into string)
+        NGINX_PUBLIC: (bf env "NGINX_PUBLIC")
+        NGINX_WWW: (bf env "NGINX_WWW")
+        REDIRECT_TO_CANONICAL: (bf env check "PROXY_SSL_REDIRECT_TO_CANONICAL" | into string)
         UPSTREAM: $upstream
     }
 
