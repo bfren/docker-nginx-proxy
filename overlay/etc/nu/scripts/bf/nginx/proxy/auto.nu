@@ -10,6 +10,7 @@ export def generate_conf_json []: nothing -> nothing {
         $a => ($a | split words | str join "\", \"" | $"\"($in)\"")
     }
     let custom = bf env -s "PROXY_AUTO_CUSTOM"
+    let conf_json = bf env "PROXY_SSL_CONF"
 
     # generate file
     bf write "Generating conf.json using auto environment variables." auto/generate_conf_json
@@ -19,7 +20,7 @@ export def generate_conf_json []: nothing -> nothing {
         ALIASES: $aliases
         CUSTOM: $custom
     }
-    with-env $e { bf esh template (bf env "PROXY_SSL_CONF") }
+    with-env $e { bf esh template $conf_json }
 
     # return nothing
     return

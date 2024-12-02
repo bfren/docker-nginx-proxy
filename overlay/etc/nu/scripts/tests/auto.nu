@@ -59,7 +59,7 @@ export def is_enabled__returns_true [] {
 # generate_conf_json
 #======================================================================================================================
 
-const CONF_JSON_OUTPUT = "/tmp/conf.json"
+const CONF_JSON = "conf.json"
 
 def get_conf_json_e [
     --primary: string   # Optional primary domain name
@@ -73,15 +73,17 @@ def get_conf_json_e [
         BF_PROXY_AUTO_UPSTREAM: (match $upstream { null => (random chars), _ => $upstream })
         BF_PROXY_AUTO_ALIASES: $aliases
         BF_PROXY_AUTO_CUSTOM: (match $custom { true => "1", false => "" })
-        BF_PROXY_SSL_CONF: $CONF_JSON_OUTPUT
+        BF_PROXY_SSL_CONF: (get_conf_json_file)
     }
 }
+
+def get_conf_json_file [] { $"(mktemp -d -t)/($CONF_JSON)" }
 
 export def generate_conf_json__outputs_primary [] {
     let primary = random chars --length 5
     let e = get_conf_json_e --primary $primary
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get domains.0.primary
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get domains.0.primary
 
     assert equal $primary $result
 }
@@ -90,7 +92,7 @@ export def generate_conf_json__outputs_upstream [] {
     let upstream = random chars --length 5
     let e = get_conf_json_e --upstream $upstream
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get domains.0.upstream
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get domains.0.upstream
 
     assert equal $upstream $result
 }
@@ -100,7 +102,7 @@ export def generate_conf_json__outputs_aliases [] {
     let aliases_in = $aliases | str join " "
     let e = get_conf_json_e --aliases $aliases_in
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get domains.0.aliases
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get domains.0.aliases
 
     assert equal $aliases $result
 }
@@ -108,7 +110,7 @@ export def generate_conf_json__outputs_aliases [] {
 export def generate_conf_json__does_not_output_aliases [] {
     let e = get_conf_json_e
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get -i domains.0.aliases
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get -i domains.0.aliases
 
     assert equal null $result
 }
@@ -116,7 +118,7 @@ export def generate_conf_json__does_not_output_aliases [] {
 export def generate_conf_json__outputs_custom [] {
     let e = get_conf_json_e --custom
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get domains.0.custom
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get domains.0.custom
 
     assert equal true $result
 }
@@ -124,7 +126,7 @@ export def generate_conf_json__outputs_custom [] {
 export def generate_conf_json__does_not_output_custom [] {
     let e = get_conf_json_e
 
-    let result = with-env $e { generate_conf_json } | open $CONF_JSON_OUTPUT | get -i domains.0.custom
+    let result = with-env $e { generate_conf_json } | open $e.BF_PROXY_SSL_CONF | get -i domains.0.custom
 
     assert equal null $result
 }
