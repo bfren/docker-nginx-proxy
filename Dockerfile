@@ -1,4 +1,4 @@
-FROM bfren/nginx:nginx1.26-alpine3.20-6.3.16
+FROM bfren/nginx:nginx1.26-alpine3.20-6.3.17
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
@@ -23,14 +23,16 @@ ENV \
     BF_PROXY_GETSSL_EMAIL= \
     # set to 1 to use live instead of staging server
     BF_PROXY_GETSSL_USE_LIVE_SERVER=0 \
-    # the renew window number of days (certificates with more than this will not renew)
-    BF_PROXY_GETSSL_RENEW_WINDOW_DAYS=14 \
+    # the renew window number of days - certificates with more than this will not renew (Nu duration)
+    BF_PROXY_GETSSL_RENEW_WINDOW=14day \
     # set to 1 to skip local HTTP token check
     BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK=0 \
     # set to the number of bits to use for generating private key
     BF_PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
     BF_PROXY_SSL_DHPARAM_BITS=4096 \
+    # the period of time before self-generated SSL certificates will expire (Nu duration)
+    BF_PROXY_SSL_EXPIRY=36500day \
     # canonical domain name redirection
     BF_PROXY_SSL_REDIRECT_TO_CANONICAL=0 \
     # if both are set, on first startup will generate SSL config and request certs
@@ -42,8 +44,8 @@ ENV \
     BF_PROXY_AUTO_CUSTOM=0 \
     # upstream DNS resolver, set to Docker's internal resolver by default
     BF_PROXY_UPSTREAM_DNS_RESOLVER=127.0.0.11 \
-    # the number of seconds before the maintenance page will automatically refresh
-    BF_PROXY_MAINTENANCE_REFRESH_SECONDS=6
+    # the number of seconds before the maintenance page will automatically refresh (Nu duration)
+    BF_PROXY_MAINTENANCE_REFRESH=6sec
 
 RUN bf-install
 
