@@ -1,3 +1,4 @@
+use bf
 use bf/nginx/proxy conf
 bf env load
 
