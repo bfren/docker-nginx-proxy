@@ -243,6 +243,19 @@ export def generate_nginx_site_conf__outputs_server_names [] {
     server_name                     ($server_names);"
 }
 
+export def generate_nginx_site_conf__without_aliases_outputs_only_primary_to_server_names [] {
+    let domain = generate_domain | reject aliases
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"# serve HTTP site for these domain names
+    server_name                     ($domain.primary);"
+    assert str contains $result $"# serve HTTPS site for these domain names
+    server_name                     ($domain.primary);"
+}
+
 export def generate_nginx_site_conf__allows_changes_when_custom_is_true [] {
     let domain = generate_domain true
     let sites_dir = mktemp -d -t
@@ -255,6 +268,16 @@ export def generate_nginx_site_conf__allows_changes_when_custom_is_true [] {
 
 export def generate_nginx_site_conf__disallows_changes_when_custom_is_false [] {
     let domain = generate_domain false
+    let sites_dir = mktemp -d -t
+    let e = generate_nginx_site_conf_e $sites_dir
+
+    let result = with-env $e { generate_nginx_site_conf $domain } | open --raw $in
+
+    assert str contains $result "# WARNING: This file is generated. Do not make changes to this file."
+}
+
+export def generate_nginx_site_conf__disallows_changes_when_custom_is_not_set [] {
+    let domain = generate_domain | reject custom
     let sites_dir = mktemp -d -t
     let e = generate_nginx_site_conf_e $sites_dir
 
