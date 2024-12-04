@@ -9,16 +9,16 @@ use ssl.nu
 #   2. `init --root`
 #   3. `init --domain xxxxxx`
 export def main [
-    --all (-a)              # If set, will initialise root and all configured domains
-    --domain (-d): string   # Specify the domain to be initialised
-    --root (-d)             # If set, will initialise root domain
+    --all (-a)              # Initialise root and all configured domains
+    --domain (-d): string   # The domain to be initialised
+    --root (-d)             # Initialise root domain
 ]: nothing -> nothing {
     # generate getssl configuration
     bf write "Creating getssl global configuration file." init
     getssl generate_global_conf
 
     # generate DHPARAM file
-    bf write "Generating DHPARAM."
+    bf write "Generating DHPARAM." init
     ssl generate_dhparam
 
     # closure to run init procedure
@@ -26,16 +26,16 @@ export def main [
         bf write $"Initialising ($x.primary)." init
 
         # generate Nginx config
-        bf write " .. generating Nginx configuration file."
+        bf write " .. generating Nginx configuration file." init
         conf generate_nginx_site_conf $x
 
         # generate site getssl conf
-        bf write " .. generating getssl configuration file."
+        bf write " .. generating getssl configuration file." init
         getssl generate_site_conf $x.primary
         getssl update_site_conf $x
 
         # generate temporary SSL files
-        bf write " .. generating temporary SSL certificates and keys."
+        bf write " .. generating temporary SSL certificates and keys." init
         ssl generate_temp_certs $x.primary
         ssl create_pem $x.primary
     }
@@ -45,17 +45,20 @@ export def main [
         get_all | each $init_domain
     }
     else if $root {
-        $init_domain (get_root)
+        do $init_domain (get_root)
     }
     else if $domain {
-        $init_domain (get_single $domain)
+        do $init_domain (get_single $domain)
+    }
+    else {
+        main --help
     }
 
-    # return nothing
-    return
+    # done
+    bf write ok "Done." init
 }
 
-# Check for clean install and delete
+# Check for clean install and delete.
 export def setup_clean_install []: nothing -> nothing {
     bf write debug " .. removing SSL config and certificates:" init/setup_clean_install
     bf env "PROXY_GETSSL_GLOBAL_CFG" | remove
@@ -64,20 +67,20 @@ export def setup_clean_install []: nothing -> nothing {
     bf env "PROXY_SSL_DHPARAM" | remove
 }
 
-# Remove file(s) by converting input into a glob before calling `rm`
+# Remove file(s) by converting input into a glob before calling `rm`.
 def remove []: string -> nothing {
     let file = $in | into glob
     bf write debug $"    ($file)" init/remove
     rm --force --recursive $file
 }
 
-# Retrieve all configured domain record
+# Retrieve all configured domain record.
 export def get_all []: nothing -> list<record> { conf get_domains }
 
-# Retrieve a single domain record
+# Retrieve a single domain record.
 export def get_single [
     domain: string  # The domain to initialise
 ]: nothing -> record { conf get_domains | where primary == $domain | into record }
 
-# Retrieve the root domain record
+# Retrieve the root domain record.
 export def get_root []: nothing -> record { get_single (bf env "PROXY_DOMAIN") }
