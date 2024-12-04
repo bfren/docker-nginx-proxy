@@ -26,10 +26,10 @@ export def generate_nginx_site_conf [
     domain: record      # the domain record to generate config for
 ]: nothing -> string {
     # get type-hinted variables
-    let primary: string = $domain.primary
-    let upstream: string = $domain.upstream
-    let aliases: list<string> = $domain.aliases
-    let custom: bool = $domain.custom
+    let primary: string = $domain | get primary
+    let upstream: string = $domain | get upstream
+    let aliases: list<string> = $domain | get -i aliases | default []
+    let custom: bool = $domain | get -i custom | default false
     let is_root = $primary == (bf env "PROXY_DOMAIN")
 
     # generate paths
