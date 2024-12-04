@@ -1,4 +1,5 @@
 export const ETC_TEMPLATES = "/etc/bf/templates"
+export const GETSSL_CONF_BASENAME = "getssl.cfg"
 export const NGINX_SSL_CONF = "/etc/nginx/http.d/ssl.conf"
 
 # Generate a random domain record

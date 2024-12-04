@@ -27,7 +27,7 @@ def generate_conf_e [
     }
 }
 
-def get_tmp_file []: nothing -> string { $"/(mktemp -d -t)/getssl-global.conf" }
+def get_tmp_file []: nothing -> string { $"/(mktemp -d -t)/getssl.cfg" }
 
 export def generate_conf__does_nothing_if_file_exists [] {
     let file = get_tmp_file
@@ -182,18 +182,25 @@ export def replace__adds_double_quotes [] {
 # generate_site_conf
 #======================================================================================================================
 
+def generate_site_conf_e [
+    --cfg: string
+    certs: string
+] {
+    {
+        BF_PROXY_SSL_CERTS: $certs
+        BF_PROXY_GETSSL_CFG: ($cfg | default $GETSSL_CONF_BASENAME)
+    }
+}
+
 export def generate_site_conf__does_nothing_when_config_exists [] {
     let primary = random chars
     let certs = mktemp -d -t
     let cfg = random chars
-    let e = {
-        BF_PROXY_SSL_CERTS: $certs
-        BF_PROXY_GETSSL_CFG: $cfg
-    }
     let content = random chars
-    let cfg = $"($certs)/($primary)/($cfg)"
+    let cfg = $"($certs)/($primary)/(random chars)"
     $cfg | path dirname | mkdir $in
     $content | save --force $cfg
+    let e = generate_site_conf_e --cfg ($cfg | path basename) $certs
 
     let result = with-env $e { generate_site_conf $primary } | open --raw
 
@@ -203,15 +210,94 @@ export def generate_site_conf__does_nothing_when_config_exists [] {
 export def generate_site_conf__creates_default_config [] {
     let primary = "do not use random value or hash will break"
     let certs = mktemp -d -t
-    let cfg = "getssl.cfg"
-    let e = {
-        BF_PROXY_SSL_CERTS: $certs
-        BF_PROXY_GETSSL_CFG: $cfg
-    }
-    let cfg = $"($certs)/($primary)/($cfg)"
+    let e = generate_site_conf_e $certs
     let expected = "7146e789a83077202ab129d461959016"
 
     let result = with-env $e { generate_site_conf $primary } | open --raw | hash md5
 
     assert equal $expected $result
 }
+
+
+#======================================================================================================================
+# update_site_conf
+#======================================================================================================================
+
+def update_site_conf_e [
+    --acme: string
+    certs: string
+] {
+    {
+        BF_PROXY_SSL_CERTS: $certs
+        BF_PROXY_GETSSL_CFG: $GETSSL_CONF_BASENAME
+        BF_PROXY_WWW_ACME_CHALLENGE: ($acme | default (random chars))
+    }
+}
+
+def update_site_conf_create_blank_file [
+    certs: string
+    primary: string
+] {
+    let cfg = $"($certs)/($primary)/($GETSSL_CONF_BASENAME)"
+    $cfg | path dirname | mkdir $in
+    echo $"#(random chars)=(random chars)" | save --force $cfg
+}
+
+export def update_site_conf__outputs_aliases_as_sans [] {
+    let aliases = [(random chars) (random chars)]
+    let domain = generate_domain --aliases $aliases
+    let certs = mktemp -d -t
+    update_site_conf_create_blank_file $certs $domain.primary
+    let e = update_site_conf_e $certs
+
+    let result = with-env $e { update_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"SANS=\"($aliases.0),($aliases.1)\""
+}
+
+export def update_site_conf__outputs_empty_sans_when_no_aliases [] {
+    let domain = generate_domain | reject aliases
+    let certs = mktemp -d -t
+    update_site_conf_create_blank_file $certs $domain.primary
+    let e = update_site_conf_e $certs
+
+    let result = with-env $e { update_site_conf $domain } | open --raw $in
+
+    assert str contains $result "SANS=\"\""
+}
+
+export def update_site_conf__outputs_certification_locations [] {
+    let domain = generate_domain
+    let certs = mktemp -d -t
+    update_site_conf_create_blank_file $certs $domain.primary
+    let e = update_site_conf_e $certs
+
+    let result = with-env $e { update_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"DOMAIN_CERT_LOCATION=\"($certs)/($domain.primary).crt\""
+    assert str contains $result $"DOMAIN_KEY_LOCATION=\"($certs)/($domain.primary).key\""
+}
+
+export def update_site_conf__outputs_acme_challenge [] {
+    let domain = generate_domain
+    let certs = mktemp -d -t
+    update_site_conf_create_blank_file $certs $domain.primary
+    let acme = random chars
+    let e = update_site_conf_e --acme $acme $certs
+
+    let result = with-env $e { update_site_conf $domain } | open --raw $in
+
+    assert str contains $result $"ACL=\(\"($acme)\"\)"
+}
+
+export def update_site_conf__outputs_use_single_acl [] {
+    let domain = generate_domain
+    let certs = mktemp -d -t
+    update_site_conf_create_blank_file $certs $domain.primary
+    let e = update_site_conf_e $certs
+
+    let result = with-env $e { update_site_conf $domain } | open --raw $in
+
+    assert str contains $result "USE_SINGLE_ACL=\"true\""
+}
+

@@ -55,10 +55,10 @@ export def update_site_conf [
 ]: nothing -> string {
     # get variables
     let certs = bf env "PROXY_SSL_CERTS"
-    let file = $"($certs)/($domain)/(bf env "PROXY_GETSSL_CFG")"
+    let file = $"($certs)/($domain.primary)/(bf env "PROXY_GETSSL_CFG")"
 
     # SANS
-    let sans = $domain.aliases | str join ","
+    let sans = $domain | get -i aliases | default [] | str join ","
     replace -q "SANS" $sans $file
 
     # certificate
@@ -89,6 +89,18 @@ export def replace [
     let quoted_value = match $add_quotes { true => $"\"($value)\"" false => $value }
 
     # replace value
-    let find = $"^#?($key).*$" | bf dump -t "regex"
-    open --raw $file | str replace --all --regex $find $"($key)=($quoted_value)" | save --force $file
+    let find = $"^#?($key).*$"
+    load_cfg $key $file | str replace --all --multiline --regex $find $"($key)=($quoted_value)" | save --force $file
+}
+
+# Load cfg file and ensure the given key exists
+export def load_cfg [
+    key: string
+    file: string
+] {
+    let cfg = open --raw $file
+    match ($cfg | str contains $key) {
+        true => $cfg
+        false => ($cfg | append $"#($key)=" | str join (char newline))
+    }
 }
