@@ -1,6 +1,7 @@
 use bf
 use conf.nu
 use getssl.nu
+use nginx.nu
 use ssl.nu
 
 # Initialise SSL for the specified domain(s).
@@ -27,7 +28,7 @@ export def main [
 
         # generate Nginx config
         bf write " .. generating Nginx configuration file." init
-        conf generate_nginx_site_conf $x
+        nginx generate_site_conf $x
 
         # generate site getssl conf
         bf write " .. generating getssl configuration file." init
