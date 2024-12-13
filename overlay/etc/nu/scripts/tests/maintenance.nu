@@ -9,15 +9,15 @@ use vars.nu *
 #======================================================================================================================
 
 export def generate_helper_conf__outputs_conf [] {
-    let modules = mktemp -d -t
+    let helpers = mktemp -d -t
     let public = random chars
     let e = {
         BF_ETC_TEMPLATES: $ETC_TEMPLATES
-        BF_NGINX_ETC_MODULES: $modules
+        BF_NGINX_ETC_HELPERS: $helpers
         BF_NGINX_PUBLIC: $public
     }
 
-    let result = with-env $e { generate_helper_conf } | open --raw $"($modules)/proxy-maintenance.conf"
+    let result = with-env $e { generate_helper_conf } | open --raw $"($helpers)/proxy-maintenance.conf"
 
     assert str contains $result $"root                                ($public);"
 }

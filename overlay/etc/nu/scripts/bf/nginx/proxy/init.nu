@@ -44,15 +44,12 @@ export def main [
     # initialise domain(s)
     if $all {
         get_all | each $init_domain
-    }
-    else if $root {
+    } else if $root {
         do $init_domain (get_root)
-    }
-    else if $domain {
+    } else if $domain {
         do $init_domain (get_single $domain)
-    }
-    else {
-        main --help
+    } else {
+        bf write error "Incorrect usage - try `init --help`." init
     }
 
     # done

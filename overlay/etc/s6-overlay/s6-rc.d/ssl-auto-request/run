@@ -1,38 +1,28 @@
-#!/command/with-contenv bash
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E="${PWD##*/}/$(basename ${0})"
+use bf
+use bf/nginx/proxy auto
+bf env load -x ssl-auto-request
 
+# Request SSL certificates and then disable the service
+def main [...args] {
+    if (auto is_enabled) {
+        # get the pid of the nginx process - if the pid is empty, nginx is not running
+        let pid = { ^pidof nginx } | bf handle
+        if $pid == "" {
+            # wait 2s before exiting the service - S6 will keep restarting it until Nginx comes online
+            # on first run, it will disable this upgrade service itself
+            let sleep_for = 2sec
+            bf write debug $"Waiting ($sleep_for) for Nginx to come online."
+            sleep $sleep_for
+        } else {
+            # request SSL certificates for all configured domains
 
-#======================================================================================================================
-# Run request executable and then disable the service.
-# First, wait until the Nginx service is running.
-#======================================================================================================================
-
-if [ "${PROXY_AUTO-}" = "1" ] ; then
-
-    if [ -n "$(pidof nginx)" ]; then
-
-        # run upgrade executable
-        bf-echo "Requesting SSL certificates using auto-generated conf.json."
-        ssl-request -a
-
+            # disable the auto request service
+            auto disable_svc
+        }
+    } else {
         # disable the auto request service
-        ssl-auto-request-disable
-
-    else
-
-        # wait 2s before exiting the service - S6 will keep restarting it until Nginx comes online
-        # on first run, it will disable this upgrade service itself
-        SLEEP=2
-        bf-debug "Waiting ${SLEEP}s for Nginx to come online..."
-        sleep ${SLEEP}
-
-    fi
-
-else
-
-    # disable the auto request service
-    ssl-auto-request-disable
-
-fi
+        auto disable_svc
+    }
+}

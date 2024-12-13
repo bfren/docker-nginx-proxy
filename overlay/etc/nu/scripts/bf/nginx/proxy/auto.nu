@@ -1,4 +1,5 @@
 use bf
+use bf-s6
 
 # Generate conf.json as part of auto setup
 export def generate_conf_json []: nothing -> nothing {
@@ -36,3 +37,6 @@ export def is_enabled []: nothing -> bool {
     # all conditions must be true
     return ($ssl_does_not_exist and $auto_primary_is_set and $auto_upstream_is_set)
 }
+
+# Disable the auto request service
+export def disable_svc []: nothing -> nothing { bf-s6 svc down ssl-auto-request }

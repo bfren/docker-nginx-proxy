@@ -1,11 +1,8 @@
-#!/command/with-contenv bash
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E="${PWD##*/}/$(basename ${0})"
+use bf
+use bf-s6
+bf env load -x ssl-auto-request
 
-
-#======================================================================================================================
-# Show helpful log message.
-#======================================================================================================================
-
-bf-svc-finish
+# Bring service down without terminating container
+def main [...args] { bf-s6 svc finish }

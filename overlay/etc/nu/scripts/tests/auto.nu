@@ -130,4 +130,3 @@ export def generate_conf_json__does_not_output_custom [] {
 
     assert equal null $result
 }
-

@@ -27,5 +27,5 @@ def main [] {
     ^mkdir -p /ssl/certs
 
     # add bf-nginx-proxy module to config
-    bf config use bf-nginx-proxy
+    bf config use bf/nginx/proxy
 }

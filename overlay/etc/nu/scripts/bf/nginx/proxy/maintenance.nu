@@ -6,7 +6,7 @@ export def generate_helper_conf []: nothing -> string {
     let e = {
         PUBLIC: (bf env NGINX_PUBLIC)
     }
-    with-env $e { template $"(bf env NGINX_ETC_MODULES)/proxy-maintenance.conf" }
+    with-env $e { template $"(bf env NGINX_ETC_HELPERS)/proxy-maintenance.conf" }
 }
 
 # Generate maintenance HTML file
