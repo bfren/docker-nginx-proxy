@@ -2,9 +2,9 @@
     "$schema": "https://raw.githubusercontent.com/bfren/docker-nginx-proxy/main/ssl-conf-schema.json",
     "domains": [
         {
-            "primary": "<%= ${PROXY_AUTO_PRIMARY} %>",
-            "upstream": "<%= ${PROXY_AUTO_UPSTREAM} %>"<% if [ -n "${PROXY_AUTO_ALIASES-}" ] ; then %>,
-            "aliases": [ "<%= ${PROXY_AUTO_ALIASES// /\", \"} %>" ]<% fi ; if [ "${PROXY_AUTO_CUSTOM-}" = "1" ] ; then %>,
+            "primary": "<%= ${PRIMARY} %>",
+            "upstream": "<%= ${UPSTREAM} %>"<% if [ -n "${ALIASES}" ] ; then %>,
+            "aliases": [ <%= ${ALIASES} %> ]<% fi ; if [ "${CUSTOM}" = "1" ] ; then %>,
             "custom": true<% fi %>
         }
     ]
