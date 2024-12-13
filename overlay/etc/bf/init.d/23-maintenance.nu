@@ -1,11 +1,11 @@
 use bf
+use bf/nginx/proxy maintenance
 bf env load
 
-# Generate maintenance page and config
+# Generate maintenance helper config and html page
 def main []: nothing -> nothing {
     bf write "Generating maintenance files."
-    bf esh template "/etc/nginx/helpers/proxy-maintenance.conf"
-    bf esh template $"(bf env NGINX_PUBLIC)/maintenance.html"
-
+    maintenance generate_helper_conf
+    maintenance generate_html
     return
 }
