@@ -4,7 +4,7 @@
 #
 # Use environment variable PROXY_DOMAIN to change this file.
 #
-# Copyright (c) 2021-2024 bfren
+# Copyright (c) 2021-2025 bfren
 #======================================================================================================================
 
 #======================================================================================================================
@@ -19,7 +19,7 @@ server {
 <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-        # redirect all other requests to HTTPS using PROXY_DOMAIN
+        # redirect all other requests to HTTPS using DOMAIN_NAME
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
 }
@@ -34,7 +34,7 @@ server {
     listen                          443 ssl http2 default_server;
     listen                          [::]:443 ssl http2 default_server;
 
-    # redirect to PROXY_DOMAIN to avoid certificate errors
+    # redirect to DOMAIN_NAME to avoid certificate errors
     if ($host != <%= "${DOMAIN_NAME}" %>) {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
     }
