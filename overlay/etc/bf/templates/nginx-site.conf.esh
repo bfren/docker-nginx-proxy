@@ -1,4 +1,4 @@
-<% if [ "${DOMAIN_NGXCONF}" = "true" ] ; then -%>
+<% if [ "${IS_CUSTOM}" = "true" ] ; then -%>
 #======================================================================================================================
 # You can make changes to this file.
 #
@@ -15,7 +15,7 @@
 #   "custom": true
 # This will cause this file to be regenerated next time the container is started.
 #
-# Copyright (c) 2021-2024 bfren
+# Copyright (c) 2021-2025 bfren
 #======================================================================================================================
 <% else -%>
 #======================================================================================================================
@@ -29,7 +29,7 @@
 #   "custom": true
 # This will stop this file being generated next time the container is started.
 #
-# Copyright (c) 2021-2024 bfren
+# Copyright (c) 2021-2025 bfren
 #======================================================================================================================
 <% fi %>
 #======================================================================================================================
@@ -44,8 +44,8 @@ include                             <%= "${CUSTOM_CONF}/${DOMAIN_NAME}[.]upstrea
 #======================================================================================================================
 
 server {
-    # serve site for these domain names only
-    server_name                     <%= "${SERVER_NAMES}" %>;
+    # serve HTTP site for these domain names
+    server_name                     <%= "${DOMAIN_NAMES}" %>;
 
     # listen on HTTP port for both IPv4 and IPv6
     listen                          80;
@@ -54,7 +54,7 @@ server {
 <%+ ./nginx-acme-challenge.part.esh %>
 
     location / {
-<% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+<% if [ "${REDIRECT_TO_CANONICAL}" = "true" ] ; then -%>
         # redirect all other requests to HTTPS using primary domain name
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
 <% else -%>
@@ -70,14 +70,15 @@ server {
 #======================================================================================================================
 
 server {
-    # serve site for these domain names only
-    server_name                     <%= "${SERVER_NAMES}" %>;
+    # serve HTTPS site for these domain names
+    server_name                     <%= "${DOMAIN_NAMES}" %>;
 
     # listen on SSL port for both IPv4 and IPv6, and enable HTTP/2
-    listen                          443 ssl http2;
-    listen                          [::]:443 ssl http2;
+    listen                          443 ssl;
+    listen                          [::]:443 ssl;
+    http2                           on;
 
-<% if [ "${PROXY_SSL_REDIRECT_TO_CANONICAL}" = "1" ] ; then -%>
+<% if [ "${REDIRECT_TO_CANONICAL}" = "true" ] ; then -%>
     # redirect to primary (canonical) domain name
     if ($host != <%= "${DOMAIN_NAME}" %>) {
         return                      301 <%= "https://${DOMAIN_NAME}" %>$request_uri;
@@ -88,7 +89,7 @@ server {
     location / {
         # set resolver to Docker's internal DNS resolver and use an upstream variable so Nginx will always start,
         # even if $upstream is not available - h/t https://stackoverflow.com/a/54719226/8199362
-        resolver                    <%= "${PROXY_UPSTREAM_DNS_RESOLVER}" %> valid=30s;
+        resolver                    <%= "${DNS_RESOLVER}" %> valid=30s;
         set $upstream               <%= "${UPSTREAM}" %>;
 
         # proxy to the upstream server, enabling best-practice proxy and security headers
@@ -98,12 +99,6 @@ server {
 
         # block AI bots
         include                     helpers/nginx-block-ai-bots.conf;
-
-    <% if [ "${PROXY_ENABLE_NAXSI-}" = "1" ] ; then -%>
-        # enable NAXSI web application firewall with custom rules
-        include                     helpers/naxsi.conf;
-        include                     <%= "${CUSTOM_CONF}/*.rules" %>;
-    <% fi -%>
 
         # use maintenance page (defined in helpers/proxy-maintenance.conf - see below) when there's an upstream error
         error_page                  502 503 504 /maintenance.html;
