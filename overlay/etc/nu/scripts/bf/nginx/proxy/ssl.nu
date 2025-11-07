@@ -76,5 +76,5 @@ export def create_pem [
     echo $"($key)(char newline)($crt)" | save --force $pem_file
 
     # return path to pem file
-    return $pem_file
+    $pem_file
 }

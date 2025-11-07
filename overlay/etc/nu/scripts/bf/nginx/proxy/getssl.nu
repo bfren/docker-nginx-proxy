@@ -46,7 +46,7 @@ export def generate_site_conf [
     { ^getssl ...$args } | bf handle
 
     # return cfg file path
-    return $file
+    $file
 }
 
 # Update getssl site configuration file with domain-specific values
@@ -72,7 +72,7 @@ export def update_site_conf [
     replace -q "USE_SINGLE_ACL" "true" $file
 
     # return cfg file path
-    return $file
+    $file
 }
 
 # Replace a value in a given config file
