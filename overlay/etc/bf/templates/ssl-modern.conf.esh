@@ -1,7 +1,7 @@
 #======================================================================================================================
 # SSL
 # Using Mozilla's SSL Configuration Generator with 'Modern' settings
-# See https://ssl-config.mozilla.org/#server=nginx&version=1.26.0&config=modern
+# See https://ssl-config.mozilla.org/#server=nginx&config=modern
 #======================================================================================================================
 
 ssl_protocols                   TLSv1.3;

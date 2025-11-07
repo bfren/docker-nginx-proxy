@@ -19,7 +19,7 @@ def generate_nginx_ssl_conf_e [
 
 export def generate_nginx_ssl_conf__outputs_intermediate_conf [] {
     let e = generate_nginx_ssl_conf_e
-    let expected = "c8864a579b0ec2cb4070f27affb4e05f"
+    let expected = "c6f62672330e60f47657a720c2ffd693"
 
     let result = with-env $e { generate_server_conf } | open --raw $NGINX_SSL_CONF | hash md5
 
@@ -28,7 +28,7 @@ export def generate_nginx_ssl_conf__outputs_intermediate_conf [] {
 
 export def generate_nginx_ssl_conf__outputs_modern_conf [] {
     let e = generate_nginx_ssl_conf_e --harden
-    let expected = "73f99a3458030a8dae265a10355032e3"
+    let expected = "641b08342873b272be06190413aacf8c"
 
     let result = with-env $e { generate_server_conf } | open --raw $NGINX_SSL_CONF | hash md5
 

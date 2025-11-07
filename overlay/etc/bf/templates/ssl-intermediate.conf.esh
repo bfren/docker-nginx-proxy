@@ -1,7 +1,7 @@
 #======================================================================================================================
 # SSL
 # Using Mozilla's SSL Configuration Generator with 'Intermediate' settings
-# See https://ssl-config.mozilla.org/#server=nginx&version=1.26.0&config=intermediate
+# See https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 #======================================================================================================================
 
 ssl_protocols                   TLSv1.2 TLSv1.3;
