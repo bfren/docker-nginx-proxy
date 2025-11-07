@@ -1,4 +1,4 @@
-FROM bfren/nginx:nginx1.26-alpine3.21-6.4.3
+FROM bfren/nginx:nginx1.28-alpine3.22-6.5.7
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
@@ -35,13 +35,6 @@ ENV \
     BF_PROXY_SSL_EXPIRY=36500day \
     # canonical domain name redirection
     BF_PROXY_SSL_REDIRECT_TO_CANONICAL=0 \
-    # if both are set, on first startup will generate SSL config and request certs
-    BF_PROXY_AUTO_PRIMARY= \
-    BF_PROXY_AUTO_UPSTREAM= \
-    # optional - add aliases to the auto-generated conf.json on first startup
-    BF_PROXY_AUTO_ALIASES= \
-    # optional - mark the Nginx config as custom so it isn't regenerated on future startups
-    BF_PROXY_AUTO_CUSTOM=0 \
     # upstream DNS resolver, set to Docker's internal resolver by default
     BF_PROXY_UPSTREAM_DNS_RESOLVER=127.0.0.11 \
     # the number of seconds before the maintenance page will automatically refresh (Nu duration)
