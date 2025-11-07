@@ -23,8 +23,8 @@ export def generate_site_conf [
     # get type-hinted variables
     let primary: string = $domain | get primary
     let upstream: string = $domain | get upstream
-    let aliases: list<string> = $domain | get -i aliases | default []
-    let custom: bool = $domain | get -i custom | default false
+    let aliases: list<string> = $domain | get --optional aliases | default []
+    let custom: bool = $domain | get --optional custom | default false
     let is_root = $primary == (bf env "PROXY_DOMAIN")
 
     # generate paths

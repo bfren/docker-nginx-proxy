@@ -58,7 +58,7 @@ export def update_site_conf [
     let file = $"($certs)/($domain.primary)/(bf env "PROXY_GETSSL_CFG")"
 
     # SANS
-    let sans = $domain | get -i aliases | default [] | str join ","
+    let sans = $domain | get --optional aliases | default [] | str join ","
     replace -q "SANS" $sans $file
 
     # certificate
