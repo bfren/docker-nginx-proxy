@@ -12,7 +12,7 @@ use ssl.nu
 export def main [
     --all (-a)              # Initialise root and all configured domains
     --domain (-d): string   # The domain to be initialised
-    --root (-d)             # Initialise root domain
+    --root (-r)             # Initialise root domain
 ]: nothing -> nothing {
     # generate getssl configuration
     bf write "Creating getssl global configuration file." init
