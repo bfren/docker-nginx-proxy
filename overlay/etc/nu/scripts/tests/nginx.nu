@@ -76,7 +76,7 @@ export def generate_site_conf__creates_site_directory_when_does_not_exist [] {
     assert equal true $result
 }
 
-export def generate_site_conf__keeps_config_when_custom_is_true [] {
+export def generate_site_conf__keeps_config_when_exists [] {
     let primary = random chars
     let domain = generate_domain --primary $primary true
     let sites_dir = mktemp -d -t
@@ -87,19 +87,6 @@ export def generate_site_conf__keeps_config_when_custom_is_true [] {
     let result = with-env $e { generate_site_conf $domain } | open --raw $in
 
     assert equal $content $result
-}
-
-export def generate_site_conf__regenerates_config_when_custom_is_false [] {
-    let primary = random chars
-    let domain = generate_domain --primary $primary false
-    let sites_dir = mktemp -d -t
-    let content = random chars
-    $content | save --force $"($sites_dir)/($primary).conf"
-    let e = generate_site_conf_e $sites_dir
-
-    let result = with-env $e { generate_site_conf $domain } | open --raw $in
-
-    assert not equal $content $result
 }
 
 export def generate_site_conf__outputs_acme_challenge [] {
@@ -351,4 +338,76 @@ export def generate_site_conf__outputs_upstream [] {
     let result = with-env $e { generate_site_conf $domain } | open --raw $in
 
     assert str contains $result $"set $upstream               ($upstream);"
+}
+
+
+#======================================================================================================================
+# reenerate_site_conf
+#======================================================================================================================
+
+export def regenerate_site_conf__keeps_config_when_custom_is_true [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let content = random chars
+    $content | save --force $"($sites_dir)/($primary).conf"
+    let e = generate_site_conf_e $sites_dir
+
+    let result = with-env $e { regenerate_site_conf $domain } | open --raw $in
+
+    assert equal $content $result
+}
+
+export def regenerate_site_conf__regenerates_config_when_custom_is_false [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary false
+    let sites_dir = mktemp -d -t
+    let content = random chars
+    $content | save --force $"($sites_dir)/($primary).conf"
+    let e = generate_site_conf_e $sites_dir
+
+    let result = with-env $e { regenerate_site_conf $domain } | open --raw $in
+
+    assert not equal $content $result
+}
+
+export def regenerate_site_conf__regenerates_config_when_custom_is_true_and_force_is_enabled [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let content = random chars
+    $content | save --force $"($sites_dir)/($primary).conf"
+    let e = generate_site_conf_e $sites_dir
+
+    let result = with-env $e { regenerate_site_conf --force $domain } | open --raw $in
+
+    assert not equal $content $result
+}
+
+export def regenerate_site_conf__keeps_config_dir_when_clean_is_false [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let site_dir = $"($sites_dir)/($primary).d"
+    mkdir $site_dir
+    mktemp --tmpdir-path $site_dir
+    let e = generate_site_conf_e $sites_dir
+
+    let result = with-env $e { regenerate_site_conf $domain } | ls $site_dir | length
+
+    assert equal 1 $result
+}
+
+export def regenerate_site_conf__regenerates_config_dir_when_clean_is_true [] {
+    let primary = random chars
+    let domain = generate_domain --primary $primary true
+    let sites_dir = mktemp -d -t
+    let site_dir = $"($sites_dir)/($primary).d"
+    mkdir $site_dir
+    mktemp --tmpdir-path $site_dir
+    let e = generate_site_conf_e $sites_dir
+
+    let result = with-env $e { regenerate_site_conf --clean $domain } | ls $site_dir | length
+
+    assert equal 0 $result
 }
