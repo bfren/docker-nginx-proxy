@@ -19,7 +19,7 @@ def main [] {
     let getssl_version = bf fs read GETSSL_VERSION
     let getssl_url = $"https://raw.githubusercontent.com/srvrco/getssl/v($getssl_version)/getssl"
     let getssl_exe = "/usr/bin/getssl"
-    http get $getssl_url | save --raw $getssl_exe
+    bf http download $getssl_url $getssl_exe
     ^chmod +x $getssl_exe
 
     # create and link directories
