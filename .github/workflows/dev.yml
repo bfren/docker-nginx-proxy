@@ -12,13 +12,13 @@ jobs:
     steps:
       -
         name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
   build:
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       -
         name: Get repository name
         run: echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
@@ -53,7 +53,7 @@ jobs:
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           tags: |
             bfren/nginx-proxy:dev
-            bfren/nginx-proxy:${{ steps.version.outputs.contents }}-beta
+            bfren/nginx-proxy:${{ steps.version.outputs.contents }}-dev
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
