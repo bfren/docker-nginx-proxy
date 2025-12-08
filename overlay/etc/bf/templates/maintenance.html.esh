@@ -11,9 +11,9 @@
 <body>
 <h1>Maintenance</h1>
 <p>The site you requested is temporarily down for maintenance.  Please try again later.</p>
-<p class="muted">This page will auto-refresh in <span id="remaining"><%= "${PROXY_MAINTENANCE_REFRESH_SECONDS}" %></span>s.</p>
+<p class="muted">This page will auto-refresh in <span id="remaining"><%= "${REFRESH_SECONDS}" %></span>s.</p>
 <script type="text/javascript">
-    let remaining = <%= "${PROXY_MAINTENANCE_REFRESH_SECONDS}" %>;
+    let remaining = <%= "${REFRESH_SECONDS}" %>;
     let countdown = function () {
         // reload the page
         if (remaining == 0) {

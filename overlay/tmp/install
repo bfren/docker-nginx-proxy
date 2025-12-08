@@ -1,72 +1,31 @@
-#!/bin/sh
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
 
+# Setup and install getssl and depdencies
+def main [] {
+    # get nginx version and install dependencies
+    cd /tmp
+    let nginx_version = bf fs read NGINX_BUILD
+    bf write $"Installing dependencies for getssl."
+    bf pkg install [
+        "bash"
+        "curl"
+        $"nginx-mod-http-set-misc=($nginx_version)"
+        "openssl"
+    ]
 
-#======================================================================================================================
-# Get Nginx Version.
-#======================================================================================================================
+    # download getssl script and make executable
+    let getssl_version = bf fs read GETSSL_VERSION
+    let getssl_url = $"https://raw.githubusercontent.com/srvrco/getssl/v($getssl_version)/getssl"
+    let getssl_exe = "/usr/bin/getssl"
+    bf http download $getssl_url $getssl_exe
+    ^chmod +x $getssl_exe
 
-cd /tmp
+    # create and link directories
+    ^ln -s /sites /etc/nginx/sites
+    ^mkdir -p /ssl/certs
 
-VERSION=$(cat NGINX_BUILD)
-bf-echo "Nginx version ${VERSION}."
-
-
-#======================================================================================================================
-# Install Nginx extensions.
-#======================================================================================================================
-
-bf-echo "Installing Nginx v${VERSION} extensions..."
-apk add --no-cache \
-    nginx-mod-http-naxsi=${VERSION} \
-    nginx-mod-http-set-misc=${VERSION}
-bf-done
-
-
-#======================================================================================================================
-# Install additional packages.
-#======================================================================================================================
-
-bf-echo "Installing additional packages..."
-apk add --no-cache \
-    bash \
-    curl \
-    jq \
-    openssl
-bf-done
-
-
-#======================================================================================================================
-# Download getssl script.
-#======================================================================================================================
-
-VERSION=`cat /tmp/GETSSL_VERSION`
-bf-echo "Downloading getssl ${VERSION}."
-
-GETSSL=/usr/lib/bf/proxy/getssl
-wget -O ${GETSSL} "https://raw.githubusercontent.com/srvrco/getssl/v${VERSION}/getssl"
-chmod +x ${GETSSL}
-bf-done
-
-
-#======================================================================================================================
-# Cleanup.
-#======================================================================================================================
-
-bf-echo "Cleaning up Nginx sites definitions."
-rm -rf /etc/nginx/sites
-bf-done
-
-
-#======================================================================================================================
-# Create and link Nginx directories.
-#======================================================================================================================
-
-bf-echo "Creating and linking Nginx directories."
-
-mkdir /sites
-ln -s /sites /etc/nginx/sites
-
-mkdir -p /ssl/certs
+    # add bf-nginx-proxy module to config
+    bf config use bf/nginx/proxy
+}
