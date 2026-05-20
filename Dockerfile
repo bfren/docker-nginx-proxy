@@ -1,4 +1,4 @@
-FROM quay.io/bfren/nginx:nginx1.28-alpine3.23-7.1.0
+FROM quay.io/bfren/nginx:nginx1.28-alpine3.23-7.1.7
 
 LABEL org.opencontainers.image.source="https://github.com/bfren/docker-nginx-proxy"
 
@@ -30,7 +30,7 @@ ENV \
     # set to the number of bits to use for generating private key
     BF_PROXY_SSL_KEY_BITS=4096 \
     # set to the number of bits to use for generating DHPARAM
-    BF_PROXY_SSL_DHPARAM_BITS=4096 \
+    BF_PROXY_SSL_DHPARAM_BITS=2048 \
     # the period of time before self-generated SSL certificates will expire (Nu duration)
     BF_PROXY_SSL_EXPIRY=36500day \
     # canonical domain name redirection
