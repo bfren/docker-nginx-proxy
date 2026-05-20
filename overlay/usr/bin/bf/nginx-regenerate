@@ -1,146 +1,34 @@
-#!/command/with-contenv bash
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
+use bf-nginx
+use bf/nginx/proxy *
+bf env load -x
 
+# Nginx configuration for all or a specific domain.
+def main [
+    --all (-a)              # Regenerate Nginx configuration for all domains (will take precedence over other options).
+    --domain (-d): string   # Regenerate Nginx configuration for this domain.
+    --force (-f)            # Force all configuration files to be deleted (even custom ones).
+    --proxy (-p)            # Regenerate Nginx configuration for proxy domain.
+]: nothing -> nothing {
+    let domains = json get_domains
+    if $all {
+        $domains
+            | each {|x| nginx regenerate_site_conf --force=($force) $x }
+    } else if $proxy {
+        $domains
+            | where primary == (bf env PROXY_DOMAIN)
+            | first
+            | nginx regenerate_site_conf --force=($force) $in
+    } else if not ($domain | is-empty) {
+        $domains
+            | where primary == $domain
+            | first
+            | nginx regenerate_site_conf --force=($force) $in
+    } else {
+        bf write error "You must use a flag to determine what action to take (try --help)." "nginx-regenerate"
+    }
 
-#======================================================================================================================
-# Executable usage.
-#======================================================================================================================
-
-usage () {
-    echo "Usage: `basename ${0}` [-a] [-d DOMAIN_NAME]" 2>&1
-    echo
-    echo "Set action (-a takes precedence):"
-    echo "    -a        Regenerate SSL certificates for all domains."
-    echo "    -d XXXXX  Regenerate SSL certificate for domain XXXXX."
-    echo "              To regenerate proxy domain set to 'proxy'."
-    echo "    -f        Force all configuration files to be deleted (even custom ones)."
-    echo
-    echo "Usage:"
-    echo "    -h        Show this usage message."
-    exit 2
+    bf-nginx reload
 }
-
-MODE=0
-while getopts ":had:f" C ; do
-    case ${C} in
-        h) usage ;;
-        a) ALL=1 ;;
-        d) DOMAIN="${OPTARG}" ;;
-        f) FORCE=1 ;;
-        ?) bf-notok "Invalid option: -${OPTARG}" "nginx-regenerate" && usage ;;
-    esac
-done
-
-ARGS="$@"
-shift $(($OPTIND -1))
-
-
-#======================================================================================================================
-# Support regenerating Nginx configuration for proxy domain.
-#======================================================================================================================
-
-if [ "${DOMAIN-}" = "proxy" ] ; then
-    DOMAIN="${PROXY_DOMAIN}"
-fi
-
-
-#======================================================================================================================
-# Load SSL configuration.
-#======================================================================================================================
-
-bf-echo "Loading SSL configuration."
-source ${BF_INC}/proxy-load-conf.sh
-bf-debug "Loaded: ${DOMAINS[*]}."
-
-
-#======================================================================================================================
-# Delete Nginx configuration files for a domain.
-#
-# Arguments:
-#   1   Domain name
-#======================================================================================================================
-
-delete-conf () {
-
-    # use a nice variable name
-    DOMAIN=${1}
-
-    # the domain has standard config - delete conf file
-    CUSTOM_CONF=`get-custom "${DOMAIN}"`
-    if [[ "${CUSTOM_CONF}" = "false" ]] ; then
-
-        bf-debug " .. standard config: remove configuration file"
-        rm -f ${PROXY_SITES}/${DOMAIN}.conf
-
-    # the domain has custom config but force is enabled - delete conf file
-    elif [[ "${FORCE-}" = "1" ]] ; then
-
-        bf-debug " .. custom config with force enabled: remove configuration file"
-        rm -f ${PROXY_SITES}/${DOMAIN}.conf
-
-    # the domain has custom config and force is not enabled - do nothing
-    else
-
-        bf-debug " .. custom config and force not enabled: leave"
-
-    fi
-
-    # force is enabled - delete configuration directory
-    if [[ "${FORCE-}" = "1" ]] ; then
-
-        bf-debug " .. force enabled: remove configuration directory"
-        rm -rf ${PROXY_SITES}/${DOMAIN}.d
-
-    fi
-
-}
-
-
-#======================================================================================================================
-# Delete configuration files so they can be regenerated.
-#======================================================================================================================
-
-if [ "${ALL-}" = "1" ] ; then
-
-    bf-echo "Getting Nginx sites configuration."
-    NGINX_CONFIGS=(${PROXY_SITES}/*)
-
-    bf-echo "Checking against configured domains..."
-    for CFG in "${NGINX_CONFIGS[@]}" ; do
-
-        # do nothing if this is a file
-        [[ -f "${CFG}" ]] && continue
-
-        # get name and strip .d from end of directory
-        NAME=$(basename -- "${CFG}")
-        STRIPPED=${NAME::-2}
-        bf-debug " .. ${STRIPPED}"
-
-        # delete files
-        delete-conf "${STRIPPED}"
-
-    done
-
-    bf-done
-
-elif [ -n "${DOMAIN-}" ] ; then
-
-    bf-debug "Removing configuration for ${DOMAIN}..."
-    delete-conf "${DOMAIN}"
-    bf-done
-
-else
-
-    usage
-
-fi
-
-
-#======================================================================================================================
-# Reinitialise.
-#======================================================================================================================
-
-bf-debug "Calling ssl-init with '${ARGS}'"
-ssl-init ${ARGS}

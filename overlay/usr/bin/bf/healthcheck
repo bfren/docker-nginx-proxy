@@ -1,11 +1,7 @@
-#!/command/with-contenv bash
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
+bf env load -x
 
-
-#======================================================================================================================
-# Test Proxy URI.
-#======================================================================================================================
-
-bf-test-url "http://${PROXY_DOMAIN}"
+# Attempt to load localhost
+def main []: nothing -> nothing { bf env PROXY_DOMAIN | bf http test | if not $in { exit 1 } }

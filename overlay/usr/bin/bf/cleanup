@@ -1,0 +1,73 @@
+#!/usr/bin/nu
+
+use bf
+use bf-nginx
+use bf/nginx/proxy *
+bf env load -x
+
+# Cleanup old / dead SSL and Nginx configuration files.
+def main [
+    --live (-l)         # if set, files will be deleted - otherwise actions will be printed.
+]: nothing -> nothing {
+    remove --live=($live) (bf env PROXY_SSL_CERTS)
+    remove --live=($live) (bf env PROXY_SITES)
+
+    # if something has been done, reload Nginx
+    if $live {
+        bf-nginx reload
+    }
+}
+
+# Remove all files / dirs relating to a base path.
+def remove [
+    base: string        # base path to remove files and dirs from.
+    --live (-l)         # if set, files will be deleted - otherwise actions will be printed.
+] {
+    let domains = json get_domains
+    ls --full-paths $base | each {|x|
+        let domain = $x | path basename
+        let keep = $domains | select primary | $domain in $in
+        if $keep {
+            continue
+        }
+
+        bf write debug $" .. ($domain)" cleanup/remove
+        if not $live {
+            bf write $" .. will remove ($x)*" cleanup/remove
+            continue
+        }
+
+        bf write $" .. removing ($x)*" cleanup/remove
+
+        if ($x | path type) == "dir" {
+            bf write debug $" .. removing ($x)" cleanup/remove
+            rm --recursive $x
+        }
+
+        let dot_d = $"($x).d"
+        if ($dot_d | path type) == "dir" {
+            bf write debug $" .. removing ($dot_d)" cleanup/remove
+            rm --recursive  $dot_d
+        }
+
+        let conf = $"($x).conf"
+        if ($conf | path type) == "file" {
+            bf write debug $" .. removing ($conf)" cleanup/remove
+            rm $conf
+        }
+
+        let crt = $"($x).crt"
+        if ($crt | path type) == "file" {
+            bf write debug $" .. removing ($crt)" cleanup/remove
+            rm $crt
+        }
+
+        let key = $"($x).key"
+        if ($key | path type) == "file" {
+            bf write debug $" .. removing ($key)" cleanup/remove
+            rm $key
+        }
+    }
+
+    bf write ok "    done." cleanup/remove
+}

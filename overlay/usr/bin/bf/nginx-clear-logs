@@ -1,12 +1,10 @@
-#!/command/with-contenv sh
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
+bf env load -x
 
-
-#======================================================================================================================
 # Echo an empty string to access and error logs.
-#======================================================================================================================
-
-echo "" > /var/log/nginx/access.log
-echo "" > /var/log/nginx/error.log
+def main []: nothing -> nothing {
+    echo "" | save "/var/log/nginx/access.log"
+    echo "" | save "/var/log/nginx/error.log"
+}

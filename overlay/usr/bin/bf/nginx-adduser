@@ -1,24 +1,21 @@
-#!/command/with-contenv sh
+#!/usr/bin/nu
 
-set -euo pipefail
-export BF_E=`basename ${0}`
+use bf
+bf env load -x
 
+# Add an nginx user with encrypted password
+def main [
+    name: string    # Username
+    pass: string    # Password (will be encrypted using openssl)
+]: nothing -> nothing {
+    let args = [
+        "passwd"
+        "-apr1"
+        $pass
+    ]
+    let encrypted_pass = ^openssl ...$args
 
-#======================================================================================================================
-# Check variables.
-#======================================================================================================================
-
-[[ -z "${1-}" ]] && bf-error "You must pass a username." "nginx-adduser"
-USER="${1}"
-
-[[ -z "${2-}" ]] && bf-error "You must pass a password." "nginx-adduser"
-PASS="${2}"
-
-
-#======================================================================================================================
-# Add a user for basic HTTP auth.
-#======================================================================================================================
-
-bf-echo "Adding user ${USER} with encrypted password..." "nginx-adduser"
-printf "${USER}:$(openssl passwd -apr1 ${PASS})\n" >> /etc/nginx/htpasswd
-bf-done
+    bf write $"Adding user ($name) with encrypted password..." "nginx-adduser"
+    $"($name):($encrypted_pass)" | save --append "/etc/nginx/htpasswd"
+    bf write ok "Done." "nginx-adduser"
+}
