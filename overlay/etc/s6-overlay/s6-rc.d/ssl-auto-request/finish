@@ -1,8 +1,0 @@
-#!/usr/bin/nu
-
-use bf
-use bf-s6
-bf env load -x ssl-auto-request
-
-# Bring service down without terminating container
-def main [...args] { bf-s6 svc finish }

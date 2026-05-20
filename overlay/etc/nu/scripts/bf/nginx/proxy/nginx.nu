@@ -1,5 +1,5 @@
 use bf
-use conf.nu
+use json.nu
 
 # Generate Nginx SSL config
 export def generate_server_conf []: nothing -> nothing {

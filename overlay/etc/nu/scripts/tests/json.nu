@@ -1,6 +1,6 @@
 use std assert
 use bf
-use bf/nginx/proxy conf *
+use bf/nginx/proxy json *
 use vars.nu *
 
 

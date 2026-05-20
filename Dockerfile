@@ -29,7 +29,7 @@ ENV \
     BF_PROXY_GETSSL_SKIP_HTTP_TOKEN_CHECK=0 \
     # set to the number of bits to use for generating private key
     BF_PROXY_SSL_KEY_BITS=4096 \
-    # set to the number of bits to use for generating DHPARAM
+    # set to the number of bits to use for generating DHPARAM - 4096 is unncessary and takes ages to generate
     BF_PROXY_SSL_DHPARAM_BITS=2048 \
     # the period of time before self-generated SSL certificates will expire (Nu duration)
     BF_PROXY_SSL_EXPIRY=36500day \

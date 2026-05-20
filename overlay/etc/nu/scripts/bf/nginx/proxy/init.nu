@@ -1,6 +1,6 @@
 use bf
-use conf.nu
 use getssl.nu
+use json.nu
 use nginx.nu
 use ssl.nu
 
@@ -73,12 +73,12 @@ def remove []: string -> nothing {
 }
 
 # Retrieve all configured domain record.
-export def get_all []: nothing -> list<record> { conf get_domains }
+export def get_all []: nothing -> list<record> { json get_domains }
 
 # Retrieve a single domain record.
 export def get_single [
     domain: string  # The domain to initialise
-]: nothing -> record { conf get_domains | where primary == $domain | into record }
+]: nothing -> record { json get_domains | where primary == $domain | into record }
 
 # Retrieve the root domain record.
 export def get_root []: nothing -> record { get_single (bf env "PROXY_DOMAIN") }
